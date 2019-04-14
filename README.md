@@ -1,12 +1,12 @@
-# Razzle With SCSS Example
+# Razzle With Django Example
 
 ## How to use
 
 Download the example [or clone the whole project](https://github.com/jaredpalmer/razzle.git):
 
 ```bash
-curl https://codeload.github.com/jaredpalmer/razzle/tar.gz/master | tar -xz --strip=2 razzle-master/examples/with-scss
-cd with-scss
+curl https://codeload.github.com/fivethreeo/django-razzle-secure/tar.gz/master | tar -xz django-razzle-secure-master
+cd django-razzle-secure-master
 ```
 
 Install it and run:
