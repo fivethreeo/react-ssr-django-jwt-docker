@@ -11,11 +11,13 @@
   "dependencies": {
     "@loadable/component": "^5.7.0",
     "@loadable/server": "^5.8.0",
+    "bootstrap": "^4.3.1",
     "express": "^4.15.2",
     "helmet": "^3.16.0",
     "hpp": "^0.2.2",
     "react": "^16.0.0",
-    "react-dom": "^16.0.0"
+    "react-dom": "^16.0.0",
+    "reactstrap": "^8.0.0"
   },
   "devDependencies": {
     "@loadable/babel-plugin": "^5.8.0",
