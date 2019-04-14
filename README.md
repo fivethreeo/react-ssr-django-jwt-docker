@@ -2,7 +2,7 @@
 
 ## How to use
 
-Download the example [or clone the whole project](https://github.com/jaredpalmer/razzle.git):
+Download the example [or clone the whole project](https://github.com/fivethreeo/django-razzle-secure.git):
 
 ```bash
 curl https://codeload.github.com/fivethreeo/django-razzle-secure/tar.gz/master | tar -xz django-razzle-secure-master
