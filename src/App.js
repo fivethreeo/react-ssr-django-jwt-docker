@@ -2,27 +2,24 @@ import './App.scss';
 import React from 'react';
 import loadable from '@loadable/component'
 import { Route, Switch, NavLink } from 'react-router-dom';
-import { Container, Row, Col } from 'reactstrap';
 
 const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
 );
 const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
 const Login = loadable(() => import(/* webpackChunkName: "login" */ './Login'));
+const Register = loadable(() => import(/* webpackChunkName: "register" */ './Register'));
 
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
 );
 
 const App = () => (
-  <Container>
-    <Row>
-      <Col>
+ <div class="container">
+    <div class="row">
         <Header />
-      </Col>
-    </Row>
-    <Row>
-      <Col>
+    </div>
+    <div class="row">
         <Switch>
           <Route
             exact
@@ -30,15 +27,13 @@ const App = () => (
             component={Body} 
           />
           <Route path="/login" component={Login} />
+          <Route path="/register" component={Register} />
         </Switch>
-      </Col>
-    </Row>
-    <Row>
-      <Col>
+    </div>
+    <div class="row">
         <Footer />
-      </Col>
-    </Row>
-  </Container>
+    </div>
+  </div>
 );
 
 export default App;

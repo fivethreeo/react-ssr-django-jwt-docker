@@ -3,10 +3,10 @@ import { Jumbotron, Container } from 'reactstrap';
 
 const Header = (props) => {
   return (
-      <Jumbotron>
-          <h1 className="display-3">This is my Header</h1>
-          <p className="lead">This is a modified jumbotron that occupies the entire horizontal space of its parent.</p>
-      </Jumbotron>
+    <div class="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <h1 className="display-3">django-razzle-secure</h1>
+      <p className="lead">Razzle With Django Example.</p>
+    </div>
   );
 };
 

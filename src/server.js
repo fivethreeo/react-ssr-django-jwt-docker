@@ -11,11 +11,8 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 
-server
-  .disable('x-powered-by')
-  .use(...security)
-  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .get('/*', async (req, res) => {
+const getAppRenderer = (app) => {
+  return async (req, res) => {
 
     const context = {};
     
@@ -26,7 +23,7 @@ server
     // Wrap your application using "collectChunks"
     const jsx = extractor.collectChunks(
       <StaticRouter location={req.url} context={context}>
-        <App />
+        <app />
       </StaticRouter>)
     // Render your application
     const markup = renderToString(jsx)
@@ -55,6 +52,13 @@ server
   </body>
 </html>`
     );
-  });
+  }
+}
+
+server
+  .disable('x-powered-by')
+  .use(...security)
+  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
+  .get('/*', getAppRenderer(<App />));
 
 export default server;
