@@ -12,8 +12,10 @@ cd django-razzle-secure-master
 Install it and run:
 
 ```bash
+pipenv install
 yarn install
-yarn start
+pipenv run python runserver.py & ppid=$! && yarn start
+pgrep -P $ppid | xargs kill -9
 ```
 
 ## Idea behind the example

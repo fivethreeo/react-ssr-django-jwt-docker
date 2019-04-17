@@ -9,3 +9,5 @@ build
 public/static
 .env.*.local
 yarn.lock
+Pipfile.lock
+*.sqlite3
