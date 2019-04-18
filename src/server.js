@@ -5,14 +5,23 @@ import express from 'express';
 import { renderToString } from 'react-dom/server';
 import { ChunkExtractor } from '@loadable/server'
 import { StaticRouter } from 'react-router-dom';
+import Cookies from 'universal-cookie';
+import CookieProvider from './Cookies';
+import AxiosProvider from './Axios';
+
 import security from '../razzle-plugins/security/middleware';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 
-const getAppRenderer = (app) => {
-  return async (req, res) => {
+server
+  .disable('x-powered-by')
+  .use(...security)
+  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
+  .get('/*', async (req, res) => {
+
+    const cookies = new Cookies(req.headers.cookie);
 
     const context = {};
     
@@ -22,9 +31,13 @@ const getAppRenderer = (app) => {
     const extractor = new ChunkExtractor({ statsFile, entrypoints: ['client']})
     // Wrap your application using "collectChunks"
     const jsx = extractor.collectChunks(
-      <StaticRouter location={req.url} context={context}>
-        <app />
-      </StaticRouter>)
+      <CookieProvider value={cookies}>
+        <AxiosProvider>
+          <StaticRouter location={req.url} context={context}>
+            <App />
+          </StaticRouter>
+        </AxiosProvider>
+      </CookieProvider>)
     // Render your application
     const markup = renderToString(jsx)
     // You can now collect your script tags
@@ -52,13 +65,6 @@ const getAppRenderer = (app) => {
   </body>
 </html>`
     );
-  }
-}
-
-server
-  .disable('x-powered-by')
-  .use(...security)
-  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
-  .get('/*', getAppRenderer(<App />));
+  });
 
 export default server;

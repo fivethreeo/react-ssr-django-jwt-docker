@@ -1,7 +1,7 @@
 import './App.scss';
 import React from 'react';
 import loadable from '@loadable/component'
-import { Route, Switch, NavLink } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 
 const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
@@ -15,11 +15,11 @@ const Footer = loadable(() =>
 );
 
 const App = () => (
- <div class="container">
-    <div class="row">
+ <div className="container">
+    <div className="row">
         <Header />
     </div>
-    <div class="row">
+    <div className="row">
         <Switch>
           <Route
             exact
@@ -30,7 +30,7 @@ const App = () => (
           <Route path="/register" component={Register} />
         </Switch>
     </div>
-    <div class="row">
+    <div className="row">
         <Footer />
     </div>
   </div>

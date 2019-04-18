@@ -14,8 +14,8 @@ Install it and run:
 ```bash
 pipenv install
 yarn install
-pipenv run python runserver.py & ppid=$! && yarn start
-pgrep -P $ppid | xargs kill -9
+pipenv run python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yarn start
+kill -9 $pid
 ```
 
 ## Idea behind the example
