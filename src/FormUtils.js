@@ -20,17 +20,17 @@ export const Label = ({ error, className, children, ...props }) => {
   );
 };
 
-export const TextInput = ({ type, id, name, label, error, value, onChange, ...props }) => {
+export const TextInput = ({ type, id, name, label, labelClassName="", inputClassName="", error, value, onChange, ...props }) => {
   const classes = classnames(
     'form-control',
     {
       'error': !!error,
     },
-    props.inputClassName
+    inputClassName
   );
   return (
     <>
-      <Label htmlFor={id} error={error} className={props.labelClassName || ""}>
+      <Label htmlFor={id} error={error} className={labelClassName}>
         {label}
       </Label>
       <input
@@ -47,13 +47,13 @@ export const TextInput = ({ type, id, name, label, error, value, onChange, ...pr
   );
 };
 
-export const CheckboxInput = ({ type, id, name, label, error, value, onChange, className, ...props }) => {
+export const CheckboxInput = ({ type, id, name, label, error, value, onChange, className, inputClassName="", ...props }) => {
   const classes = classnames(
     'checkbox',
     {
       'error': !!error,
     },
-    props.inputClassName || ""
+    inputClassName
   );
   const wrapperClasses = classnames(
     'checkbox',
