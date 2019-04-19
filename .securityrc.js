@@ -1,6 +1,6 @@
 module.exports = {
   cspExtensions: {
-  	fontSrc: ['fonts.googleapis.com/css', 'fonts.gstatic.com'],
+    fontSrc: ['fonts.googleapis.com/css', 'fonts.gstatic.com'],
     imgSrc: [],
     mediaSrc: [],
     manifestSrc: [],
@@ -9,6 +9,3 @@ module.exports = {
     styleSrc: ['fonts.googleapis.com/css']
   }
 };
-
-
-    
