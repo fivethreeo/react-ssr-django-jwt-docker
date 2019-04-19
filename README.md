@@ -2,11 +2,11 @@
 
 ## How to use
 
-Download the example [or clone the whole project](https://github.com/fivethreeo/django-razzle-secure.git):
+Download the example [or clone] (https://github.com/fivethreeo/django-razzle-secure.git):
 
 ```bash
-curl https://codeload.github.com/fivethreeo/django-razzle-secure/tar.gz/master | tar -xz django-razzle-secure-master
-cd django-razzle-secure-master
+curl https://codeload.github.com/fivethreeo/django-razzle-react-jwt/tar.gz/master | tar -xz django-razzle-react-jwt-master
+cd django-razzle-react-jwt-master
 ```
 
 Install it and run:
@@ -14,6 +14,7 @@ Install it and run:
 ```bash
 pipenv install
 yarn install
+pipenv run python manage.py migrate
 pipenv run python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yarn start
 kill -9 $pid
 ```
