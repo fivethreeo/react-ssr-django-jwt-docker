@@ -4,13 +4,12 @@ import axios from 'axios';
 
 export const getAxios = (cookies) => {
   const authAxios = axios.create();
-  const noauthAxios = axios.create();
-  return { authAxios, noauthAxios };
+  return { axios: authAxios };
 }
 
 export const AxiosContext = React.createContext(null);
 
-export default (props) => {
+const AxiosProvider = (props) => {
 
   const cookies = useContext(CookieContext);
 
@@ -20,3 +19,5 @@ export default (props) => {
     </AxiosContext.Provider>
   );
 }
+
+export default AxiosProvider;

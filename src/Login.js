@@ -1,22 +1,82 @@
 import React from 'react';
+import { Formik } from 'formik';
+import * as Yup from 'yup';
+import { TextInput, CheckboxInput } from './FormUtils';
 
 export default class Login extends React.Component {
   render() {
     return (
       <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-        <form className="form-auth form-signin">
-          <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-          <label htmlFor="inputEmail" className="sr-only">Email address</label>
-          <input type="email" name="email" id="inputEmail" className="form-control" placeholder="Email address" required autoFocus />
-          <label htmlFor="inputPassword" className="sr-only">Password</label>
-          <input type="password" name="password" id="inputPassword" className="form-control" placeholder="Password" required />
-          <div className="checkbox mb-3">
-            <label>
-              <input type="checkbox" value="remember-me" /> Remember me
-            </label>
-          </div>
-          <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-        </form>
+      <Formik
+        initialValues={{ email: '' }}
+        onSubmit={(values, { setSubmitting }) => {
+          setTimeout(() => {
+            alert(JSON.stringify(values, null, 2));
+            setSubmitting(false);
+          }, 500);
+        }}
+        validationSchema={Yup.object().shape({
+          email: Yup.string()
+            .email()
+            .required('Required'),
+        })}
+      >
+        {props => {
+          const {
+            values,
+            touched,
+            errors,
+            dirty,
+            isSubmitting,
+            handleChange,
+            handleBlur,
+            handleSubmit,
+            handleReset,
+          } = props;
+          return (
+            <form className="form-auth form-signin" onSubmit={handleSubmit}>
+              <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
+              <TextInput
+                id="inputEmail"
+                name="email"
+                labelClassName="sr-only"
+                type="text"
+                label="Email address"
+                placeholder="your@email.com"
+                error={touched.email && errors.email}
+                value={values.email}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <TextInput
+                id="inputPassword"
+                name="password"
+                labelClassName="sr-only"
+                type="text"
+                label="Password"
+                placeholder="Password"
+                error={touched.password && errors.password}
+                value={values.password}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <CheckboxInput
+                id="inputRemember"
+                name="rememberme"
+                className="mb-3"
+                type="checkbox"
+                label="Remember me"
+                placeholder="Password"
+                error={touched.remember && errors.remember}
+                value={values.remember}
+                onChange={handleChange}
+                onBlur={handleBlur}
+              />
+              <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+            </form>
+          );
+        }}
+      </Formik>
       </div>
     );
   }
