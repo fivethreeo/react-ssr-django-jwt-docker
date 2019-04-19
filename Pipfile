@@ -7,8 +7,8 @@ verify_ssl = true
 
 [packages]
 django = "*"
-jwt = "*"
 django-rest-framework = "*"
+djangorestframework-simplejwt = "*"
 
 [requires]
 python_version = "3.6"

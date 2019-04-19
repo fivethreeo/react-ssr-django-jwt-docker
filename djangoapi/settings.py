@@ -123,12 +123,9 @@ STATIC_URL = '/static/'
 AUTH_USER_MODEL = 'authentication.User'
 
 REST_FRAMEWORK = {
+    'EXCEPTION_HANDLER': 'djangoapi.authentication.exceptions.core_exception_handler',
+    'NON_FIELD_ERRORS_KEY': 'error',
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'djangoapi.authentication.backends.JWTAuthentication',
-    ),
-    'DEFAULT_PARSER_CLASSES': (
-      'rest_framework.parsers.JSONParser',
-      'rest_framework.parsers.FormParser',
-      'rest_framework.parsers.MultiPartParser'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
