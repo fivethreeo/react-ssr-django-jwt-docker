@@ -2,7 +2,7 @@
 
 ## How to use
 
-Download the example [or clone] (https://github.com/fivethreeo/django-razzle-secure.git):
+Download the example [or clone](https://github.com/fivethreeo/django-razzle-react-jwt.git):
 
 ```bash
 curl https://codeload.github.com/fivethreeo/django-razzle-react-jwt/tar.gz/master | tar -xz django-razzle-react-jwt-master
