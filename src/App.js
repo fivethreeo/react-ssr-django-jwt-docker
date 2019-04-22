@@ -14,26 +14,27 @@ const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
 );
 
-const App = () => (
- <div className="container">
-    <div className="row">
-        <Header />
+const App = () => {
+ return (
+   <>
+   <Header />
+   <div className="container">
+      <div className="row">
+          <Switch>
+            <Route
+              exact
+              path="/"
+              component={Body} 
+            />
+            <Route path="/login" component={Login} />
+            <Route path="/register" component={Register} />
+          </Switch>
+      </div>
+      <div className="row">
+          <Footer />
+      </div>
     </div>
-    <div className="row">
-        <Switch>
-          <Route
-            exact
-            path="/"
-            component={Body} 
-          />
-          <Route path="/login" component={Login} />
-          <Route path="/register" component={Register} />
-        </Switch>
-    </div>
-    <div className="row">
-        <Footer />
-    </div>
-  </div>
-);
-
+    </>
+  );
+};
 export default App;

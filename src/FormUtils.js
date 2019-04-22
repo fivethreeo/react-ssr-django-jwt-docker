@@ -3,7 +3,10 @@ import React from 'react';
 import classnames from 'classnames';
 
 export const InputFeedback = ({ error }) =>
-  error ? <div className="input-feedback">{error}</div> : null;
+  error ? <div className="invalid-feedback">{error}</div> : null;
+
+export const InputFeedbackTooltip = ({ error }) =>
+  error ? <div className="invalid-tooltip" data-placement="right">{error}</div> : null;
 
 export const Label = ({ error, className, children, ...props }) => {
   const classes = classnames(
@@ -20,16 +23,19 @@ export const Label = ({ error, className, children, ...props }) => {
   );
 };
 
-export const TextInput = ({ type, id, name, label, labelClassName="", inputClassName="", error, value, onChange, ...props }) => {
+export const TextInput = ({ type, id, name, label, touched, labelClassName="", inputClassName="", error, value, onChange, ...props }) => {
   const classes = classnames(
     'form-control',
     {
-      'error': !!error,
+      'is-invalid': !!error,
+    },
+    {
+      'is-valid': touched && (error === undefined),
     },
     inputClassName
   );
   return (
-    <>
+    <div class="col">
       <Label htmlFor={id} error={error} className={labelClassName}>
         {label}
       </Label>
@@ -42,35 +48,43 @@ export const TextInput = ({ type, id, name, label, labelClassName="", inputClass
         onChange={onChange}
         {...props}
       />
-      <InputFeedback error={error} />
-    </>
+      <InputFeedbackTooltip error={error} />
+    </div>
   );
 };
 
-export const CheckboxInput = ({ type, id, name, label, error, value, onChange, className, inputClassName="", ...props }) => {
+export const CheckboxInput = ({ type, id, name, label, touched, error, value, onChange, className, labelClassName="", inputClassName="", ...props }) => {
   const classes = classnames(
-    'checkbox',
+    'form-check-input',
     {
-      'error': !!error,
+      'is-invalid': !!error,
+    },
+    {
+      'is-valid': touched && (error === undefined),
     },
     inputClassName
   );
+  const labelClasses = classnames(
+    'form-check-label',
+    labelClassName
+  );
   const wrapperClasses = classnames(
-    'checkbox',
+    'form-check',
     className
   );
   return ( 
     <div className={wrapperClasses}>
-      <Label htmlFor={id} error={error} className={props.labelClassName}>
-        <input
-          id={id}
-          name={name}
-          className={classes}
-          type={type}
-          value={value}
-          onChange={onChange}
-          {...props}
-        /> {label}
+      <input
+        id={id}
+        name={name}
+        className={classes}
+        type={type}
+        value={value}
+        onChange={onChange}
+        {...props}
+      />
+      <Label htmlFor={id} error={error} className={labelClasses}>
+         {label}
       </Label>
       
       <InputFeedback error={error} />
