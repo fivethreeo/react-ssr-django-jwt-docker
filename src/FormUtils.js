@@ -6,7 +6,7 @@ export const InputFeedback = ({ error }) =>
   error ? <div className="invalid-feedback">{error}</div> : null;
 
 export const InputFeedbackTooltip = ({ error }) =>
-  error ? <div className="invalid-tooltip" data-placement="right">{error}</div> : null;
+  error ? <div className="invalid-tooltip">{error}</div> : null;
 
 export const Label = ({ error, className, children, ...props }) => {
   const classes = classnames(
@@ -35,7 +35,7 @@ export const TextInput = ({ type, id, name, label, touched, labelClassName="", i
     inputClassName
   );
   return (
-    <div class="col">
+    <>
       <Label htmlFor={id} error={error} className={labelClassName}>
         {label}
       </Label>
@@ -49,7 +49,7 @@ export const TextInput = ({ type, id, name, label, touched, labelClassName="", i
         {...props}
       />
       <InputFeedbackTooltip error={error} />
-    </div>
+    </>
   );
 };
 
