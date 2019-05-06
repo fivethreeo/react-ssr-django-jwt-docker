@@ -2,7 +2,7 @@ logs
 *.log
 npm-debug.log*
 .DS_Store
-
+__pycache__
 coverage
 node_modules
 build

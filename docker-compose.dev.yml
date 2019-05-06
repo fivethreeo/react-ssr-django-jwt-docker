@@ -1,0 +1,26 @@
+version: "3.7"
+
+services:
+  traefik:
+    command:
+      - "--api"
+      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:https Address::443 TLS:certs/cert.crt,certs/cert.key"
+      - "--defaultentrypoints=http,https"
+      - "--docker"
+      - "--docker.watch"
+    volumes:
+      - ./certs/:/certs/
+  djangoapi:
+    build:
+      target: dev
+      context: .
+      dockerfile: docker/django/Dockerfile
+    volumes:
+      - ./djangoapi:/code/djangoapi
+      - ./runserver.py:/code/runserver.py
+      - ./db.sqlite3:/code/db.sqlite3
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=3002"
+      - "traefik.frontend.rule=Host:localhost"

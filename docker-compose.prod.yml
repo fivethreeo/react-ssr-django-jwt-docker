@@ -1,0 +1,25 @@
+version: "3.7"
+
+services:
+  traefik:
+    command:
+      - "--api"
+      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:https Address::443 TLS"
+      - "--defaultentrypoints=http,https"
+      - "--acme"
+      - "--acme.storage=/etc/traefik/acme/acme.json"
+      - "--acme.entryPoint=https"
+      - "--acme.httpChallenge.entryPoint=http"
+      - "--acme.onHostRule=true"
+      - "--acme.onDemand=false"
+      - "--acme.email=jason@raimondi.us"
+      - "--docker"
+      - "--docker.watch"
+    volumes:
+      - ./traefik/acme:/etc/traefik/acme
+  djangoapi:
+    build:
+      target: prod
+      context: .
+      dockerfile: docker/django/Dockerfile
