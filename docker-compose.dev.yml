@@ -23,4 +23,25 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.port=3002"
-      - "traefik.frontend.rule=Host:localhost"
+      - "traefik.frontend.rule=Host:localhost;PathPrefix:/api,/admin"
+  reactapp:
+    build:
+      target: dev
+      context: .
+      dockerfile: docker/react/Dockerfile
+    volumes:
+      - ./src:/code/src
+      - ./public:/code/public
+      - ./razzle-plugins:/code/razzle-plugins
+      - ./.securityrc.js:/code/.securityrc.js
+      - ./razzle.config.js:/code/razzle.config.js
+      - ./.babelrc:/code/.babelrc
+    labels:
+      - "traefik.enable=true"
+      - "traefik.server.port=3000"
+      - "traefik.server.frontend.rule=Host:localhost"
+      - "traefik.static.port=3001"
+      - "traefik.static.frontend.rule=Host:localhost;PathPrefix:/static"
+    environment:
+      PUBLIC_PATH: https://localhost/
+      CLIENT_PUBLIC_PATH: https://localhost/

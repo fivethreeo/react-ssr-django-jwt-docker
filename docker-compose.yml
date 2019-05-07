@@ -13,3 +13,7 @@ services:
     build:
       context: .
       dockerfile: docker/django/Dockerfile
+  reactapp:
+    build:
+      context: .
+      dockerfile: docker/react/Dockerfile
