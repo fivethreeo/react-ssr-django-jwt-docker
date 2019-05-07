@@ -6,11 +6,14 @@ services:
       - "--api"
       - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
       - "--entrypoints=Name:https Address::443 TLS:certs/cert.crt,certs/cert.key"
-      - "--defaultentrypoints=http,https"
+      - "--entrypoints=Name:httpsdev Address::3001 TLS:certs/cert.crt,certs/cert.key"
+      - "--defaultentrypoints=http,https,httpsdev"
       - "--docker"
       - "--docker.watch"
     volumes:
       - ./certs/:/certs/
+    ports:
+     - "3001:3001"
   djangoapi:
     build:
       target: dev
@@ -41,7 +44,7 @@ services:
       - "traefik.server.port=3000"
       - "traefik.server.frontend.rule=Host:localhost"
       - "traefik.static.port=3001"
-      - "traefik.static.frontend.rule=Host:localhost;PathPrefix:/static"
+      - "traefik.static.frontend.rule=Host:localhost;PathPrefix:/static,/sockjs-node"
     environment:
       PUBLIC_PATH: https://localhost/
       CLIENT_PUBLIC_PATH: https://localhost/
