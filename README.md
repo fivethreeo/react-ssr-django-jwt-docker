@@ -1,9 +1,10 @@
-# React with server side rendering and django api
+# React with server-side rendering and django api on docker
 
 ## Features
 
 * Building using [razzle][razzle]
 * Server hot module reloading
+* Server-side rendering
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
