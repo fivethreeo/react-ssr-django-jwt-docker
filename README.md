@@ -2,7 +2,7 @@
 
 ## Features
 
-* Buliding using [razzle][razzle]
+* Building using [razzle][razzle]
 * Server hot module reloading
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
