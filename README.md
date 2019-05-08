@@ -53,6 +53,11 @@ kill -9 $pid
 
 ## Ideas behind the example
 
-* [[react-universally]][react-universally]
+* [react-universally][react-universally]
+* [razzle][razzle]
+* [Setting up JWT Authentication][JWT A]
+
 
   [react-universally]: <https://github.com/ctrlplusb/react-universally>
+  [razzle]: <https://github.com/jaredpalmer/razzle>
+  [JWT A]: <https://thinkster.io/tutorials/django-json-api/authentication>
