@@ -1,5 +1,14 @@
 # Razzle With Django Example
 
+## Features
+
+* Buliding using [razzle][razzle]
+* Server hot module reloading
+* Code splitting using [@loadable/component][@loadable/component]
+* Babel 7 with fragments
+* React 16.8.6 with hooks
+* Registration and authentication using JWT and django-rest-framework
+
 ## How to use
 
 Download the example [or clone](https://github.com/fivethreeo/react-ssr-django-jwt-docker.git):
@@ -57,7 +66,8 @@ kill -9 $pid
 * [razzle][razzle]
 * [Setting up JWT Authentication][JWT A]
 
-
   [react-universally]: <https://github.com/ctrlplusb/react-universally>
   [razzle]: <https://github.com/jaredpalmer/razzle>
   [JWT A]: <https://thinkster.io/tutorials/django-json-api/authentication>
+  [@loadable/component]: <https://github.com/smooth-code/loadable-components#readme>
+
