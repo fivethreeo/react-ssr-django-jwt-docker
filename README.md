@@ -39,7 +39,7 @@ Run all services (traefik, djangoapi, reactapp):
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
 
-Go to [https://localhost][https://localhost].
+Go to [https://localhost][https://localhost] .
 
 To remove https warnings add `certs/cert.pem` to authorities in your browser.
 
@@ -73,7 +73,7 @@ pipenv run python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yar
 kill -9 $pid
 ```
 
-Go to [http0://localhost][http://localhost].
+Go to [http://localhost][http://localhost] .
 
 ## Ideas behind the example
 
