@@ -1,4 +1,4 @@
-# Razzle With Django Example
+# React with server side rendering and django api
 
 ## Features
 
