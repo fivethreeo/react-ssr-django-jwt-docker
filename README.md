@@ -53,6 +53,6 @@ kill -9 $pid
 
 ## Ideas behind the example
 
-* [react-universally][react-universally]
+* [[react-universally]][react-universally]
 
   [react-universally]: <https://github.com/ctrlplusb/react-universally>
