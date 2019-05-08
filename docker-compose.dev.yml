@@ -19,9 +19,11 @@ services:
       target: dev
       context: .
       dockerfile: docker/django/Dockerfile
+    image: djangoapi_dev:latest
     volumes:
       - ./djangoapi:/code/djangoapi
       - ./runserver.py:/code/runserver.py
+      - ./manage.py:/code/manage.py
       - ./db.sqlite3:/code/db.sqlite3
     labels:
       - "traefik.enable=true"
@@ -32,6 +34,7 @@ services:
       target: dev
       context: .
       dockerfile: docker/react/Dockerfile
+    image: reactapp_dev:latest
     volumes:
       - ./src:/code/src
       - ./public:/code/public
