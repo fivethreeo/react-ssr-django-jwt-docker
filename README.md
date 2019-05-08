@@ -9,6 +9,7 @@
 * Babel 7 with fragments
 * React 16.8.6 with hooks
 * Registration and authentication using JWT and django-rest-framework
+* Usign [træfik][træfik] for routing requests and ssl.
 
 ## How to use
 
@@ -85,4 +86,5 @@ Go to [http://localhost](http://localhost).
   [razzle]: <https://github.com/jaredpalmer/razzle>
   [JWT A]: <https://thinkster.io/tutorials/django-json-api/authentication>
   [@loadable/component]: <https://github.com/smooth-code/loadable-components#readme>
+  [træfik]: <https://traefik.io/>
 
