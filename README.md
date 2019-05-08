@@ -39,6 +39,18 @@ Run all services (traefik, djangoapi, reactapp):
 docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 ```
 
+Go to [https://localhost][https://localhost].
+
+To remove https warnings add `certs/cert.pem` to authorities in your browser.
+
+To make your own certs:
+
+```bash
+cd certs
+rm cert*
+bash scert.sh cert
+```
+
 ### To run locally:
 
 Install requirements:
@@ -60,6 +72,8 @@ Start the django api and the react app:
 pipenv run python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yarn start
 kill -9 $pid
 ```
+
+Go to [http0://localhost][http://localhost].
 
 ## Ideas behind the example
 
