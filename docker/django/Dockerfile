@@ -28,18 +28,6 @@ RUN apk add --no-cache --virtual .build-deps \
     && apk add --virtual .rundeps $runDeps \
     && apk del .build-deps
 
-# Add any static environment variables needed by Django or your settings file here:
-ENV DJANGO_SETTINGS_MODULE=djangoapi.settings
-
-# Tell uWSGI where to find your wsgi file (change this):
-ENV UWSGI_WSGI_FILE=djangoapi/wsgi.py
-
-# Base uWSGI configuration (you shouldn't need to change these):
-ENV UWSGI_HTTP=:8000 UWSGI_MASTER=1 UWSGI_HTTP_AUTO_CHUNKED=1 UWSGI_HTTP_KEEPALIVE=1 UWSGI_UID=1000 UWSGI_GID=2000 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
-
-# Number of uWSGI workers and threads per worker (customize as needed):
-ENV UWSGI_WORKERS=2 UWSGI_THREADS=4
-
 # Uncomment after creating your docker-entrypoint.sh
 # ENTRYPOINT ["/code/docker-entrypoint.sh"]
 
@@ -52,8 +40,20 @@ FROM base as prod
 COPY djangoapi djangoapi/
 COPY manage.py manage.py
 
+# Add any static environment variables needed by Django or your settings file here:
+ENV DJANGO_SETTINGS_MODULE=djangoapi.settings
+
+# Tell uWSGI where to find your wsgi file (change this):
+ENV UWSGI_WSGI_FILE=djangoapi/wsgi.py
+
+# Base uWSGI configuration (you shouldn't need to change these):
+ENV UWSGI_HTTP=:3002 UWSGI_MASTER=1 UWSGI_HTTP_AUTO_CHUNKED=1 UWSGI_HTTP_KEEPALIVE=1 UWSGI_UID=1000 UWSGI_GID=2000 UWSGI_LAZY_APPS=1 UWSGI_WSGI_ENV_BEHAVIOR=holy
+
+# Number of uWSGI workers and threads per worker (customize as needed):
+ENV UWSGI_WORKERS=2 UWSGI_THREADS=4
+
 # Call collectstatic (customize the following line with the minimal environment variables needed for manage.py to run):
-RUN DATABASE_URL='' python manage.py collectstatic --noinput
+# RUN DATABASE_URL='' python manage.py collectstatic --noinput
 
 # Start uWSGI
 CMD ["uwsgi", "--show-config"]

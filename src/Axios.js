@@ -30,7 +30,7 @@ export const getAxios = (cookies) => {
         expires: new Date(new Date().getTime()+1000*60*60*24),
         maxAge: 60*60*24,
         domain: process.env.HOST,
-        secure: process.env.NODE_ENV === 'development' ? false : true,
+        secure: process.env.RAZZLE_NO_HTTPS === 'true' ? false : true,
         httpOnly: false,
         sameSite: true
       });

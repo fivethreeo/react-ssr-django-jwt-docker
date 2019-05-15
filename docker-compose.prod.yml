@@ -23,3 +23,21 @@ services:
       target: prod
       context: .
       dockerfile: docker/django/Dockerfile
+    image: djangoapi:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=3002"
+      - "traefik.frontend.rule=Host:localhost;PathPrefix:/api,/admin"
+  reactapp:
+    build:
+      target: prod
+      context: .
+      dockerfile: docker/react/Dockerfile
+    image: reactapp:latest
+    labels:
+      - "traefik.enable=true"
+      - "traefik.server.port=3000"
+      - "traefik.server.frontend.rule=Host:localhost"
+    environment:
+      PUBLIC_PATH: https://localhost/
+      CLIENT_PUBLIC_PATH: https://localhost/
