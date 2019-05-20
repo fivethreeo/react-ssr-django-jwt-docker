@@ -33,11 +33,11 @@ services:
       target: prod
       context: .
       dockerfile: docker/react/Dockerfile
+      args:
+        PUBLIC_PATH: https://localhost/
+        CLIENT_PUBLIC_PATH: https://localhost/
     image: reactapp:latest
     labels:
       - "traefik.enable=true"
       - "traefik.server.port=3000"
       - "traefik.server.frontend.rule=Host:localhost"
-    environment:
-      PUBLIC_PATH: https://localhost/
-      CLIENT_PUBLIC_PATH: https://localhost/

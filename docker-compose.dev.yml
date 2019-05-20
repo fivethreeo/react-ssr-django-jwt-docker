@@ -5,8 +5,8 @@ services:
     command:
       - "--api"
       - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
-      - "--entrypoints=Name:https Address::443 TLS:certs/cert.crt,certs/cert.key"
-      - "--entrypoints=Name:httpsdev Address::3001 TLS:certs/cert.crt,certs/cert.key"
+      - "--entrypoints=Name:https Address::443 TLS:certs/localhost_https_server.crt,certs/localhost_https_server.key"
+      - "--entrypoints=Name:httpsdev Address::3001 TLS:certs/localhost_https_server.crt,certs/localhost_https_server.key"
       - "--defaultentrypoints=http,https,httpsdev"
       - "--docker"
       - "--docker.watch"

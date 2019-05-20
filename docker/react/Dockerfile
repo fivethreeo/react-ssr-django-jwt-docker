@@ -3,6 +3,12 @@ FROM node:8-alpine as base
 RUN mkdir /code
 WORKDIR /code
 
+ARG PUBLIC_PATH=https://localhost/ CLIENT_PUBLIC_PATH=https://localhost/ RAZZLE_API_URI=https://localhost
+
+ENV RAZZLE_NO_HTTPS=false
+
+ENV PUBLIC_PATH=${PUBLIC_PATH} CLIENT_PUBLIC_PATH=${PUBLIC_PATH} RAZZLE_API_URI=${RAZZLE_API_URI} 
+
 # Copying requirements
 COPY package.json package.json
 COPY yarn.lock yarn.lock
@@ -43,7 +49,7 @@ COPY razzle.config.js razzle.config.js
 COPY .babelrc .babelrc
 
 RUN yarn build \
-    && rf -rf node_modules \
+    && rm -rf node_modules \
     && rm yarn.lock \
     && mv node_modules_run node_modules \
     && mv yarn_run.lock yarn.lock \

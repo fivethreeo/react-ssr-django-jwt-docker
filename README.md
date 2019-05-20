@@ -48,8 +48,9 @@ To make your own certs:
 
 ```bash
 cd certs
-rm cert*
-bash scert.sh cert
+rm localhost_https*
+bash makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Huston" --dn-o "Your organization" --dn-ou "Your department" --dn-email "your@email.com" \
+    --common-name "localhost" --dns "localhost" --ip "127.0.0.1" --https
 ```
 
 ### To run locally:
