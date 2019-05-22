@@ -66,6 +66,13 @@ makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
   --dn-o "Your organization" --dn-ou "Your department" \
   --dn-email "your@email.com" \
   --common-name "example.com" --dns "example.com" --dns "www.example.com" --dns "admin.example.com" --https
+
+Tls server and client certificates for docker
+
+makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
+  --dn-o "Your organization" --dn-ou "Your department" \
+  --dn-email "your@email.com" \
+  --common-name "docker" --ip "192.168.0.2" 
     '
   printf 'Usage: %s [-c|--common-name <arg>] [-d|--dns <arg>] [-i|--ip <arg>] [-p|--(no-)passphrase] [-s|--(no-)https] [--dn-c <arg>] [--dn-st <arg>] [--dn-l <arg>] [--dn-o <arg>] [--dn-ou <arg>] [--dn-email <arg>] [-h|--help]\n' "$0"
   printf '\t%s\n' "-c,--common-name: set common name (default: 'localhost')"
@@ -332,10 +339,6 @@ fi
 
 serverkeysuffix=${servername}-key.pem
 servercertsuffix=${servername}.pem
-
-clientkeysuffix=client-key.pem
-clientcertsuffix=client.pem
-
 if [ $_arg_https == "on" ]
 then
   serverkeysuffix=${servername}.key
@@ -344,6 +347,7 @@ fi
 
 server_key="/tmp/scert/${prefix}_${serverkeysuffix}"
 server_crt="/tmp/scert/${prefix}_${servercertsuffix}"
+
 openssl req -new -sha256 -nodes -out /tmp/scert/tmp.csr -newkey rsa:2048 -keyout "$server_key" -config <( cat /tmp/scert/tmp.cnf )
 openssl x509 -req -in /tmp/scert/tmp.csr -CA "$ca" -CAkey "$ca_key_nopass" -CAcreateserial -out "$server_crt" -days 500 -sha256 -extfile /tmp/scert/tmp.ext
   
@@ -360,10 +364,17 @@ cp $server_crt .
 
 if [ $_arg_https != "on" ]
 then
+
+  clientkeysuffix=client-key.pem
+  clientcertsuffix=client.pem
+
   client_key="/tmp/scert/${prefix}_${clientkeysuffix}"
   client_crt="/tmp/scert/${prefix}_${clientcertsuffix}"
+  
   openssl req -subj '/CN=client' -new -sha256 -nodes -out /tmp/scert/tmp-client.csr -newkey rsa:2048 -keyout "$client_key"
   openssl x509 -req -in /tmp/scert/tmp-client.csr -CA "$ca" -CAkey "$ca_key_nopass" -CAcreateserial -out "$client_crt" -days 500 -sha256 -extfile /tmp/scert/tmp-client.ext
+
+  echo ""
 
   echo Generated client key: ${prefix}_${clientkeysuffix}
   cp $client_key .
@@ -373,6 +384,7 @@ then
 
 fi
 
+rm -r /tmp/scert/* 2>/dev/null
 
 #
 # ] <-- needed because of Argbash
