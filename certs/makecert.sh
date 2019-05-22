@@ -259,7 +259,7 @@ new_ca_key=""
 if [ -f "${prefix}_ca-key.pem" ]
 then
   echo Using existing ca key: ${prefix}_ca_key.pem
-  ca_key="${prefix}_ca_key.pem"
+  ca_key="${prefix}_ca-key.pem"
 else
   new_ca_key="$ca_key"
   openssl genrsa $passout -out "$ca_key" 2048
@@ -356,11 +356,15 @@ echo ""
 if [ ! -z $new_ca_key ]; then echo Generated ca private key: ${prefix}_ca-key.pem; cp $new_ca_key ${prefix}_ca-key.pem; fi
 if [ ! -z $new_ca ]; then echo Generated ca certificate: ${prefix}_ca.pem; cp $new_ca .; fi
 
+echo ""
+
 echo Generated server key: ${prefix}_${serverkeysuffix}
 cp $server_key .
 
 echo Generated server certificate: ${prefix}_${servercertsuffix}
 cp $server_crt .
+
+echo ""
 
 if [ $_arg_https != "on" ]
 then
