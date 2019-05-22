@@ -53,15 +53,19 @@ _arg_dn_email=
 
 print_help ()
 {
-  printf '%s\n' 'If basename_<scheme>_ca_key.pem exists already new certificates will be made using this ca
+  printf '%s\n' 'If <common-name>_<scheme>_ca[_key].pem exists already new certificates will be made using this ca
 
 examples:
 
-makecert.sh --dn-c "NO" --dn-st "Trøndelag" --dn-l "Levanger" --dn-o "Private" --dn-ou "Home" --dn-email "oyvind.saltvik@gmail.com" \
-    --common-name "localhost" --dns "localhost" --ip "127.0.0.1" --https
+makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
+  --dn-o "Your organization" --dn-ou "Your department" \
+  --dn-email "your@email.com" \
+  --common-name "localhost" --dns "localhost" --ip "127.0.0.1" --https
 
-makecert.sh --dn-c "NO" --dn-st "Trøndelag" --dn-l "Levanger" --dn-o "Private" --dn-ou "Home" --dn-email "oyvind.saltvik@gmail.com" \
-    --common-name "example.com" --dns "example.com" --dns "www.example.com" --dns "admin.example.com" --https
+makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
+  --dn-o "Your organization" --dn-ou "Your department" \
+  --dn-email "your@email.com" \
+  --common-name "example.com" --dns "example.com" --dns "www.example.com" --dns "admin.example.com" --https
     '
   printf 'Usage: %s [-c|--common-name <arg>] [-d|--dns <arg>] [-i|--ip <arg>] [-p|--(no-)passphrase] [-s|--(no-)https] [--dn-c <arg>] [--dn-st <arg>] [--dn-l <arg>] [--dn-o <arg>] [--dn-ou <arg>] [--dn-email <arg>] [-h|--help]\n' "$0"
   printf '\t%s\n' "-c,--common-name: set common name (default: 'localhost')"
@@ -261,20 +265,6 @@ then
   openssl rsa $passin -in "$ca_key" -out "$ca_key_nopass"
 fi
 
-ca="/tmp/scert/${prefix}_ca.pem"
-new_ca=""
-if [ -f "${prefix}_ca.pem" ]
-then
-  echo Using existing ca: ${prefix}_ca.pem
-  ca="${prefix}_ca.pem"
-else
-  new_ca="$ca"
-  openssl req -x509 -new -nodes -key "$ca_key_nopass" -subj "/C=$_arg_dn_c/ST=$_arg_dn_st/L=$_arg_dn_l/O=$_arg_dn_o/OU=$_arg_dn_ou/CN=$_arg_common_name" \
-  -sha256 -days 1024 -out "$ca"
-fi
-
-echo ""
-
 echo "[req]" > /tmp/scert/tmp.cnf
 echo "default_bits = 2048" >> /tmp/scert/tmp.cnf
 echo "prompt = no" >> /tmp/scert/tmp.cnf
@@ -297,6 +287,7 @@ echo "keyUsage = digitalSignature, nonRepudiation, keyEncipherment, dataEncipher
 if [ $_arg_https != "on" ]
 then
   echo "extendedKeyUsage = serverAuth" >> /tmp/scert/tmp.ext
+  echo "extendedKeyUsage = clientAuth" >> /tmp/scert/tmp-client.ext
 fi
 
 echo "subjectAltName = @alt_names" >> /tmp/scert/tmp.ext
@@ -315,27 +306,72 @@ do
   echo "IP.$i = ${_arg_ip[$i-1]}" >> /tmp/scert/tmp.ext
 done
 
+ca="/tmp/scert/${prefix}_ca.pem"
+new_ca=""
+if [ -f "${prefix}_ca.pem" ]
+then
+  echo Using existing ca: ${prefix}_ca.pem
+  ca="${prefix}_ca.pem"
+else
+  new_ca="$ca"
+  openssl req -x509 -new -nodes -key "$ca_key_nopass" -days 1024 -out "$ca" -config <( cat /tmp/scert/tmp.cnf ) 
+fi
+
+echo ""
+
+servername=server
+if [ ! $dnslength -eq 0 ]
+then
+  servername=${_arg_dns[0]//\./_}
+else
+  if [ ! $iplength -eq 0 ]
+  then
+    servername=${_arg_ip[0]//\./_}
+  fi
+fi
+
+serverkeysuffix=${servername}-key.pem
+servercertsuffix=${servername}.pem
+
+clientkeysuffix=client-key.pem
+clientcertsuffix=client.pem
 
 if [ $_arg_https == "on" ]
 then
-  server_key="/tmp/scert/${prefix}_server.key"
-  server_crt="/tmp/scert/${prefix}_server.crt"
-  openssl req -new -sha256 -nodes -out /tmp/scert/tmp.csr -newkey rsa:2048 -keyout "$server_key" -config <( cat /tmp/scert/tmp.cnf )
-  openssl x509 -req -in /tmp/scert/tmp.csr -CA "$ca" -CAkey "$ca_key_nopass" -CAcreateserial -out "$server_crt" -days 500 -sha256 -extfile /tmp/scert/tmp.ext
-  
-  echo ""
-  
-  if [ ! -z $new_ca_key ]; then echo Generated ca private key: ${prefix}_ca_key.pem; cp $new_ca_key ${prefix}_ca_key.pem; fi
-  if [ ! -z $new_ca ]; then echo Generated ca certificate: ${prefix}_ca.pem; cp $new_ca .; fi
-
-  echo Generated server key: ${prefix}_server.key
-  cp $server_key .
-
-  echo Generated server certificate: ${prefix}_server.crt;
-  cp $server_crt .
+  serverkeysuffix=${servername}.key
+  servercertsuffix=${servername}.crt
 fi
 
-# makecert.sh --dn-c "NO" --dn-st "Trøndelag" --dn-l "Levanger" --dn-o "Private" --dn-ou "Home" --dn-email "oyvind.saltvik@gmail.com" --common-name "localhost" --dns "localhost" --ip "127.0.0.1" --https
+server_key="/tmp/scert/${prefix}_${serverkeysuffix}"
+server_crt="/tmp/scert/${prefix}_${servercertsuffix}"
+openssl req -new -sha256 -nodes -out /tmp/scert/tmp.csr -newkey rsa:2048 -keyout "$server_key" -config <( cat /tmp/scert/tmp.cnf )
+openssl x509 -req -in /tmp/scert/tmp.csr -CA "$ca" -CAkey "$ca_key_nopass" -CAcreateserial -out "$server_crt" -days 500 -sha256 -extfile /tmp/scert/tmp.ext
+  
+echo ""
+  
+if [ ! -z $new_ca_key ]; then echo Generated ca private key: ${prefix}_ca-key.pem; cp $new_ca_key ${prefix}_ca-key.pem; fi
+if [ ! -z $new_ca ]; then echo Generated ca certificate: ${prefix}_ca.pem; cp $new_ca .; fi
+
+echo Generated server key: ${prefix}_${serverkeysuffix}
+cp $server_key .
+
+echo Generated server certificate: ${prefix}_${servercertsuffix}
+cp $server_crt .
+
+if [ $_arg_https != "on" ]
+then
+  client_key="/tmp/scert/${prefix}_${clientkeysuffix}"
+  client_crt="/tmp/scert/${prefix}_${clientcertsuffix}"
+  openssl req -subj '/CN=client' -new -sha256 -nodes -out /tmp/scert/tmp-client.csr -newkey rsa:2048 -keyout "$client_key"
+  openssl x509 -req -in /tmp/scert/tmp-client.csr -CA "$ca" -CAkey "$ca_key_nopass" -CAcreateserial -out "$client_crt" -days 500 -sha256 -extfile /tmp/scert/tmp-client.ext
+
+  echo Generated client key: ${prefix}_${clientkeysuffix}
+  cp $client_key .
+
+  echo Generated client certificate: ${prefix}_${clientcertsuffix}
+  cp $client_crt .
+
+fi
 
 
 #

@@ -42,7 +42,7 @@ docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
 
 Go to [https://localhost](https://localhost).
 
-To remove https warnings add `certs/cert.pem` to authorities in your browser.
+To remove https warnings add `certs/localhost_https_ca.pem` to authorities in your browser.
 
 To make your own certs:
 
