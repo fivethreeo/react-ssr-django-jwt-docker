@@ -256,7 +256,7 @@ fi
 
 ca_key=/tmp/scert/tmp.pass.key.pem
 new_ca_key=""
-if [ -f "${prefix}_ca_key.pem" ]
+if [ -f "${prefix}_ca-key.pem" ]
 then
   echo Using existing ca key: ${prefix}_ca_key.pem
   ca_key="${prefix}_ca_key.pem"
