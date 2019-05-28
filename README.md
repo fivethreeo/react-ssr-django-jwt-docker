@@ -25,7 +25,7 @@ cd react-ssr-django-jwt-docker-master
 Build images:
 
 ```bash
-docker-compose -f docker.compose.yml -f docker-compose.dev.yml build
+docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
 ```
 
 Run database migrations:
