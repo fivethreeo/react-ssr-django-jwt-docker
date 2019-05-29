@@ -21,13 +21,14 @@ services:
     volumes:
       - ./traefik/acme:/etc/traefik/acme
       - /var/run/docker.sock:/var/run/docker.sock:ro
+    networks:
+      - traefik
     ports:
-     - "80:80"
-     - "443:443"
+      - "8080:8080"
+      - "80:80"
+      - "443:443"
 
 networks:
-  default:
+  traefik:
     name: traefik
-    driver: overlay
-    options:
-      internal: true
+    driver: bridge
