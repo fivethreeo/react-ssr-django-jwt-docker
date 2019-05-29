@@ -25,19 +25,19 @@ cd react-ssr-django-jwt-docker-master
 Build images:
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml build
+docker-compose -f docker-compose.dev.yml build
 ```
 
 Run database migrations:
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml run djangoapi python manage.py migrate
+docker-compose -f docker-compose.dev.yml run djangoapi python manage.py migrate
 ```
 
 Run all services (traefik, djangoapi, reactapp):
 
 ```bash
-docker-compose -f docker-compose.yml -f docker-compose.dev.yml up
+docker-compose -f docker-compose.dev.yml up
 ```
 
 Go to [https://localhost](https://localhost).

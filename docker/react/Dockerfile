@@ -3,7 +3,9 @@ FROM node:8-alpine as base
 RUN mkdir /code
 WORKDIR /code
 
-ARG PUBLIC_PATH=https://localhost/ CLIENT_PUBLIC_PATH=https://localhost/ RAZZLE_API_URI=https://localhost
+ARG PUBLIC_PATH=https://localhost/
+ARG CLIENT_PUBLIC_PATH=https://localhost/
+ARG RAZZLE_API_URI=https://localhost
 
 ENV RAZZLE_NO_HTTPS=false
 

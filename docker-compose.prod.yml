@@ -1,23 +1,6 @@
 version: "3.7"
 
 services:
-  traefik:
-    command:
-      - "--api"
-      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
-      - "--entrypoints=Name:https Address::443 TLS"
-      - "--defaultentrypoints=http,https"
-      - "--acme"
-      - "--acme.storage=/etc/traefik/acme/acme.json"
-      - "--acme.entryPoint=https"
-      - "--acme.httpChallenge.entryPoint=http"
-      - "--acme.onHostRule=true"
-      - "--acme.onDemand=false"
-      - "--acme.email=jason@raimondi.us"
-      - "--docker"
-      - "--docker.watch"
-    volumes:
-      - ./traefik/acme:/etc/traefik/acme
   djangoapi:
     build:
       target: prod
@@ -28,6 +11,9 @@ services:
       - "traefik.enable=true"
       - "traefik.port=3002"
       - "traefik.frontend.rule=Host:localhost;PathPrefix:/api,/admin"
+      - "traefik.network=traefik"
+    networks:
+      - traefik
   reactapp:
     build:
       target: prod
@@ -41,3 +27,12 @@ services:
       - "traefik.enable=true"
       - "traefik.server.port=3000"
       - "traefik.server.frontend.rule=Host:localhost"
+      - "traefik.network=traefik"
+    networks:
+      - traefik
+
+
+networks:
+  traefik:
+    external:
+      name: traefik
