@@ -37,7 +37,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'djangoapi.authentication',
+    'rest_framework',
+    'rest_framework_jwt',
+    'djoser',
+    'graphene_django',
+    'gjwt_auth'
     'corsheaders'
 ]
 
@@ -50,9 +54,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'gjwt_auth.middleware.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoapi.urls'
+
 
 TEMPLATES = [
     {
@@ -102,6 +108,23 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTH_USER_MODEL = 'gjwt_auth.User'
+
+GRAPHENE = {
+    'SCHEMA': 'djangoapi.schema.schema'
+}
+
+DJOSER = {
+    'DOMAIN': os.environ.get('DJANGO_DJOSER_DOMAIN', 'localhost:3000'),
+    'SITE_NAME': os.environ.get('DJANGO_DJOSER_SITE_NAME', 'my site'),
+    'PASSWORD_RESET_CONFIRM_URL': '?action=set-new-password&uid={uid}&token={token}',
+    'ACTIVATION_URL': 'activate?uid={uid}&token={token}',
+    'SEND_ACTIVATION_EMAIL': True,
+}
+
+JWT_AUTH = {
+    'JWT_ALLOW_REFRESH': True,
+}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/
@@ -122,15 +145,6 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-AUTH_USER_MODEL = 'authentication.User'
-
-REST_FRAMEWORK = {
-    'EXCEPTION_HANDLER': 'djangoapi.authentication.exceptions.core_exception_handler',
-    'NON_FIELD_ERRORS_KEY': 'error',
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
-}
 
 CORS_ORIGIN_WHITELIST = (
     '%s:%s' % (os.environ.get('HOST', 'localhost'), os.environ.get('PORT', '3000'))

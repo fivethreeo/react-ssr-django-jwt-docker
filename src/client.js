@@ -2,12 +2,19 @@ import React from 'react';
 import { hydrate, render } from 'react-dom';
 import { loadableReady } from '@loadable/component'
 import { BrowserRouter } from 'react-router-dom';
+import { createBrowserHistory } from 'history';
+
 import Cookies from 'universal-cookie';
+import { ApolloProvider } from "react-apollo-hooks";
+import { getApolloClient } from './apolloUtils';
 import CookieProvider from './Cookies';
-import AxiosProvider from './Axios';
 import App from './App';
 
 const cookies = new Cookies();
+
+const history = createBrowserHistory();
+
+const client = getApolloClient({ history, cookies });
 
 // Load all components needed before rendering
 loadableReady(() => {
@@ -15,11 +22,11 @@ loadableReady(() => {
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
     <CookieProvider value={cookies}>
-      <AxiosProvider>
-        <BrowserRouter>
+      <ApolloProvider client={client}>
+        <BrowserRouter history={history} >
           <App />
         </BrowserRouter>
-      </AxiosProvider>
+      </ApolloProvider>
     </CookieProvider>,
     root)
 })

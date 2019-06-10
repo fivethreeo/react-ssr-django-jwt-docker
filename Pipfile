@@ -8,8 +8,8 @@ verify_ssl = true
 [packages]
 django = "*"
 django-rest-framework = "*"
-djangorestframework-simplejwt = "*"
 django-cors-headers = "*"
+graphene-jwt-auth-registration = "*"
 
 [requires]
 python_version = "3.6"

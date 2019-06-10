@@ -15,7 +15,7 @@ services:
       - "--acme.httpChallenge.entryPoint=http"
       - "--acme.onHostRule=true"
       - "--acme.onDemand=false"
-      - "--acme.email=jason@raimondi.us"
+      - "--acme.email=${ACME_EMAIL:?Email required}"
       - "--docker"
       - "--docker.watch"
     volumes:
