@@ -19,7 +19,7 @@ export const unAuthenticate = (cookies) => {
   cookies.remove("authToken");
 };
 
-export const getApolloClient({ history, cookies }) => {
+export const getApolloClient = ({ history, cookies }) => {
 
   const httpLink = new HttpLink({ uri: api_uri });
 

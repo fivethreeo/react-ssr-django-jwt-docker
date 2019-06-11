@@ -41,7 +41,7 @@ INSTALLED_APPS = [
     'rest_framework_jwt',
     'djoser',
     'graphene_django',
-    'gjwt_auth'
+    'gjwt_auth',
     'corsheaders'
 ]
 
@@ -147,5 +147,5 @@ STATIC_URL = '/static/'
 
 
 CORS_ORIGIN_WHITELIST = (
-    '%s:%s' % (os.environ.get('HOST', 'localhost'), os.environ.get('PORT', '3000'))
+    'http://%s:%s' % (os.environ.get('HOST', 'localhost'), os.environ.get('PORT', '3000')),
 )

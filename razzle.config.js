@@ -4,7 +4,8 @@ const LoadablePlugin = require('@loadable/webpack-plugin')
 const securityPlugin = require('./razzle-plugins/security/index.js');
 
 module.exports = {
-  modify: (config, { target }) => {
+  modify: (defaultConfig, { target }) => {
+    const config = defaultConfig;
     if (target === 'web') {
       return {
         ...config,
@@ -17,6 +18,10 @@ module.exports = {
           }),
         ],
       };
+    }
+    if (target === 'node') {
+      config.entry.unshift('cross-fetch/polyfill');
+
     }
   return config;
   },
