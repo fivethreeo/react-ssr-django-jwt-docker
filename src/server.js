@@ -1,5 +1,4 @@
 import path from 'path';
-import App from './App';
 import React from 'react';
 import express from 'express';
 import { renderToString } from 'react-dom/server';
@@ -7,9 +6,10 @@ import { ChunkExtractor } from '@loadable/server'
 import { Router } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { createMemoryHistory } from 'history';
-import CookieProvider from './Cookies';
 import { ApolloProvider } from "react-apollo-hooks";
-import { getApolloClient } from './apolloUtils';
+import CookieProvider from './utils/Cookies';
+import { getApolloClient } from './utils/apolloUtils';
+import App from './components/App';
 
 import security from '../razzle-plugins/security/middleware';
 

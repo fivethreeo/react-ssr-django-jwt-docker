@@ -7,8 +7,8 @@ const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
 );
 const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
-const Login = loadable(() => import(/* webpackChunkName: "login" */ './Login'));
-const Register = loadable(() => import(/* webpackChunkName: "register" */ './Register'));
+const Login = loadable(() => import(/* webpackChunkName: "login" */ '../auth/Login'));
+const Register = loadable(() => import(/* webpackChunkName: "register" */ '../auth/Register'));
 
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')

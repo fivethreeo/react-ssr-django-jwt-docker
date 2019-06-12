@@ -1,12 +1,10 @@
 import React, { useContext } from 'react';
-import { AxiosContext } from './Axios';
 import { Formik } from 'formik';
 import * as Yup from 'yup';
-import { TextInput, CheckboxInput } from './FormUtils';
+import { TextInput, CheckboxInput } from '../utils/FormUtils';
 
 export default Register => {
 
-  const { register } = useContext(AxiosContext);
 
   return (
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">

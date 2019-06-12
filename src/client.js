@@ -6,9 +6,9 @@ import { createBrowserHistory } from 'history';
 
 import Cookies from 'universal-cookie';
 import { ApolloProvider } from "react-apollo-hooks";
-import { getApolloClient } from './apolloUtils';
-import CookieProvider from './Cookies';
-import App from './App';
+import { getApolloClient } from './utils/apolloUtils';
+import CookieProvider from './utils/Cookies';
+import App from './components/App';
 
 const cookies = new Cookies();
 
