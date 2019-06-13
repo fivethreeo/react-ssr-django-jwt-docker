@@ -3,9 +3,9 @@ import { hydrate, render } from 'react-dom';
 import { loadableReady } from '@loadable/component'
 import { BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
-
 import Cookies from 'universal-cookie';
-import { ApolloProvider } from "react-apollo-hooks";
+import { ApolloProvider } from "react-apollo";
+import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import { getApolloClient } from './utils/apolloUtils';
 import CookieProvider from './utils/Cookies';
 import App from './components/App';
@@ -23,9 +23,11 @@ loadableReady(() => {
   renderMethod(
     <CookieProvider value={cookies}>
       <ApolloProvider client={client}>
-        <BrowserRouter history={history} >
-          <App />
-        </BrowserRouter>
+        <ApolloHooksProvider client={client} >
+          <BrowserRouter history={history} >
+            <App />
+          </BrowserRouter>
+        </ApolloHooksProvider>
       </ApolloProvider>
     </CookieProvider>,
     root)

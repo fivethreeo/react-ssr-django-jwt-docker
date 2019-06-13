@@ -52,6 +52,6 @@ export const getApolloClient = ({ history, cookies }) => {
     link: authErrorLink.concat(concat(authMiddleware, httpLink)),
     cache: cache,
   });
-
+  console.log(client);
   return client;
 }

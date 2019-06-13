@@ -7,7 +7,7 @@ const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
 );
 const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
-const Login = loadable(() => import(/* webpackChunkName: "login" */ '../auth/Login'));
+// const Login = loadable(() => import(/* webpackChunkName: "login" */ '../auth/Login'));
 const Register = loadable(() => import(/* webpackChunkName: "register" */ '../auth/Register'));
 
 const Footer = loadable(() =>
@@ -26,7 +26,6 @@ const App = () => {
               path="/"
               component={Body} 
             />
-            <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>
       </div>

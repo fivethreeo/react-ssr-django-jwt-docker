@@ -6,7 +6,8 @@ import { ChunkExtractor } from '@loadable/server'
 import { Router } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { createMemoryHistory } from 'history';
-import { ApolloProvider } from "react-apollo-hooks";
+import { ApolloProvider } from "react-apollo";
+import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import CookieProvider from './utils/Cookies';
 import { getApolloClient } from './utils/apolloUtils';
 import App from './components/App';
@@ -39,9 +40,11 @@ server
     const jsx = extractor.collectChunks(
       <CookieProvider value={cookies}>
         <ApolloProvider client={client} >
-          <Router history={history} >
-            <App />
-          </Router>
+          <ApolloHooksProvider client={client} >
+            <Router history={history} >
+              <App />
+            </Router>
+          </ApolloHooksProvider>
         </ApolloProvider>
       </CookieProvider>)
     // Render your application
