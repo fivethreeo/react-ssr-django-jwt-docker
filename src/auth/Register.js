@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom'
 import { graphql, compose } from 'react-apollo'
 import { withFormik } from 'formik';
+import { withCookies } from '../utils/Cookies';
 import RegisterSchema from './RegisterSchema';
 import RegisterMutation from './RegisterMutation';
 import RegisterForm from './RegisterForm';
@@ -30,7 +31,8 @@ const RegisterFormWithGraphQL = compose(
     }),
     handleSubmit: handleSubmit,
     displayName: 'Register'
-  })
+  }),
+  withCookies
 )(RegisterForm)
 
 const RegisterFormWithRouter = withRouter(RegisterFormWithGraphQL)

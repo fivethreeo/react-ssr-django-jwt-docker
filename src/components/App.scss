@@ -35,16 +35,16 @@ body {
   border-top-left-radius: 0;
   border-top-right-radius: 0;
 }
-.form-register input[name="username"] {
+.form-register input[name="email"] {
   margin-bottom: -1px;
   border-bottom-right-radius: 0;
   border-bottom-left-radius: 0;
 }
-.form-register input[name="password"], .form-register input[name="email"] {
+.form-register input[name="password"] {
   margin-bottom: -1px;
   border-radius: 0;
 }
-.form-register input[name="password_again"] {
+.form-register input[name="passwordRepeat"] {
   margin-bottom: 10px;
   border-top-left-radius: 0;
   border-top-right-radius: 0;
