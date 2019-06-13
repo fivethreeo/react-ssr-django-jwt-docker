@@ -12,7 +12,7 @@ const RegisterForm = ({
   handleSubmit,
   handleReset,
 }) =>
-  <form className="needs-validation form-auth form-register" onSubmit={handleSubmit} novalidate>
+  <form className="needs-validation form-auth form-register" onSubmit={handleSubmit} noValidate>
     <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
 
     <TextInput

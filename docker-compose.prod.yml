@@ -10,7 +10,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.port=3002"
-      - "traefik.frontend.rule=Host:192.168.1.22;PathPrefix:/api,/admin"
+      - "traefik.frontend.rule=Host:192.168.1.22;PathPrefix:/graphql,/admin"
       - "traefik.docker.network=traefik"
     networks:
       - traefik

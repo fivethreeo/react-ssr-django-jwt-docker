@@ -6,10 +6,6 @@ import { InMemoryCache } from "apollo-cache-inmemory";
 
 let api_uri = process.env.RAZZLE_API_URI;
 
-if (process.env.NODE_ENV === 'development') {
-  api_uri = 'http://' + process.env.HOST + ':' + (parseInt(process.env.PORT) + 2) + '/graphql';
-}
-
 export const isAuthenticated = (cookies) => {
   const token = cookies.get("authToken");
   return !!(token) ? true : false;

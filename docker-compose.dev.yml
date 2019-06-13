@@ -33,7 +33,7 @@ services:
     labels:
       - "traefik.enable=true"
       - "traefik.port=3002"
-      - "traefik.frontend.rule=Host:localhost;PathPrefix:/api,/admin"
+      - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin"
   reactapp:
     build:
       target: dev
@@ -56,3 +56,4 @@ services:
     environment:
       PUBLIC_PATH: https://localhost/
       CLIENT_PUBLIC_PATH: https://localhost/
+      RAZZLE_API_URI: https://localhost/graphql

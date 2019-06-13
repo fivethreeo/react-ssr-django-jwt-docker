@@ -5,7 +5,7 @@ WORKDIR /code
 
 ARG PUBLIC_PATH=https://localhost/
 ARG CLIENT_PUBLIC_PATH=https://localhost/
-ARG RAZZLE_API_URI=https://localhost
+ARG RAZZLE_API_URI=https://localhost/graphql
 
 ENV RAZZLE_NO_HTTPS=false
 

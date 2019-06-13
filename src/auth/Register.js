@@ -9,10 +9,9 @@ import RegisterForm from './RegisterForm';
 
 const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {
   const {email, password, passwordRepeat } = payload
+  console.log('submit')
   props.registerUser({ variables: { email, password, passwordRepeat } })
     .then((response) => {
-      window.localStorage.setItem('graphcoolToken', response.data.registerUser.token)
-      props.data.refetch()
       props.history.push('/')
     }).catch((e) => {
       const errors = e.graphQLErrors.map(error => error.message)
@@ -31,8 +30,7 @@ const RegisterFormWithGraphQL = compose(
     }),
     handleSubmit: handleSubmit,
     displayName: 'Register'
-  }),
-  withCookies
+  })
 )(RegisterForm)
 
 const RegisterFormWithRouter = withRouter(RegisterFormWithGraphQL)
