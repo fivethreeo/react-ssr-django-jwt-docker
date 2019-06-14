@@ -1,4 +1,5 @@
 django
+django-environ
 django-rest-framework
 django-cors-headers
 graphene-jwt-auth-registration

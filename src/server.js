@@ -10,6 +10,7 @@ import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import CookieProvider from './utils/Cookies';
 import { getApolloClient } from './utils/apolloUtils';
+import ClientConfig from './config/components/ClientConfig';
 import App from './components/App';
 
 import security from '../razzle-plugins/security/middleware';
@@ -56,6 +57,8 @@ server
     // And you can even collect your style tags (if you use "mini-css-extract-plugin")
     const styleTags = extractor.getStyleTags({nonce: res.locals.nonce}) // or extractor.getStyleElements();
 
+    const configTag = renderToString(<ClientConfig nonce={res.locals.nonce} />)
+
     res.send(
       // prettier-ignore
       `<!doctype html>
@@ -70,6 +73,7 @@ server
   </head>
   <body>
       <div id="root">${markup}</div>
+      ${configTag}
       ${scriptTags}
   </body>
 </html>`

@@ -11,6 +11,12 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 """
 
 import os
+import environ
+
+env = environ.Env(
+    # set casting, default value
+    DEBUG=(bool, False)
+)
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -23,7 +29,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u079tk=6$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = []
 
@@ -122,7 +128,10 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
 }
 
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+EMAIL_CONFIG = env.email_url(
+    'EMAIL_URL', default='consolemail://')
+    
+vars().update(EMAIL_CONFIG)
 
 JWT_AUTH = {
     'JWT_ALLOW_REFRESH': True,
