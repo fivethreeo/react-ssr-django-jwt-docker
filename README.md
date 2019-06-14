@@ -3,6 +3,7 @@
 ## Features
 
 * Building using [razzle][razzle]
+* Runtime configuration 
 * Server hot module reloading
 * Server-side rendering
 * Code splitting using [@loadable/component][@loadable/component]
@@ -60,20 +61,21 @@ bash makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
 Install requirements:
 
 ```bash
-pipenv install
+virtualenv venv
+venv/bin/pip install -r requirements.txt
 yarn install
 ```
 
 Run database migrations:
 
 ```bash
-pipenv run python manage.py migrate
+venv/bin/python manage.py migrate
 ```
 
 Start the django api and the react app:
 
 ```bash
-pipenv run python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yarn start
+venv/bin/python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yarn start
 kill -9 $pid
 ```
 
