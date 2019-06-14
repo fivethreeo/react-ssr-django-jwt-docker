@@ -12,7 +12,7 @@ const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {
   console.log('submit')
   props.LoginUser({ variables: { email, password } })
     .then((response) => {
-      props.cookies.set('authToken', response.login.token, {
+      props.cookies.set('authToken', response.data.login.token, {
         path: '/',
         expires: new Date(new Date().getTime()+1000*60*60*24),
         maxAge: 60*60*24,
@@ -31,6 +31,7 @@ const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {
 }
 
 const LoginFormWithGraphQL = compose(
+  withCookies,
   graphql(LoginMutation, {name: 'LoginUser'}),
   withFormik({
     validationSchema: LoginSchema,
@@ -39,8 +40,7 @@ const LoginFormWithGraphQL = compose(
     }),
     handleSubmit: handleSubmit,
     displayName: 'Login'
-  }),
-  withCookies
+  })
 )(LoginForm)
 
 const LoginFormWithRouter = withRouter(LoginFormWithGraphQL)
