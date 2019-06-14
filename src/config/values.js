@@ -26,7 +26,7 @@ const values = {
   clientConfigOverrides: {
 
     GRAPHQL_URL: EnvVars.string('GRAPHQL_FRONTEND_URL'),
-    
+
   },
 
   // The host on which the server should run.
@@ -96,7 +96,7 @@ const values = {
 // client bundle. That would be a big NO NO to do. :)
 if (process.env.BUILD_TARGET === 'client') {
   throw new Error(
-    "You shouldn't be importing the `<projectroot>/config/values.js` directly into code that will be included in your 'client' bundle as the configuration object will be sent to user's browsers. This could be a security risk! Instead, use the `config` helper function located at `<projectroot>/config/index.js`.",
+    "You shouldn't be importing the `<projectroot>/src/config/values.js` directly into code that will be included in your 'client' bundle as the configuration object will be sent to user's browsers. This could be a security risk! Instead, use the `config` helper function located at `<projectroot>/config/index.js`.",
   );
 }
 

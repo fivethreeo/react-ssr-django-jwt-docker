@@ -6,6 +6,7 @@
 * Runtime configuration in server and client
 * Server hot module reloading
 * Server-side rendering
+* Server-side handlers for graceful degradation of login views (in progress or deprecation :) )  
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
@@ -39,6 +40,12 @@ Run all services (traefik, djangoapi, reactapp):
 
 ```bash
 docker-compose -f docker-compose.dev.yml up
+```
+
+To test registration email:
+
+```bash
+export EMAIL_URL=smtp://username:password@localhost:25
 ```
 
 Go to [https://localhost](https://localhost).

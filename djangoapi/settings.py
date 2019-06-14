@@ -13,15 +13,17 @@ https://docs.djangoproject.com/en/2.2/ref/settings/
 import os
 import environ
 
+
+# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
+BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
     PROXY_SSL=(bool, False)
 )
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
-BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+DEBUG = env('DEBUG')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
@@ -33,8 +35,10 @@ if env('PROXY_SSL'):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env('DEBUG')
 
+EMAIL_CONFIG = env.email_url(
+    'EMAIL_URL', default='consolemail://')
+    
 ALLOWED_HOSTS = []
 
 
@@ -132,9 +136,6 @@ DJOSER = {
     'SEND_ACTIVATION_EMAIL': True,
 }
 
-EMAIL_CONFIG = env.email_url(
-    'EMAIL_URL', default='consolemail://')
-    
 vars().update(EMAIL_CONFIG)
 
 JWT_AUTH = {
