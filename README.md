@@ -3,13 +3,13 @@
 ## Features
 
 * Building using [razzle][razzle]
-* Runtime configuration 
+* Runtime configuration in server and client
 * Server hot module reloading
 * Server-side rendering
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
-* Registration and authentication using JWT and django-rest-framework
+* Registration/activation and authentication using JWT and graphene
 * Using [træfik][træfik] for routing requests and ssl.
 
 ## How to use

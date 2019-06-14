@@ -7,8 +7,9 @@ const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
 );
 const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
-// const Login = loadable(() => import(/* webpackChunkName: "login" */ '../auth/Login'));
-const Register = loadable(() => import(/* webpackChunkName: "register" */ '../auth/Register'));
+const Login = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/Login'));
+const Register = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/Register'));
+const Activate = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/Activate'));
 
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
@@ -26,6 +27,8 @@ const App = () => {
               path="/"
               component={Body} 
             />
+            <Route path="/activate" component={Activate} />
+            <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>
       </div>

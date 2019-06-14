@@ -3,8 +3,9 @@ import { HttpLink } from "apollo-link-http";
 import { onError } from "apollo-link-error";
 import { ApolloLink, concat } from "apollo-link";
 import { InMemoryCache } from "apollo-cache-inmemory";
+import config from '../config';
 
-let api_uri = process.env.RAZZLE_API_URI;
+const GRAPHQL_URL = config('GRAPHQL_URL');
 
 export const isAuthenticated = (cookies) => {
   const token = cookies.get("authToken");
@@ -17,7 +18,7 @@ export const unAuthenticate = (cookies) => {
 
 export const getApolloClient = ({ history, cookies }) => {
 
-  const httpLink = new HttpLink({ uri: api_uri });
+  const httpLink = new HttpLink({ uri: GRAPHQL_URL });
 
   const authErrorLink = onError(({ graphQLErrors }) => {
     const hasUnauthorized = graphQLErrors && graphQLErrors.find(error => {

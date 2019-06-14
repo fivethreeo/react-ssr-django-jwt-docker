@@ -4,6 +4,26 @@ import serialize from 'serialize-javascript';
 import filterWithRules from '../../utils/objects/filterWithRules';
 import values from '../values';
 
+function isObject(item) {
+  return (item && typeof item === 'object' && !Array.isArray(item));
+}
+
+function mergeDeep(target, source) {
+  let output = Object.assign({}, target);
+  if (isObject(target) && isObject(source)) {
+    Object.keys(source).forEach(key => {
+      if (isObject(source[key])) {
+        if (!(key in target))
+          Object.assign(output, { [key]: source[key] });
+        else
+          output[key] = mergeDeep(target[key], source[key]);
+      } else {
+        Object.assign(output, { [key]: source[key] });
+      }
+    });
+  }
+  return output;
+}
 // Filter the config down to the properties that are allowed to be included
 // in the HTML response.
 const clientConfig = filterWithRules(
@@ -13,7 +33,7 @@ const clientConfig = filterWithRules(
   values,
 );
 
-const serializedClientConfig = serialize(clientConfig);
+const serializedClientConfig = serialize(mergeDeep(clientConfig, values.clientConfigOverrides));
 
 /**
  * A react component that generates a script tag that binds the allowed

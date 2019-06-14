@@ -1,7 +1,7 @@
 import React from 'react';
-import { TextInput } from '../utils/FormUtils';
+import { TextInput, CheckboxInput } from '../utils/FormUtils';
 
-const RegisterForm = ({
+const LoginForm = ({
   values,
   touched,
   errors,
@@ -12,9 +12,8 @@ const RegisterForm = ({
   handleSubmit,
   handleReset,
 }) =>
-  <form className="needs-validation form-auth form-register" onSubmit={handleSubmit} noValidate>
-    <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
-
+  <form className="form-auth form-signin" onSubmit={handleSubmit}>
+    <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
     <TextInput
       id="inputEmail"
       name="email"
@@ -41,20 +40,20 @@ const RegisterForm = ({
       onChange={handleChange}
       onBlur={handleBlur}
     />
-    <TextInput
-      id="inputPasswordRepeat"
-      name="passwordRepeat"
-      labelClassName="sr-only"
-      type="password"
-      label="Password (again)"
-      placeholder="Password (again)"
-      touched={touched.passwordRepeat}
-      error={errors.passwordRepeat && touched.passwordRepeat && errors.passwordRepeat}
-      value={values.passwordRepeat}
+    <CheckboxInput
+      id="inputRemember"
+      name="rememberme"
+      className="mb-3"
+      labelClassName="form-check-label"
+      type="checkbox"
+      label="Remember me"
+      touched={touched.remember}
+      error={touched.remember && errors.remember}
+      value={values.remember}
       onChange={handleChange}
       onBlur={handleBlur}
     />
-    <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
+    <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
   </form>
 
-export default RegisterForm;
+export default LoginForm;

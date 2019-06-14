@@ -35,6 +35,11 @@ services:
       - "traefik.port=3002"
       - "traefik.frontend.headers.customRequestHeaders=X-Forwarded-Proto:https"
       - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin"
+    environment:
+      DEBUG: "true"
+      PROXY_SSL: "true"
+      SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
+
   reactapp:
     build:
       target: dev
@@ -58,3 +63,5 @@ services:
       PUBLIC_PATH: https://localhost/
       CLIENT_PUBLIC_PATH: https://localhost/
       RAZZLE_API_URI: https://localhost/graphql
+      GRAPHQL_BACKEND_URL: https://djangoapi/graphql
+      GRAPHQL_FRONTEND_URL: https://localhost/graphql

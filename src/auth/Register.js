@@ -1,8 +1,7 @@
-import React, { useContext } from 'react';
-import { withRouter, Link } from 'react-router-dom'
+import React from 'react';
+import { withRouter } from 'react-router-dom'
 import { graphql, compose } from 'react-apollo'
 import { withFormik } from 'formik';
-import { withCookies } from '../utils/Cookies';
 import RegisterSchema from './RegisterSchema';
 import RegisterMutation from './RegisterMutation';
 import RegisterForm from './RegisterForm';
@@ -50,7 +49,6 @@ class Register extends React.Component {
     return (
       <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
         <RegisterFormWithRouter variables={{ email: '', password: '', passwordRepeat: '' }} />
-        <p>Don't have an account? <Link to='/signup'>Create one now</Link></p>
       </div>
     )
   }

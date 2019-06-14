@@ -1,88 +1,69 @@
-import React, { useContext } from 'react';
-import { Formik } from 'formik';
-import * as Yup from 'yup';
-import { TextInput, CheckboxInput } from '../utils/FormUtils';
+import React from 'react';
+import { withRouter, Link } from 'react-router-dom'
+import { graphql, compose } from 'react-apollo'
+import { withFormik } from 'formik';
+import { withCookies } from '../utils/Cookies';
+import LoginSchema from './LoginSchema';
+import LoginMutation from './LoginMutation';
+import LoginForm from './LoginForm';
 
-export default Login => {
-
-
-  return (
-    <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-      <Formik
-        initialValues={{ email: '', password: ''}}
-        onSubmit={(values, { setSubmitting }) => {
-          login(values.email, values.password);
-        }}
-        validationSchema={Yup.object().shape({
-          email: Yup.string()
-            .email()
-            .required('Required'),
-          password: Yup.string()
-            .required('Required')
-        })}
-      >
-        {props => {
-          const {
-            values,
-            touched,
-            errors,
-            dirty,
-            isSubmitting,
-            handleChange,
-            handleBlur,
-            handleSubmit,
-            handleReset,
-            validateField,
-            validateForm
-          } = props;
-          return (
-            <form className="form-auth form-signin" onSubmit={handleSubmit}>
-              <h1 className="h3 mb-3 font-weight-normal">Please sign in</h1>
-              <TextInput
-                id="inputEmail"
-                name="email"
-                labelClassName="sr-only"
-                type="text"
-                label="Email address"
-                placeholder="your@email.com"
-                touched={touched.email}
-                error={touched.email && errors.email}
-                value={values.email}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <TextInput
-                id="inputPassword"
-                name="password"
-                labelClassName="sr-only"
-                type="password"
-                label="Password"
-                placeholder="Password"
-                touched={touched.password}
-                error={touched.password && errors.password}
-                value={values.password}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <CheckboxInput
-                id="inputRemember"
-                name="rememberme"
-                className="mb-3"
-                labelClassName="form-check-label"
-                type="checkbox"
-                label="Remember me"
-                touched={touched.remember}
-                error={touched.remember && errors.remember}
-                value={values.remember}
-                onChange={handleChange}
-                onBlur={handleBlur}
-              />
-              <button className="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
-            </form>
-          );
-        }}
-      </Formik>
-    </div>
-  );
+const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {
+  const {email, password } = payload
+  console.log('submit')
+  props.LoginUser({ variables: { email, password } })
+    .then((response) => {
+      props.cookies.set('authToken', response.login.token, {
+        path: '/',
+        expires: new Date(new Date().getTime()+1000*60*60*24),
+        maxAge: 60*60*24,
+        domain: process.env.HOST,
+        secure: process.env.RAZZLE_NO_HTTPS === 'true' ? false : true,
+        httpOnly: false,
+        sameSite: true
+      });
+      props.history.push('/')
+    }).catch((e) => {
+      const errors = e.graphQLErrors.map(error => error.message)
+      console.log(errors)
+      setSubmitting(false)
+      setErrors({ email: ' ', password: ' ', form: errors })
+    })
 }
 
+const LoginFormWithGraphQL = compose(
+  graphql(LoginMutation, {name: 'LoginUser'}),
+  withFormik({
+    validationSchema: LoginSchema,
+    mapPropsToValues: ({ variables }) => ({
+      ...variables
+    }),
+    handleSubmit: handleSubmit,
+    displayName: 'Login'
+  }),
+  withCookies
+)(LoginForm)
+
+const LoginFormWithRouter = withRouter(LoginFormWithGraphQL)
+
+class Login extends React.Component {
+  componentWillUpdate (nextProps) {
+    if (!this.props.data.user && nextProps.data.user) {
+      this.props.history.push('/dashboard')
+    }
+  }
+
+  render () {
+    /*if (this.props.data.loading) {
+      return (<div></div>)
+    }*/
+
+    return (
+      <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+        <LoginFormWithRouter variables={{ email: '', password: '' }} />
+        <p>Don't have an account? <Link to='/register'>Create one now</Link></p>
+      </div>
+    )
+  }
+}
+
+export default Login;

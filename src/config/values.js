@@ -20,6 +20,13 @@ const values = {
     polyfillIO: true,
     // We need to expose all the htmlPage settings.
     htmlPage: true,
+
+  },
+
+  clientConfigOverrides: {
+
+    GRAPHQL_URL: EnvVars.string('GRAPHQL_FRONTEND_URL'),
+    
   },
 
   // The host on which the server should run.
@@ -27,6 +34,7 @@ const values = {
   // The port on which the server should run.
   port: EnvVars.number('PORT', 1337),
 
+  GRAPHQL_URL: EnvVars.string('GRAPHQL_BACKEND_URL'),
 
   // This is an example environment variable which is used within the react
   // application to demonstrate the usage of environment variables across
