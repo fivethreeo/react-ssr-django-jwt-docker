@@ -1,7 +1,6 @@
 'use strict';
 const path = require('path');
 const LoadablePlugin = require('@loadable/webpack-plugin')
-const securityPlugin = require('./razzle-plugins/security/index.js');
 
 module.exports = {
   modify: (defaultConfig, { target }) => {
@@ -24,5 +23,5 @@ module.exports = {
     return config;
   },
 
-  plugins: ['scss', securityPlugin]
+  plugins: ['scss']
 };

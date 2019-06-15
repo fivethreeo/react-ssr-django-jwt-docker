@@ -3,7 +3,7 @@ import uuid from 'uuid';
 import hpp from 'hpp';
 import helmet from 'helmet';
 
-const securityConfig = require(RAZZLE_SECURITY_RC);
+import config from '../../config';
 
 const cspConfig = {
   directives: {
@@ -48,7 +48,7 @@ const cspConfig = {
 };
 
 // Add any additional CSP from the static config.
-const cspExtensions = securityConfig['cspExtensions'];
+const cspExtensions = config('cspExtensions');
 Object.keys(cspExtensions).forEach((key) => {
   if (cspConfig.directives[key]) {
     cspConfig.directives[key] = cspConfig.directives[key].concat(cspExtensions[key]);

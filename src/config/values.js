@@ -80,13 +80,8 @@ const values = {
     mediaSrc: [],
     manifestSrc: [],
     objectSrc: [],
-    scriptSrc: [
-      // Allow scripts from cdn.polyfill.io so that we can import the
-      // polyfill.
-      'cdn.polyfill.io',
-    ],
+    scriptSrc: [],
     styleSrc: [
-      'cdn.rawgit.com/milligram/milligram/master/dist/milligram.min.css',
       'fonts.googleapis.com/css',
     ]
   },
