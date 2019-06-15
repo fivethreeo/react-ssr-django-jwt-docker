@@ -3,6 +3,8 @@ import React from 'react';
 import loadable from '@loadable/component'
 import { Route, Switch } from 'react-router-dom';
 
+import { Container, Row } from "reactstrap";
+
 const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
 );
@@ -19,8 +21,8 @@ const App = () => {
  return (
    <>
    <Header />
-   <div className="container">
-      <div className="row">
+   <Container>
+      <Row>
           <Switch>
             <Route
               exact
@@ -31,11 +33,11 @@ const App = () => {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>
-      </div>
-      <div className="row">
+      </Row>
+      <Row>
           <Footer />
-      </div>
-    </div>
+      </Row>
+    </Container>
     </>
   );
 };

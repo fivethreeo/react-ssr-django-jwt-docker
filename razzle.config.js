@@ -7,7 +7,7 @@ module.exports = {
     const config = defaultConfig;
 
     if (target === 'web') {
-      config.plugins.push(
+      config.plugins.unshift(
         new LoadablePlugin({ // add @loadable/webpack-plugin
           writeToDisk: {
             filename: path.resolve('./build/'),

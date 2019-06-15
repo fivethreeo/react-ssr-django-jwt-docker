@@ -32,6 +32,7 @@
     "react-apollo-hooks": "^0.4.5",
     "react-dom": "^16.8.6",
     "react-router-dom": "^5.0.0",
+    "reactstrap": "^8.0.0",
     "universal-cookie": "^3.1.0",
     "use-query-params": "^0.3.3",
     "yup": "^0.27.0"
