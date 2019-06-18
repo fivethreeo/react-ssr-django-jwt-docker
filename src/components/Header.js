@@ -1,4 +1,5 @@
 import React from 'react';
+import { compose } from 'react-apollo';
 import {
   Collapse,
   Navbar,
@@ -11,6 +12,8 @@ import {
   DropdownToggle,
   DropdownMenu,
   DropdownItem } from 'reactstrap';
+
+
 
 class Header extends React.Component {
   constructor(props) {

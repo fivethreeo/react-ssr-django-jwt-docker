@@ -1,6 +1,6 @@
 import React from 'react';
 
-export const CookieContext = React.createContext(null);
+const CookieContext = React.createContext(null);
 
 export function withCookies(Component) {
     return function WrapperComponent(props) {
@@ -12,4 +12,4 @@ export function withCookies(Component) {
     };
 }
 
-export default CookieContext.Provider;
+export default CookieContext;

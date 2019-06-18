@@ -2,11 +2,16 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useQueryParam, StringParam } from 'use-query-params';
 import { useMutation } from 'react-apollo-hooks';
+import { useServerContext } from '../utils/ServerContext';
+
 import ActivateMutation from './ActivateMutation';
 
 const Activate = ({ history }) => {
 
   const [active, setActive] = React.useState(false);
+
+   const [context, setContext] = useServerContext('Activate');
+
 
   const [token, setToken] = process.env.BUILD_TARGET === 'client' ? useQueryParam('token', StringParam) : ['i','i'];
   const [uid, setUid] = process.env.BUILD_TARGET === 'client' ? useQueryParam('uid', StringParam) : ['i','i'];
@@ -24,6 +29,8 @@ const Activate = ({ history }) => {
   });
 
   React.useEffect(() => {
+   setContext('woha');
+
     activateUser();
   }, []);
   

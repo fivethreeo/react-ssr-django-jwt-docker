@@ -2,7 +2,7 @@ import React from 'react';
 import { withRouter, Link } from 'react-router-dom'
 import { graphql, compose } from 'react-apollo'
 import { withFormik } from 'formik';
-import { withCookies } from '../utils/Cookies';
+import { withCookies } from '../utils/CookieContext';
 import LoginSchema from './LoginSchema';
 import LoginMutation from './LoginMutation';
 import LoginForm from './LoginForm';
