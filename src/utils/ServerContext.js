@@ -3,22 +3,25 @@ import serialize from 'serialize-javascript';
 
 const ServerContext = React.createContext(null);
 
-export const ServerContextProvider = ({context, children}) => {
-  const [state, setState] = useState(context);
+export const ServerContextProvider = ({value, children}) => {
+  const [state, setState] = useState(value);
+  console.log(state)
   return (
   	<ServerContext.Provider value={[state, setState]}>
   	  {children}
   	</ServerContext.Provider>)
 }
 
-export const useServerContext = (contextKey) => {
-    const [state, setState] = useContext(ServerContext);
-    const setContext = (context) => {
-    	const upd = {}
-    	upd[contextKey] = context
-    	setState(state => ({...state, ...upd}))
-    }
-    return [state ? state[contextKey] : null, setContext];
+export const useServerContext = (contextKey) => { 
+    const [state, setState] = useState(null);
+
+    const [serverState, setServerState] = useContext(ServerContext);
+    	console.log(state)
+
+    React.useEffect(() => {
+    	setServerState(state);
+    }, [state]);
+    return [serverState, setState];
 }
 
 export const ServerContextComponent = ({ nonce,  context }) => {
