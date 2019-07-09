@@ -1,6 +1,7 @@
 import path from 'path';
 import React from 'react';
 import express from 'express';
+import isEmpty from 'is-empty';
 import { renderToString } from 'react-dom/server';
 import { ChunkExtractor } from '@loadable/server'
 import { Router } from 'react-router-dom';
@@ -28,6 +29,8 @@ server
   .use(...security)
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .use(async (req, res) => {
+
+    req.locals = req.locals || {}; 
 
     const cookies = new Cookies(req.headers.cookie);
 
@@ -73,7 +76,7 @@ server
 
     const html = renderToString(<html lang="">
       <head>
-          <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+          <meta httpEquiv="X-UA-Compatible" content="IE=edge" />
           <meta charSet='utf-8' />
           <title>Welcome to Razzle</title>
           <meta name="viewport" content="width=device-width, initial-scale=1" />

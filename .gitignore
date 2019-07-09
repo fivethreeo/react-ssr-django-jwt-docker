@@ -8,7 +8,4 @@ node_modules
 build
 public/static
 .env.*.local
-yarn.lock
-Pipfile.lock
-*.sqlite3
 certs/docker*

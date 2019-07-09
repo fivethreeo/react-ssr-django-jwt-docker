@@ -5,13 +5,13 @@ import { useMutation } from 'react-apollo-hooks';
 //import { useServerContext } from '../utils/ServerContext';
 
 import ActivateMutation from './ActivateMutation';
-
+/*
 class RealActivate extends React.Component {
   
   render () {
-    /*if (this.props.data.loading) {
+    if (this.props.data.loading) {
       return (<div></div>)
-    }*/
+    }
 
     return (
       <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -21,6 +21,7 @@ class RealActivate extends React.Component {
     )
   }
 }
+*/
 
 const Activate = ({ history }) => {
 
