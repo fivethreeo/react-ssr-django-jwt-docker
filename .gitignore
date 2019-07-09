@@ -8,4 +8,5 @@ node_modules
 build
 public/static
 .env.*.local
+db.sqlite3
 certs/docker*
