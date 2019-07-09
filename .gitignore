@@ -11,3 +11,4 @@ public/static
 yarn.lock
 Pipfile.lock
 *.sqlite3
+certs/docker*
