@@ -6,7 +6,8 @@
 * Runtime configuration in server and client
 * Server hot module reloading
 * Server-side rendering
-* Server-side handlers for graceful degradation of login views (in progress or deprecation :) )  
+* Suspense server side using [react-ssr-prepass][react-ssr-prepass]
+* Server-side handlers for graceful degradation of login views (in progress)  
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
@@ -98,5 +99,6 @@ Go to [http://localhost](http://localhost).
   [razzle]: <https://github.com/jaredpalmer/razzle>
   [JWT A]: <https://thinkster.io/tutorials/django-json-api/authentication>
   [@loadable/component]: <https://github.com/smooth-code/loadable-components#readme>
+  [react-ssr-prepass]: <https://github.com/FormidableLabs/react-ssr-prepass>
   [træfik]: <https://traefik.io/>
 

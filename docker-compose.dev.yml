@@ -36,8 +36,9 @@ services:
       - "traefik.frontend.headers.customRequestHeaders=X-Forwarded-Proto:https"
       - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin"
     environment:
-      DEBUG: "true"
-      PROXY_SSL: "true"
+      DEBUG: "True"
+      ALLOWED_HOSTS: "djangoapi,localhost"
+      PROXY_SSL: "True"
       SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
       EMAIL_URL: ${EMAIL_URL:-consolemail://}
 
@@ -63,5 +64,5 @@ services:
     environment:
       PUBLIC_PATH: https://localhost/
       CLIENT_PUBLIC_PATH: https://localhost/
-      GRAPHQL_BACKEND_URL: https://djangoapi/graphql
+      GRAPHQL_BACKEND_URL: http://djangoapi:3002/graphql
       GRAPHQL_FRONTEND_URL: https://localhost/graphql

@@ -20,7 +20,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 env = environ.Env(
     # set casting, default value
     DEBUG=(bool, False),
-    PROXY_SSL=(bool, False)
+    PROXY_SSL=(bool, False),
+    ALLOWED_HOSTS=(list, [])
 )
 
 DEBUG = env('DEBUG')
@@ -39,7 +40,7 @@ if env('PROXY_SSL'):
 EMAIL_CONFIG = env.email_url(
     'EMAIL_URL', default='consolemail://')
     
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env('ALLOWED_HOSTS')
 
 
 # Application definition

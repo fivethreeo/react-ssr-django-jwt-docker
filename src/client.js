@@ -8,6 +8,8 @@ import { ApolloProvider } from "react-apollo";
 import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
 import { getApolloClient } from './utils/apolloUtils';
 import CookieContext from './utils/CookieContext';
+import { ServerContextProvider} from './utils/ServerContext';
+
 import App from './components/App';
 
 const cookies = new Cookies();
@@ -16,11 +18,13 @@ const history = createBrowserHistory();
 
 const client = getApolloClient({ history, cookies });
 
+
 // Load all components needed before rendering
 loadableReady(() => {
   const root = document.getElementById('root')
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
+    <ServerContextProvider value={window.__SERVER_CONTEXT__}>
     <CookieContext.Provider value={cookies}>
       <ApolloProvider client={client}>
         <ApolloHooksProvider client={client} >
@@ -29,7 +33,8 @@ loadableReady(() => {
           </BrowserRouter>
         </ApolloHooksProvider>
       </ApolloProvider>
-    </CookieContext.Provider>,
+    </CookieContext.Provider>
+    </ServerContextProvider>,
     root)
 })
 
