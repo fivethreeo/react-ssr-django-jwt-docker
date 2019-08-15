@@ -4,37 +4,55 @@ import { loadableReady } from '@loadable/component'
 import { BrowserRouter } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Cookies from 'universal-cookie';
-import { ApolloProvider } from "react-apollo";
-import { ApolloProvider as ApolloHooksProvider } from "react-apollo-hooks";
-import { getApolloClient } from './utils/apolloUtils';
+
+import {
+  Client,
+  dedupExchange,
+  cacheExchange,
+  fetchExchange,
+  ssrExchange,
+  Provider as UrqlProvider
+} from 'urql';
+
+
 import CookieContext from './utils/CookieContext';
-import { ServerContextProvider} from './utils/ServerContext';
 
 import App from './components/App';
+import config from './config';
 
 const cookies = new Cookies();
 
 const history = createBrowserHistory();
 
-const client = getApolloClient({ history, cookies });
+const ssrCache = ssrExchange({
+  initialState: window.URQL_DATA
+});
 
+const client = new Client({
+  exchanges: [
+    dedupExchange,
+    cacheExchange,
+    // Put the exchange returned by calling ssrExchange after your cacheExchange,
+    // but before any asynchronous exchanges like the fetchExchange:
+    ssrCache,
+    fetchExchange,
+  ],
+  url: config('GRAPHQL_URL'),
+  suspense: false
+});
 
 // Load all components needed before rendering
 loadableReady(() => {
   const root = document.getElementById('root')
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
-    <ServerContextProvider value={window.__SERVER_CONTEXT__}>
-    <CookieContext.Provider value={cookies}>
-      <ApolloProvider client={client}>
-        <ApolloHooksProvider client={client} >
-          <BrowserRouter history={history} >
-            <App />
-          </BrowserRouter>
-        </ApolloHooksProvider>
-      </ApolloProvider>
-    </CookieContext.Provider>
-    </ServerContextProvider>,
+    <UrqlProvider value={client}>
+      <CookieContext.Provider value={cookies}>
+        <BrowserRouter history={history} >
+          <App />
+        </BrowserRouter>
+      </CookieContext.Provider>
+    </UrqlProvider>,
     root)
 })
 
