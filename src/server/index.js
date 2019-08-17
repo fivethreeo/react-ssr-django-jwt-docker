@@ -10,7 +10,7 @@ import {
   cacheExchange,
   fetchExchange,
   ssrExchange,
-  Provider as UrqlProvider
+  Provider
 } from 'urql';
 
 import { renderToString } from 'react-dom/server';
@@ -23,6 +23,8 @@ import UrqlDataComponent from '../utils/UrqlDataComponent';
 import { QueryParamProvider } from 'use-query-params';
 import RequestContext from '../utils/RequestContext';
 import CookieContext from '../utils/CookieContext';
+import { createSSRCache } from '../utils/SSRCache';
+
 import ClientConfig from '../config/components/ClientConfig';
 import App from '../components/App';
 
@@ -39,6 +41,7 @@ server
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   .use( async (req, res) => {
     
+    const SSRCache = createSSRCache();
 
     const ssrCache = ssrExchange();
 
@@ -68,7 +71,8 @@ server
     const extractor = new ChunkExtractor({ statsFile, entrypoints: ['client']})
     // Wrap your application using "collectChunks"
     const jsx = extractor.collectChunks(
-      <UrqlProvider value={client}>
+      <SSRCache.Provider>
+      <Provider value={client}>
         <RequestContext.Provider value={req}>
           <CookieContext.Provider value={cookies}>
             <Router history={history} >
@@ -78,7 +82,8 @@ server
             </Router>
           </CookieContext.Provider>
         </RequestContext.Provider>
-      </UrqlProvider>
+      </Provider>
+      </SSRCache.Provider>
     )
   
     // Suspense prepass    
@@ -107,7 +112,8 @@ server
       <body>
           <div id="root">DO_NOT_DELETE_THIS_YOU_WILL_BREAK_YOUR_APP</div>
           <ClientConfig nonce={res.locals.nonce} />
-          <UrqlDataComponent context={urqlData} nonce={res.locals.nonce} />
+          <UrqlDataComponent data={urqlData} nonce={res.locals.nonce} />
+          <SSRCache.Component nonce={res.locals.nonce} />
           {scriptElements}
       </body>
     </html>);

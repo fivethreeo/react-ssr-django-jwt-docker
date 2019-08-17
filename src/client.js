@@ -16,6 +16,7 @@ import {
 
 
 import CookieContext from './utils/CookieContext';
+import { createSSRCache } from './utils/SSRCache';
 
 import App from './components/App';
 import config from './config';
@@ -23,6 +24,8 @@ import config from './config';
 const cookies = new Cookies();
 
 const history = createBrowserHistory();
+
+const SSRCache = createSSRCache();
 
 const ssrCache = ssrExchange({
   initialState: window.URQL_DATA
@@ -46,13 +49,15 @@ loadableReady(() => {
   const root = document.getElementById('root')
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
-    <UrqlProvider value={client}>
-      <CookieContext.Provider value={cookies}>
-        <BrowserRouter history={history} >
-          <App />
-        </BrowserRouter>
-      </CookieContext.Provider>
-    </UrqlProvider>,
+    <SSRCache.Provider>
+      <UrqlProvider value={client}>
+        <CookieContext.Provider value={cookies}>
+          <BrowserRouter history={history} >
+            <App />
+          </BrowserRouter>
+        </CookieContext.Provider>
+      </UrqlProvider>
+    </SSRCache.Provider>,
     root)
 })
 
