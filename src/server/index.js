@@ -43,7 +43,7 @@ server
     
     const SSRCache = createSSRCache();
 
-    const ssrCache = ssrExchange();
+    const urqlSSRCache = ssrExchange();
 
     const client = new Client({
       exchanges: [
@@ -51,7 +51,7 @@ server
         cacheExchange,
         // Put the exchange returned by calling ssrExchange after your cacheExchange,
         // but before any asynchronous exchanges like the fetchExchange:
-        ssrCache,
+        urqlSSRCache,
         fetchExchange,
       ],
       url: config('GRAPHQL_URL'),
@@ -61,7 +61,7 @@ server
     const cookies = new Cookies(req.headers.cookie);
 
     const history = createMemoryHistory({
-      initialEntries: [req.url + (isEmpty(req.query) ? '' : '?' + queryString.stringify(req.query))]
+      initialEntries: [req.url + (isEmpty(req.query) ? '' : '&' + queryString.stringify(req.query))]
     });
 
 
@@ -72,24 +72,24 @@ server
     // Wrap your application using "collectChunks"
     const jsx = extractor.collectChunks(
       <SSRCache.Provider>
-      <Provider value={client}>
-        <RequestContext.Provider value={req}>
-          <CookieContext.Provider value={cookies}>
-            <Router history={history} >
-              <QueryParamProvider ReactRouterRoute={Route}>
-                <App />
-              </QueryParamProvider>
-            </Router>
-          </CookieContext.Provider>
-        </RequestContext.Provider>
-      </Provider>
+        <Provider value={client}>
+          <RequestContext.Provider value={req}>
+            <CookieContext.Provider value={cookies}>
+              <Router history={history} >
+                <QueryParamProvider ReactRouterRoute={Route}>
+                  <App />
+                </QueryParamProvider>
+              </Router>
+            </CookieContext.Provider>
+          </RequestContext.Provider>
+        </Provider>
       </SSRCache.Provider>
     )
   
     // Suspense prepass    
     await ssrPrepass(jsx);
 
-    const urqlData = ssrCache.extractData();
+    const urqlData = urqlSSRCache.extractData();
       // Render your application
     const markup = renderToString(jsx)
     // You can now collect your script tags

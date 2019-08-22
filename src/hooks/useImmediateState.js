@@ -21,14 +21,14 @@ export const useImmediateState = (init) => {
 
   // This wraps setState and updates the state mutably on initial mount
   const updateState = useCallback(
-    (action, call=(v) => v) => {
+    (action, alsoUpdate) => {
       if (!isMounted.current) {
         const newState =
           typeof action === 'function'
             ? action(state)
             : action;
         Object.assign(state, newState);
-        call(newState)
+        if (alsoUpdate) alsoUpdate(newState)
       } else {
         setState(action);
       }

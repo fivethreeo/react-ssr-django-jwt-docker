@@ -27,7 +27,7 @@ const history = createBrowserHistory();
 
 const SSRCache = createSSRCache();
 
-const ssrCache = ssrExchange({
+const uqlSSRCache = ssrExchange({
   initialState: window.URQL_DATA
 });
 
@@ -37,7 +37,7 @@ const client = new Client({
     cacheExchange,
     // Put the exchange returned by calling ssrExchange after your cacheExchange,
     // but before any asynchronous exchanges like the fetchExchange:
-    ssrCache,
+    uqlSSRCache,
     fetchExchange,
   ],
   url: config('GRAPHQL_URL'),
