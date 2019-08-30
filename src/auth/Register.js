@@ -1,10 +1,18 @@
-import React from 'react';
+import React, { useContext } from "react";
 import { withRouter } from 'react-router-dom'
 import { graphql, compose } from 'react-apollo'
 import { withFormik } from 'formik';
+
+import { useSSRState } from '../hooks/useSSRState';
+import { executeMutation } from '../utils/UrqlUtils';
+
+
 import RegisterSchema from './RegisterSchema';
 import RegisterMutation from './RegisterMutation';
 import RegisterForm from './RegisterForm';
+
+
+
 
 const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {
   const {email, password, passwordRepeat } = payload

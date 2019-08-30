@@ -16,7 +16,7 @@ COPY package.json package.json
 COPY yarn.lock yarn.lock
 
 RUN apk add --no-cache --virtual .build-deps \
-    musl-dev \
+    musl-dev git \
     && yarn install \
     && cp yarn.lock yarn_run.lock \
     && cp -R node_modules node_modules_run \
@@ -36,6 +36,11 @@ RUN apk add --no-cache --virtual .build-deps \
 
 FROM base as dev
 
+COPY razzle.config.js razzle.config.js
+COPY .babelrc .babelrc
+COPY tsconfig.json tsconfig.json
+COPY tslint.json tslint.json
+
 RUN rm -rf node_modules_run && rm yarn_run.lock
 
 # Start server 
@@ -45,17 +50,17 @@ FROM base as prod
 
 COPY src src/
 COPY public public/
-COPY razzle-plugins razzle-plugins/
-COPY .securityrc.js .securityrc.js
 COPY razzle.config.js razzle.config.js
 COPY .babelrc .babelrc
+COPY tsconfig.json tsconfig.json
+COPY tslint.json tslint.json
 
 RUN yarn build \
     && rm -rf node_modules \
     && rm yarn.lock \
     && mv node_modules_run node_modules \
     && mv yarn_run.lock yarn.lock \
-    && rm -rf src public razzle-plugins .securityrc.js razzle.config.js .babelrc
+    && rm -rf src public razzle.config.js .babelrc tsconfig.json tslint.json
 
 # Start server 
 CMD ["yarn", "start:prod"]
