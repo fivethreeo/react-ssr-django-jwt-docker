@@ -1,12 +1,12 @@
 import gql from 'graphql-tag';
+import { StringParam } from 'serialize-query-params';
 
+export const QueryParams = { token: StringParam, uid: StringParam };
 
-const ActivateMutation = gql`
+export const ActivateMutation = gql`
   mutation activate($token: String!, $uid: String!) {
     activate(token: $token, uid: $uid) {
       success
       errors
     }
   }`;
-
-export default ActivateMutation;
