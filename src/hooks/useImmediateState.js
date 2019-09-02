@@ -28,7 +28,6 @@ export const useImmediateState = (init) => {
             ? action(state)
             : action;
         Object.assign(state, newState);
-        if (alsoUpdate) alsoUpdate(newState)
       } else {
         setState(action);
       }

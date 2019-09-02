@@ -1,26 +1,33 @@
 import React, { useState, useEffect, useContext } from "react";
 import { withRouter, Link } from 'react-router-dom';
-import { useQueryParam, StringParam } from 'use-query-params';
-import { useQuery } from "urql";
-import ActivateMutation from './ActivateMutation';
+import { useQueryParams } from 'use-query-params';
+import { useQuery, Context  } from "urql";
 
+import executeMutation from '../utils/UrqlUtils';
 import { useImmediateEffect } from '../hooks/useImmediateEffect';
 import { useSSRState } from '../hooks/useSSRState';
 
-const UNSET = 0;
-const TRUE = 1;
-const FALSE = 2;
+import { ActivateMutation, QueryParams } from './ActivateCommon';
+
 
 const Activate = ({ history }) => {
-
-  const [token, setToken] = useQueryParam('token', StringParam);
-  const [uid, setUid] = useQueryParam('uid', StringParam);
-  const res = useQuery({ query: ActivateMutation, variables: { token: token, uid: uid }});
-  const [activated, setActivated] = useSSRState(UNSET, 'activated');
+  const [{ token, uid }, setQuery] = useQueryParams(QueryParams);
+  const client = useContext(Context);
+  const [activated, hasSSRState, setActivated] = useSSRState(false, 'activated', [ token, uid ]);
+ 
+  useEffect(() => {
+    if (!hasSSRState && typeof window !== 'undefined') {
+      executeMutation(client, ActivateMutation, { token: token, uid: uid })
+      .then((res)=>{
+        if (res.data && res.data.success) { setActivated(true); }
+        else { setActivated(false); }
+      })
+    }
+  });
 
   let display = <p>Activation unsuccessful</p>
     
-    if (res.data && res.data.success) {
+    if (activated) {
 
       display = <>
         <p>Activation successful</p>

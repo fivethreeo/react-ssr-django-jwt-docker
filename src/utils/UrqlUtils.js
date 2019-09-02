@@ -1,7 +1,7 @@
 import { createRequest } from 'urql';
 import { pipe, toPromise } from 'wonka';
 
-const executeMutation = (doc, vars) => {
+export default (client, doc, vars) => {
   const req = client.createRequestOperation(
     'mutation',
     createRequest(doc, vars)
