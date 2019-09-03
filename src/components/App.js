@@ -1,6 +1,7 @@
 import './App.scss';
-import React from 'react';
-import loadable from '@loadable/component'
+import React from 'react';import { Formik, FastField, Form } from 'formik';
+
+import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 
 import { Container, Row } from "reactstrap";

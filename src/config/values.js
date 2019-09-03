@@ -80,7 +80,7 @@ const values = {
     mediaSrc: [],
     manifestSrc: [],
     objectSrc: [],
-    scriptSrc: [],
+    scriptSrc: process.env.NODE_ENV === 'development' ? ['localhost:3001'] : [],
     styleSrc: [
       'fonts.googleapis.com/css',
     ]

@@ -1,26 +1,31 @@
 {
   "compilerOptions": {
-    "allowJs": true,
-    "allowUnreachableCode": false,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true,
-    "esModuleInterop": true,
-    "forceConsistentCasingInFileNames": true,
-    "jsx": "react",
-    "lib": ["es6", "es2015", "es2017", "dom"],
+    "target": "es5",
     "module": "esnext",
-    "moduleResolution": "Node",
-    "noImplicitAny": true,
-    "noImplicitReturns": true,
-    "noImplicitThis": true,
-    "noUnusedLocals": false,
+    "lib": ["dom", "esnext"],
+    "importHelpers": true,
+    "declaration": true,
     "sourceMap": true,
-    "strictNullChecks": true,
-    "strict": true,
+    "strict": false,
     "pretty": true,
-    "suppressImplicitAnyIndexErrors": true,
-    "target": "es2016"
+    "removeComments": true,
+    "noImplicitAny": false,
+    "strictNullChecks": true,
+    "strictFunctionTypes": true,
+    "strictPropertyInitialization": true,
+    "noImplicitThis": true,
+    "alwaysStrict": true,
+    "stripInternal": true,
+    "noUnusedLocals": true,
+    "noUnusedParameters": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "emitDecoratorMetadata": false,
+    "experimentalDecorators": false,
+    "moduleResolution": "node",
+    "jsx": "react",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
   },
   "exclude": [
     "node_modules",
@@ -31,8 +36,8 @@
     "jest",
     "razzle.config.js"
   ],
-  "include": [
-    "node_modules/formik/src/index.tsx",
+
+  "files": [
   ],
   "types": ["typePatches", "node", "webpack-env"]
 }

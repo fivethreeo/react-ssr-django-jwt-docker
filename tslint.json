@@ -1,4 +1,5 @@
 {
+  "defaultSeverity" : "warning",
   "extends": ["tslint:latest", "tslint-react"],
   "rules": {
     "align": [true, "parameters", "arguments", "statements"],
@@ -12,7 +13,7 @@
     "interface-name": [true, "never-prefix"],
     "jsdoc-format": true,
     "jsx-no-lambda": false,
-    "jsx-no-multiline-js": true,
+    "jsx-no-multiline-js": false,
     "jsx-wrap-multiline": false,
     "label-position": true,
     "max-line-length": [true, 120],

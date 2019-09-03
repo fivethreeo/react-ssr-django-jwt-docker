@@ -7,11 +7,27 @@ import parseUrl from 'parseurl';
 import executeMutation from '../utils/UrqlUtils';
 import { QueryParams, ActivateMutation } from './ActivateCommon';
 
-export default async (req, response, next) => { 
-  const { token, uid } = decodeQueryParams(QueryParams, parseQueryString(parseUrl(req).search));
-  executeMutation(response.locals.urqlClient, ActivateMutation, { token: token, uid: uid }).then((res)=>{
-    if (res.data && res.data.success) { response.locals.SSRCache.set('activated', true, [ token, uid ] ); }
-    else { response.locals.SSRCache.set('activated', false, [ token, uid ] ); }
-    next();
-  })
+const SSRCallback = (callback) => {
+  return async (req, res, next) => {
+    const retval = callback(req, res, next, res.locals.SSRCache, res.locals.urqlClient)
+    if (retval) return retval
+  }
 }
+
+export default SSRCallback( (req, res, next, cache, client) => { 
+
+    const { token, uid } = decodeQueryParams(QueryParams, parseQueryString(parseUrl(req).search));
+
+    executeMutation(client, ActivateMutation, { token: token, uid: uid }).then((res)=>{
+
+      if (res.data && res.data.success) {
+        cache.set('activated', true, [ token, uid ] );
+      }
+      else {
+        cache.set('activated', true, [ token, uid ] );
+      }
+      next();
+
+    })
+  }
+)

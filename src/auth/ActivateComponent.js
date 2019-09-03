@@ -16,13 +16,23 @@ const Activate = ({ history }) => {
   const [activated, hasSSRState, setActivated] = useSSRState(false, 'activated', [ token, uid ]);
  
   useEffect(() => {
+
     if (!hasSSRState && typeof window !== 'undefined') {
+
       executeMutation(client, ActivateMutation, { token: token, uid: uid })
       .then((res)=>{
-        if (res.data && res.data.success) { setActivated(true); }
-        else { setActivated(false); }
+
+        if (res.data && res.data.success) {
+          setActivated(true);
+        }
+        else {
+          setActivated(false);
+        }
+        
       })
+
     }
+
   });
 
   let display = <p>Activation unsuccessful</p>

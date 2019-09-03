@@ -3,7 +3,7 @@ const path = require('path');
 const LoadablePlugin = require('@loadable/webpack-plugin')
 
 module.exports = {
-  modify: (defaultConfig, { target }) => {
+  modify: (defaultConfig, { target }, webpack) => {
     const config = defaultConfig;
 
     if (target === 'web') {
@@ -20,6 +20,8 @@ module.exports = {
       config.entry.unshift('cross-fetch/polyfill'); // add cross-fetch/polyfill for apollo
     }
 
+    config.plugins.push(new webpack.DefinePlugin({"__DEV__": false}))
+
     return config;
   },
 
@@ -33,9 +35,9 @@ module.exports = {
         },
         forkTsChecker: {
           tsconfig: './tsconfig.json',
-          tslint: './tslint.json',
+          //tslint: './tslint.json',
           watch: './src',
-          typeCheck: true,
+          typeCheck: false,
         },
       },
     }, 'scss']
