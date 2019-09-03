@@ -20,25 +20,7 @@ module.exports = {
       config.entry.unshift('cross-fetch/polyfill'); // add cross-fetch/polyfill for apollo
     }
 
-    config.plugins.push(new webpack.DefinePlugin({"__DEV__": false}))
-
     return config;
   },
-
-  plugins: [{
-      name: 'typescript',
-      options: {
-        useBabel: true,
-        tsLoader: {
-          transpileOnly: true,
-          experimentalWatchApi: true,
-        },
-        forkTsChecker: {
-          tsconfig: './tsconfig.json',
-          //tslint: './tslint.json',
-          watch: './src',
-          typeCheck: false,
-        },
-      },
-    }, 'scss']
+  plugins: [ 'scss' ]
 };

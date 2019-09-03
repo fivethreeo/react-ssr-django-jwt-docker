@@ -51,8 +51,6 @@ services:
     volumes:
       - ./src:/code/src
       - ./public:/code/public
-      - ./razzle-plugins:/code/razzle-plugins
-      - ./.securityrc.js:/code/.securityrc.js
       - ./razzle.config.js:/code/razzle.config.js
       - ./.babelrc:/code/.babelrc
     labels:

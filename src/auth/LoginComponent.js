@@ -3,8 +3,7 @@ import { withRouter, Link } from 'react-router-dom'
 import { graphql, compose } from 'react-apollo'
 import { useField, Formik } from 'formik';
 import { withCookies } from '../utils/CookieContext';
-import LoginSchema from './LoginSchema';
-import LoginMutation from './LoginMutation';
+import { LoginSchema, LoginMutation } from './LoginCommon';
 import LoginForm from './LoginForm';
 
 const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {

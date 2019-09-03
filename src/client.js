@@ -1,7 +1,7 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
 import { loadableReady } from '@loadable/component'
-import { BrowserRouter } from 'react-router-dom';
+import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Cookies from 'universal-cookie';
 
@@ -52,9 +52,9 @@ loadableReady(() => {
     <SSRCache.Provider>
       <UrqlProvider value={client}>
         <CookieContext.Provider value={cookies}>
-          <BrowserRouter history={history} >
+          <Router history={history} >
             <App />
-          </BrowserRouter>
+          </Router>
         </CookieContext.Provider>
       </UrqlProvider>
     </SSRCache.Provider>,

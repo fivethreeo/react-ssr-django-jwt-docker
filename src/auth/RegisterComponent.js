@@ -7,8 +7,7 @@ import { useSSRState } from '../hooks/useSSRState';
 import { executeMutation } from '../utils/UrqlUtils';
 
 
-import RegisterSchema from './RegisterSchema';
-import RegisterMutation from './RegisterMutation';
+import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 import RegisterForm from './RegisterForm';
 
 
