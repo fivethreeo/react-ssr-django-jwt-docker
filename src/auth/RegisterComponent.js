@@ -1,6 +1,5 @@
 import React, { useContext } from "react";
 import { withRouter } from 'react-router-dom'
-import { graphql, compose } from 'react-apollo'
 import { withFormik } from 'formik';
 
 import { useSSRState } from '../hooks/useSSRState';

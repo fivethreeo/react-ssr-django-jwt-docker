@@ -1,6 +1,5 @@
 import React from 'react';
 import { withRouter, Link } from 'react-router-dom'
-import { graphql, compose } from 'react-apollo'
 import { useField, Formik } from 'formik';
 import { withCookies } from '../utils/CookieContext';
 import { LoginSchema, LoginMutation } from './LoginCommon';

@@ -38,8 +38,6 @@ FROM base as dev
 
 COPY razzle.config.js razzle.config.js
 COPY .babelrc .babelrc
-COPY tsconfig.json tsconfig.json
-COPY tslint.json tslint.json
 
 RUN rm -rf node_modules_run && rm yarn_run.lock
 
@@ -52,15 +50,13 @@ COPY src src/
 COPY public public/
 COPY razzle.config.js razzle.config.js
 COPY .babelrc .babelrc
-COPY tsconfig.json tsconfig.json
-COPY tslint.json tslint.json
 
 RUN yarn build \
     && rm -rf node_modules \
     && rm yarn.lock \
     && mv node_modules_run node_modules \
     && mv yarn_run.lock yarn.lock \
-    && rm -rf src public razzle.config.js .babelrc tsconfig.json tslint.json
+    && rm -rf src public razzle.config.js .babelrc
 
 # Start server 
 CMD ["yarn", "start:prod"]

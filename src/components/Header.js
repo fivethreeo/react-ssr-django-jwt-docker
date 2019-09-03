@@ -1,5 +1,4 @@
 import React from 'react';
-import { compose } from 'react-apollo';
 import {
   Collapse,
   Navbar,
