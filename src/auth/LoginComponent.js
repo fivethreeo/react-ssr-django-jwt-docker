@@ -1,67 +1,59 @@
-import React from 'react';
+import React, { useContext } from "react";
 import { withRouter, Link } from 'react-router-dom'
-import { useField, Formik } from 'formik';
+import { Formik } from 'formik';
+import { Context  } from "urql";
+
+import { TextInput } from '../utils/FormUtils';
+import { useSSRState } from '../hooks/useSSRState';
+import { executeMutation } from '../utils/SSRUtils';
+
 import { withCookies } from '../utils/CookieContext';
 import { LoginSchema, LoginMutation } from './LoginCommon';
-import LoginForm from './LoginForm';
+import config from '../config';
 
-const handleSubmit = (payload, { props, setSubmitting, setErrors }) => {
-  const {email, password } = payload
-  console.log('submit')
-  props.LoginUser({ variables: { email, password } })
-    .then((response) => {
-      props.cookies.set('authToken', response.data.login.token, {
-        path: '/',
-        expires: new Date(new Date().getTime()+1000*60*60*24),
-        maxAge: 60*60*24,
-        domain: process.env.HOST,
-        secure: process.env.RAZZLE_NO_HTTPS === 'true' ? false : true,
-        httpOnly: false,
-        sameSite: true
-      });
-      props.history.push('/')
-    }).catch((e) => {
-      const errors = e.graphQLErrors.map(error => error.message)
-      console.log(errors)
-      setSubmitting(false)
-      setErrors({ email: ' ', password: ' ', form: errors })
-    })
+const Login = ({ history, cookies }) => {
+  const client = useContext(Context);
+  const [login, hasSSRState, setLogin] = useSSRState({}, 'login', []);
+
+  return (
+    <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+      <Formik
+        initialValues={{ email: '', password: '' }}
+        validationSchema={LoginSchema}
+        onSubmit={(values, actions) => {
+          executeMutation(client, LoginMutation, values)
+          .then((res)=>{
+            if (res.data && res.data.login.success) {
+              cookies.set('authToken', res.data.login.token, {
+                path: '/',
+                expires: new Date(new Date().getTime()+1000*60*60*24),
+                maxAge: 60*60*24,
+                domain: config('COOKIE_HOST'),
+                secure: config('COOKIE_SECURE'),
+                httpOnly: false,
+                sameSite: true
+              });
+              history.push('/')
+            }
+            else {
+            }
+            actions.setSubmitting(false);
+          })
+        }}
+        render={(props) => (
+          <form className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
+          <h1 className="h3 mb-3 font-weight-normal">Please log in</h1>
+            <TextInput name="email" type="text" label="Email address" placeholder="your@email.com" />
+            <TextInput name="password" type="text" label="Password" placeholder="Password" />
+            <p><button className="btn btn-lg btn-primary btn-block" type="submit">Login</button></p>
+            <p>Don't have an account? <Link to='/register'>Create one now</Link></p>
+
+          </form>
+
+        )}
+      />
+    </div>
+  )
 }
 
-const LoginFormWithGraphQL = compose(
-  withCookies,
-  graphql(LoginMutation, {name: 'LoginUser'}),
-  withFormik({
-    validationSchema: LoginSchema,
-    mapPropsToValues: ({ variables }) => ({
-      ...variables
-    }),
-    handleSubmit: handleSubmit,
-    displayName: 'Login'
-  })
-)(LoginForm)
-
-const LoginFormWithRouter = withRouter(LoginFormWithGraphQL)
-
-class Login extends React.Component {
-  componentWillUpdate (nextProps) {
-    if (!this.props.data.user && nextProps.data.user) {
-      this.props.history.push('/dashboard')
-    }
-  }
-
-  render () {
-    /*if (this.props.data.loading) {
-      return (<div></div>)
-    }*/
-
-    return (
-      <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
-        <LoginFormWithRouter variables={{ email: '', password: '' }} />
-        <p>Don't have an account? <Link to='/register'>Create one now</Link></p>
-      </div>
-    )
-  }
-}
-
-export default Login;
+export default withRouter(withCookies(Login));

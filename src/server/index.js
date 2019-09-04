@@ -50,7 +50,7 @@ const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
     fetchOptions: () => {
-      const token = res.locals.UniversalCookies.get('token');
+      const token = res.locals.UniversalCookies.get('authToken');
       console.log(token);
       if (token) {
         return {

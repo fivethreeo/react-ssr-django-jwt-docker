@@ -24,8 +24,9 @@ export const Label = ({ error, className, children, ...props }) => {
   );
 };
 
-export const TextInput = ({ id, label, labelClassName="", inputClassName="", ...props }) => {
+export const TextInput = ({ label, labelClassName="", inputClassName="", ...props }) => {
   const [field, meta] = useField(props);
+  const id = 'id_' + field.name;
 
   const classes = classnames(
     'form-control',
@@ -53,8 +54,9 @@ export const TextInput = ({ id, label, labelClassName="", inputClassName="", ...
   );
 };
 
-export const CheckboxInput = ({ id, name, label, className, labelClassName="", inputClassName="", ...props }) => {
+export const CheckboxInput = ({ label, className, labelClassName="", inputClassName="", ...props }) => {
   const [field, meta] = useField(props);
+  const id = 'id_' + field.name;
 
   const classes = classnames(
     'form-check-input',

@@ -21,6 +21,8 @@ const values = {
     // We need to expose all the htmlPage settings.
     htmlPage: true,
 
+    COOKIE_HOST: true,
+    COOKIE_SECURE: true
   },
 
   clientConfigOverrides: {
@@ -29,10 +31,13 @@ const values = {
 
   },
 
+  COOKIE_HOST: EnvVars.string('COOKIE_HOST', 'localhost'),
+  COOKIE_SECURE: EnvVars.bool('COOKIE_SECURE', true),
+
   // The host on which the server should run.
-  host: EnvVars.string('HOST', '0.0.0.0'),
+  HOST: EnvVars.string('HOST', '0.0.0.0'),
   // The port on which the server should run.
-  port: EnvVars.number('PORT', 1337),
+  PORT: EnvVars.number('PORT', 1337),
 
   GRAPHQL_URL: EnvVars.string('GRAPHQL_BACKEND_URL'),
 

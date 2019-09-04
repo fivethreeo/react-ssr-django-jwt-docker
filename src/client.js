@@ -33,7 +33,7 @@ const uqlSSRCache = ssrExchange({
 
 const client = new Client({
   fetchOptions: () => {
-    const token = cookies.get('token');
+    const token = cookies.get('authToken');
     console.log(token);
     if (token) {
       return {
