@@ -4,17 +4,10 @@ import {
 } from 'serialize-query-params';
 import parseUrl from 'parseurl';
 
-import executeMutation from '../utils/UrqlUtils';
+import { SSRCallback, executeMutation } from '../utils/SSRUtils';
 import { QueryParams, ActivateMutation } from './ActivateCommon';
 
-const SSRCallback = (callback) => {
-  return async (req, res, next) => {
-    const retval = callback(req, res, next, res.locals.SSRCache, res.locals.urqlClient)
-    if (retval) return retval
-  }
-}
-
-export default SSRCallback( (req, res, next, cache, client) => { 
+export default SSRCallback( async (req, res, next, cache, client) => { 
 
     const { token, uid } = decodeQueryParams(QueryParams, parseQueryString(parseUrl(req).search));
 

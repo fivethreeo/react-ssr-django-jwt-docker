@@ -32,6 +32,18 @@ const uqlSSRCache = ssrExchange({
 });
 
 const client = new Client({
+  fetchOptions: () => {
+    const token = cookies.get('token');
+    console.log(token);
+    if (token) {
+      return {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      };
+    }
+    return {};
+  },
   exchanges: [
     dedupExchange,
     cacheExchange,

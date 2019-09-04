@@ -49,6 +49,18 @@ const UniversalCookiesMiddleware = (req, res, next)=>{
 const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
+    fetchOptions: () => {
+      const token = res.locals.UniversalCookies.get('token');
+      console.log(token);
+      if (token) {
+        return {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        };
+      }
+      return {};
+    },
     exchanges: [
       dedupExchange,
       cacheExchange,

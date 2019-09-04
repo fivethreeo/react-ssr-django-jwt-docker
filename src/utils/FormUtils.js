@@ -1,6 +1,7 @@
 import React from 'react';
 
 import classnames from 'classnames';
+import { useField } from 'formik';
 
 export const InputFeedback = ({ error }) =>
   error ? <div className="invalid-feedback">{error}</div> : null;
@@ -12,7 +13,7 @@ export const Label = ({ error, className, children, ...props }) => {
   const classes = classnames(
     'label',
     {
-      'error': !!error,
+      'error': error,
     },
     className
   );
@@ -23,44 +24,45 @@ export const Label = ({ error, className, children, ...props }) => {
   );
 };
 
-export const TextInput = ({ type, id, name, label, touched, labelClassName="", inputClassName="", error, value, onChange, ...props }) => {
+export const TextInput = ({ id, label, labelClassName="", inputClassName="", ...props }) => {
+  const [field, meta] = useField(props);
+
   const classes = classnames(
     'form-control',
     {
-      'is-invalid': !!error,
+      'is-invalid': !!meta.error,
     },
     {
-      'is-valid': touched && (error === undefined),
+      'is-valid': meta.touched && (meta.error === undefined),
     },
     inputClassName
   );
   return (
     <>
-      <Label htmlFor={id} error={error} className={labelClassName}>
+      <Label htmlFor={id} error={!!meta.error} className={labelClassName}>
         {label}
       </Label>
       <input
         id={id}
-        name={name}
         className={classes}
-        type={type}
-        value={value}
-        onChange={onChange}
+        {...field}
         {...props}
       />
-      <InputFeedbackTooltip error={error} />
+      <InputFeedbackTooltip error={meta.error} />
     </>
   );
 };
 
-export const CheckboxInput = ({ type, id, name, label, touched, error, value, onChange, className, labelClassName="", inputClassName="", ...props }) => {
+export const CheckboxInput = ({ id, name, label, className, labelClassName="", inputClassName="", ...props }) => {
+  const [field, meta] = useField(props);
+
   const classes = classnames(
     'form-check-input',
     {
-      'is-invalid': !!error,
+      'is-invalid': !!meta.error,
     },
     {
-      'is-valid': touched && (error === undefined),
+      'is-valid': meta.touched && (meta.error === undefined),
     },
     inputClassName
   );
@@ -76,18 +78,15 @@ export const CheckboxInput = ({ type, id, name, label, touched, error, value, on
     <div className={wrapperClasses}>
       <input
         id={id}
-        name={name}
         className={classes}
-        type={type}
-        value={value}
-        onChange={onChange}
+        {...field}
         {...props}
       />
-      <Label htmlFor={id} error={error} className={labelClasses}>
+      <Label htmlFor={id} error={!!meta.error} className={labelClasses}>
          {label}
       </Label>
       
-      <InputFeedback error={error} />
+      <InputFeedback error={meta.error} />
     </div>
   );
 };

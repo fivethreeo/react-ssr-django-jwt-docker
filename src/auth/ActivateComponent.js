@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { useQueryParams } from 'use-query-params';
 import { useQuery, Context  } from "urql";
 
-import executeMutation from '../utils/UrqlUtils';
+import { executeMutation } from '../utils/SSRUtils';
 import { useImmediateEffect } from '../hooks/useImmediateEffect';
 import { useSSRState } from '../hooks/useSSRState';
 

@@ -1,5 +1,5 @@
 import './App.scss';
-import React from 'react';import { Formik, FastField, Form } from 'formik';
+import React from 'react';
 
 import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';

@@ -1,10 +1,18 @@
+import { SSRCallback, executeMutation } from '../utils/SSRUtils';
+import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
-import executeMutation from '../utils/UrqlUtils';
-import {RegisterSchema, RegisterMutation } from './RegisterCommon';
+export default SSRCallback( async (req, res, next, cache, client) => { 
 
-export default async (req, response, next) => { 
-  executeMutation(response.locals.urqlClient, RegisterMutation, { token: token, uid: uid }).then((res)=>{
-    if (res.data && res.data.success) { response.locals.SSRCache.set('activated', true, [ token, uid ] ); }
-    else { response.locals.SSRCache.set('activated', false, [ token, uid ] ); }
-  })
-}
+    executeMutation(client, ActivateMutation, { token: token, uid: uid }).then((res)=>{
+
+      if (res.data && res.data.success) {
+        cache.set('activated', true, [ token, uid ] );
+      }
+      else {
+        cache.set('activated', true, [ token, uid ] );
+      }
+      next();
+
+    })
+  }
+)
