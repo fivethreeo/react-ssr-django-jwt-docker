@@ -13,6 +13,7 @@ const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
 const Login = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/LoginComponent'));
 const Register = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/RegisterComponent'));
 const Activate = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/ActivateComponent'));
+const TodoOverView = loadable(() => import(/* webpackChunkName: "auth" */ '../todos/TodoOverView'));
 
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
@@ -28,7 +29,7 @@ const App = () => {
             <Route
               exact
               path="/"
-              component={Body} 
+              component={TodoOverView} 
             />
             <Route path="/activate" component={Activate} />
             <Route path="/login" component={Login} />

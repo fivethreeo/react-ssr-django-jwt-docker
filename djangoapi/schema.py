@@ -11,10 +11,12 @@ from gjwt_auth.mutations import (
     ResetPasswordConfirm,
 )
 
+from djangoapi.todos.schema import CreateTodo, UpdateTodo, DeleteTodo, Query
+
 from gjwt_auth.schema import User, Viewer
 
 
-class RootQuery(graphene.ObjectType):
+class RootQuery(Query, graphene.ObjectType):
     viewer = graphene.Field(Viewer)
 
     def resolve_viewer(self, info, **kwargs):
@@ -31,6 +33,8 @@ class Mutation(graphene.ObjectType):
     refreshToken = RefreshToken.Field()
     resetPassword = ResetPassword.Field()
     resetPasswordConfirm = ResetPasswordConfirm.Field()
-
+    create_todo = CreateTodo.Field()
+    update_todo = UpdateTodo.Field()
+    delete_todo = DeleteTodo.Field()
 
 schema = graphene.Schema(query=RootQuery, mutation=Mutation)

@@ -38,8 +38,8 @@ const Login = ({ history, cookies }) => {
             }
             else if (res.data) {
               actions.setErrors(fromGqlErrors(res.data.login.errors));
+              actions.setSubmitting(false);
             }
-            actions.setSubmitting(false);
           })
         }}
         render={(props) => (
