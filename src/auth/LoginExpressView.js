@@ -1,20 +1,52 @@
-
-import { SSRCallback, executeMutation } from '../utils/SSRUtils';
-import {RegisterSchema, RegisterMutation } from './RegisterCommon';
-
-export default SSRCallback( async (req, res, next, cache, client) => { 
+import { SSRCallback, executeMutation, fromYupErrors, fromGqlErrors } from '../utils/SSRUtils';
+import { LoginSchema, LoginMutation } from './LoginCommon';
+import config from '../config';
 
 
-    executeMutation(client, ActivateMutation, { token: token, uid: uid }).then((res)=>{
+export default SSRCallback( async (req, res, next, cache, client) => {
 
-      if (res.data && res.data.success) {
-        cache.set('activated', true, [ token, uid ] );
+  if (req.method != "POST") next();
+
+  const state = {
+    values: LoginSchema.cast(req.body),
+    errors: {}
+  };
+
+  LoginSchema.validate(state['values'], {abortEarly: false})
+  .then((values) => {
+    
+    executeMutation(client, LoginMutation, values)
+    .then((mres)=>{
+
+      if (mres.data && mres.data.login.success) {
+        res.locals.UniversalCookies.set('authToken', mres.data.login.token, {
+          path: '/',
+          expires: new Date(new Date().getTime()+1000*60*60*24),
+          maxAge: 60*60*24,
+          domain: config('COOKIE_HOST'),
+          secure: config('COOKIE_SECURE'),
+          httpOnly: false,
+          sameSite: true
+        });
+        res.redirect('/');
       }
       else {
-        cache.set('activated', true, [ token, uid ] );
+        state['errors'] = fromGqlErrors(mres.data.login.errors);
+        state['values']['password'] = '';
+        cache.set('login', state, [])
+        next();
       }
-      next();
 
     })
-  }
+
+  }).catch((err) => {
+    state['values']['password'] = '';    
+    state['errors'] = fromYupErrors(err);
+    cache.set('login', state, [])
+
+    next();
+
+  });
+       
+ }
 )

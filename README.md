@@ -7,7 +7,7 @@
 * Server hot module reloading
 * Server-side rendering
 * Suspense server side using [react-ssr-prepass][react-ssr-prepass]
-* Server-side handlers for graceful degradation of login views (in progress)  
+* Server-side handlers for graceful degradation of registration/activation/login views.  
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks

@@ -5,18 +5,20 @@ import { Context  } from "urql";
 
 import { TextInput } from '../utils/FormUtils';
 import { useSSRState } from '../hooks/useSSRState';
-import { executeMutation } from '../utils/SSRUtils';
+import { executeMutation, fromGqlErrors } from '../utils/SSRUtils';
 
 import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 const Register = ({ history }) => {
   const client = useContext(Context);
-  const [registration, hasSSRState, setRegistration] = useSSRState({}, 'registration', []);
+  const [registration, hasSSRState, setRegistration] = useSSRState(
+    {values: { email: '', password: '', passwordRepeat: '' }, errors: {} }, 'registration', []);
 
   return (
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
       <Formik
-        initialValues={{ email: '', password: '', passwordRepeat: '' }}
+        initialValues={registration.values}
+        initialErrors={registration.errors}
         validationSchema={RegisterSchema}
         onSubmit={(values, actions) => {
           executeMutation(client, RegisterMutation, values)
@@ -24,13 +26,14 @@ const Register = ({ history }) => {
             if (res.data && res.data.register.success) {
               history.push('/login')
             }
-            else {
+            else if (res.data) {
+              actions.setErrors(fromGqlErrors(res.data.register.errors));
             }
             actions.setSubmitting(false);
           })
         }}
         render={(props) => (
-          <form className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
+          <form method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
             <TextInput name="email" type="text" label="Email address" placeholder="your@email.com" />
             <TextInput name="password" type="text" label="Password" placeholder="Password" />

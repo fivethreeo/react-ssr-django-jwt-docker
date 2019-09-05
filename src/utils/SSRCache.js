@@ -17,7 +17,6 @@ const phash = (h, x) => {
 // This is a djb2 hashing function
 const hash = (x) => phash(5381 | 0, x) >>> 0;
 
-const hashQuery = (q) => hash(q.replace(/[\s,]+/g, ' ').trim());
 
 export const SSRCacheContext = createContext(null);
 
@@ -48,13 +47,11 @@ export const createSSRCache = (params={}) => {
 
   ssr.get = (key, context) => {
     const hashkey = context ? phash(key, stringify(context)) >>> 0 : key;
-    console.log('g', hashkey, data[hashkey])
     return data[hashkey];
   };
 
   ssr.set = (key, val, context) => {
     const hashkey = context ? phash(key, stringify(context)) >>> 0 : key;
-    console.log('s', hashkey, val)
     data[hashkey] = val;
   }
 

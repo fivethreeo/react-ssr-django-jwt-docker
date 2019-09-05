@@ -3,6 +3,7 @@ import React from 'react';
 import express from 'express';
 import isEmpty from 'is-empty';
 import ssrPrepass from 'react-ssr-prepass';
+import bodyParser from 'body-parser';
 
 import {
   Client,
@@ -31,6 +32,8 @@ import security from './middleware/security';
 import config from '../config';
 
 import ActivateExpressView from '../auth/ActivateExpressView';
+import RegisterExpressView from '../auth/RegisterExpressView';
+import LoginExpressView from '../auth/LoginExpressView';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -51,7 +54,6 @@ const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlClient = new Client({
     fetchOptions: () => {
       const token = res.locals.UniversalCookies.get('authToken');
-      console.log(token);
       if (token) {
         return {
           headers: {
@@ -78,9 +80,15 @@ const urqlClientMiddleware = (req, res, next)=>{
 server
   .disable('x-powered-by')
   .use(...security)
+  .use(bodyParser.urlencoded({ extended: false }))
+  .use(bodyParser.json())
   .use(...[SSRCacheMiddleware, UniversalCookiesMiddleware, urqlClientMiddleware])
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
+  
+  .use('/register', RegisterExpressView)
   .use('/activate', ActivateExpressView)
+  .use('/login', LoginExpressView)
+
   .use( async (req, res) => {
 
     const [SSRCache, UniversalCookies, urqlSSRCache, urqlClient] = [
