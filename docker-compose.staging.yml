@@ -1,0 +1,62 @@
+version: "3.7"
+
+services:
+  traefik:
+    restart: always
+    image: traefik
+    command:
+      - "--api"
+      - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
+      - "--entrypoints=Name:https Address::443 TLS:certs/localhost_https_localhost.crt,certs/localhost_https_localhost.key"
+      - "--defaultentrypoints=http,https"
+      - "--docker"
+      - "--docker.watch"
+    volumes:
+      - ./certs/:/certs/
+      - /var/run/docker.sock:/var/run/docker.sock:ro
+    ports:
+     - "80:80"
+     - "443:443"
+    networks:
+      - traefik_staging
+  djangoapi:
+    build:
+      target: prod
+      context: .
+      dockerfile: docker/django/Dockerfile
+    image: djangoapi:staging
+    environment:
+      DEBUG: "False"
+      ALLOWED_HOSTS: "djangoapi,localhost"
+      PROXY_SSL: "True"
+      SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
+      EMAIL_URL: ${EMAIL_URL:-consolemail://}
+    labels:
+      - "traefik.enable=true"
+      - "traefik.port=3002"
+      - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin"
+      - "traefik.docker.network=traefik_staging"
+    networks:
+      - traefik_staging
+  reactapp:
+    build:
+      target: prod
+      context: .
+      dockerfile: docker/react/Dockerfile
+      args:
+        PUBLIC_PATH: https://localhost/
+        CLIENT_PUBLIC_PATH: https://localhost/
+    image: reactapp:staging
+    labels:
+      - "traefik.enable=true"
+      - "traefik.server.port=3000"
+      - "traefik.server.frontend.rule=Host:localhost"
+      - "traefik.docker.network=traefik_staging"
+    networks:
+      - traefik_staging
+
+
+networks:
+  traefik_staging:
+    name: traefik_staging
+    driver: bridge

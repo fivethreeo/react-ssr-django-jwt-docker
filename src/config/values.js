@@ -37,7 +37,7 @@ const values = {
   // The host on which the server should run.
   HOST: EnvVars.string('HOST', '0.0.0.0'),
   // The port on which the server should run.
-  PORT: EnvVars.number('PORT', 1337),
+  PORT: EnvVars.number('PORT', 3000),
 
   GRAPHQL_URL: EnvVars.string('GRAPHQL_BACKEND_URL'),
 
