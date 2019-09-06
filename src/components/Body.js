@@ -7,7 +7,6 @@ const BodyPart = loadable(() =>
 );
 
 const Body = () => {
-;
   return (
     <div>
       This is my Body <BodyPart />

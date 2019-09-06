@@ -37,7 +37,7 @@ const client = new Client({
     if (token) {
       return {
         headers: {
-          Authorization: `Bearer ${token}`
+          Authorization: `JWT ${token}`
         }
       };
     }

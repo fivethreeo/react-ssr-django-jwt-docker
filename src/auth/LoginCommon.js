@@ -10,13 +10,8 @@ export const LoginSchema = Yup.object().shape({
 });
 
 export const LoginMutation = gql`
-  mutation login($email: String!, $password: String!) {
-    login(email: $email, password: $password) {
-      success
-      errors
+  mutation TokenAuth($email: String!, $password: String!) {
+    tokenAuth(email: $email, password: $password) {
       token
-      user {
-          email
-      }
     }
   }`;

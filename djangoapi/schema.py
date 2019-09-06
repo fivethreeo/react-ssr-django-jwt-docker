@@ -1,40 +1,33 @@
 
 import graphene
+import graphql_jwt
 
 from gjwt_auth.mutations import (
     Activate,
     DeleteAccount,
-    Login,
-    RefreshToken,
     Register,
     ResetPassword,
     ResetPasswordConfirm,
 )
 
-from djangoapi.todos.schema import CreateTodo, UpdateTodo, DeleteTodo, Query
+from djangoapi.todos import schema as todos_schema
 
-from gjwt_auth.schema import User, Viewer
-
-
-class RootQuery(Query, graphene.ObjectType):
-    viewer = graphene.Field(Viewer)
-
-    def resolve_viewer(self, info, **kwargs):
-        if info.context.user.is_authenticated:
-            return info.context.user
-        return None
-
+class Query(todos_schema.Query, graphene.ObjectType):
+    pass
 
 class Mutation(graphene.ObjectType):
     activate = Activate.Field()
-    login = Login.Field()
     register = Register.Field()
     deleteAccount = DeleteAccount.Field()
-    refreshToken = RefreshToken.Field()
     resetPassword = ResetPassword.Field()
     resetPasswordConfirm = ResetPasswordConfirm.Field()
-    create_todo = CreateTodo.Field()
-    update_todo = UpdateTodo.Field()
-    delete_todo = DeleteTodo.Field()
 
-schema = graphene.Schema(query=RootQuery, mutation=Mutation)
+    token_auth = graphql_jwt.ObtainJSONWebToken.Field()
+    verify_token = graphql_jwt.Verify.Field()
+    refresh_token = graphql_jwt.Refresh.Field()
+
+    create_todo = todos_schema.CreateTodo.Field()
+    update_todo = todos_schema.UpdateTodo.Field()
+    delete_todo = todos_schema.DeleteTodo.Field()
+
+schema = graphene.Schema(query=Query, mutation=Mutation)

@@ -70,7 +70,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'gjwt_auth.middleware.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'djangoapi.urls'
@@ -127,22 +126,27 @@ AUTH_PASSWORD_VALIDATORS = [
 AUTH_USER_MODEL = 'gjwt_auth.User'
 
 GRAPHENE = {
-    'SCHEMA': 'djangoapi.schema.schema'
+    'SCHEMA': 'djangoapi.schema.schema',
+    'MIDDLEWARE': [
+        'graphql_jwt.middleware.JSONWebTokenMiddleware',
+    ],
 }
 
+AUTHENTICATION_BACKENDS = [
+    'graphql_jwt.backends.JSONWebTokenBackend',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
+DOMAIN = os.environ.get('DOMAIN', 'localhost:3000')
+SITE_NAME =  os.environ.get('SITE_NAME', 'Welcome to Razzle')
+
 DJOSER = {
-    'DOMAIN': os.environ.get('DJANGO_DJOSER_DOMAIN', 'localhost:3000'),
-    'SITE_NAME': os.environ.get('DJANGO_DJOSER_SITE_NAME', 'my site'),
     'PASSWORD_RESET_CONFIRM_URL': '?action=set-new-password&uid={uid}&token={token}',
     'ACTIVATION_URL': 'activate?uid={uid}&token={token}',
     'SEND_ACTIVATION_EMAIL': True,
 }
 
 vars().update(EMAIL_CONFIG)
-
-JWT_AUTH = {
-    'JWT_ALLOW_REFRESH': True,
-}
 
 # Internationalization
 # https://docs.djangoproject.com/en/2.2/topics/i18n/

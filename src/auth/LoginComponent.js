@@ -24,8 +24,8 @@ const Login = ({ history, cookies }) => {
         onSubmit={(values, actions) => {
           executeMutation(client, LoginMutation, values)
           .then((res)=>{
-            if (res.data && res.data.login.success) {
-              cookies.set('authToken', res.data.login.token, {
+            if (res.data && res.data.token) {
+              cookies.set('authToken', res.data.tokenAuth.token, {
                 path: '/',
                 expires: new Date(new Date().getTime()+1000*60*60*24),
                 maxAge: 60*60*24,
@@ -36,8 +36,8 @@ const Login = ({ history, cookies }) => {
               });
               history.push('/')
             }
-            else if (res.data) {
-              actions.setErrors(fromGqlErrors(res.data.login.errors));
+            else if (res.errors) {
+              actions.setErrors(fromGqlErrors(res.errors));
               actions.setSubmitting(false);
             }
           })

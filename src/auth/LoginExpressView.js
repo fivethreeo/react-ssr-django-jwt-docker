@@ -18,8 +18,8 @@ export default SSRCallback( async (req, res, next, cache, client) => {
     executeMutation(client, LoginMutation, values)
     .then((mres)=>{
 
-      if (mres.data && mres.data.login.success) {
-        res.locals.UniversalCookies.set('authToken', mres.data.login.token, {
+      if (mres.data && mres.data.token) {
+        res.locals.UniversalCookies.set('authToken', mres.data.tokenAuth.token, {
           path: '/',
           expires: new Date(new Date().getTime()+1000*60*60*24),
           maxAge: 60*60*24,
@@ -31,7 +31,7 @@ export default SSRCallback( async (req, res, next, cache, client) => {
         res.redirect('/');
       }
       else {
-        state['errors'] = fromGqlErrors(mres.data.login.errors);
+        state['errors'] = fromGqlErrors(mres.data.errors);
         state['values']['password'] = '';
         cache.set('login', state, [])
         next();

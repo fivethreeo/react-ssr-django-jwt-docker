@@ -57,7 +57,7 @@ const urqlClientMiddleware = (req, res, next)=>{
       if (token) {
         return {
           headers: {
-            Authorization: `Bearer ${token}`
+            Authorization: `JWT ${token}`
           }
         };
       }

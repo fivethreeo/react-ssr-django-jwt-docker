@@ -1,4 +1,5 @@
 import graphene
+from graphql_jwt.decorators import login_required
 from django.contrib.auth import get_user_model
 from graphene_django.types import DjangoObjectType
 from djangoapi.todos.models import Todo
@@ -49,6 +50,7 @@ class Query(graphene.AbstractType):
 
         return todos
     
+    @login_required
     def resolve_users(root, info, **args):
         return User.objects.all()
 
