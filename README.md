@@ -11,6 +11,7 @@
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
+* Using [formik][formik] for forms with bootstrap4
 * Registration/activation and authentication using JWT and graphene
 * Using [træfik][træfik] for routing requests and ssl.
 
@@ -101,4 +102,4 @@ Go to [http://localhost](http://localhost).
   [@loadable/component]: <https://github.com/smooth-code/loadable-components#readme>
   [react-ssr-prepass]: <https://github.com/FormidableLabs/react-ssr-prepass>
   [træfik]: <https://traefik.io/>
-
+  [formik]: <https://github.com/jaredpalmer/formik>

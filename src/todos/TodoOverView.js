@@ -1,6 +1,9 @@
 import gql from 'graphql-tag';
 import React, { useState } from "react";
+import { Link } from 'react-router-dom'
+
 import { useQuery } from 'urql';
+
 import TodoList from './TodoList';
 import NewTodoForm from './NewTodoForm';
 
@@ -8,13 +11,18 @@ const TodoOverview = () => {
   const [filterCompleted, setFilterCompleted] = useState(false);
 
   const [overview] = useQuery({ query: TodoOverviewQuery });
-  
+
   if (overview.error) {
-    let error = 'Error'
+    let error = <p>Error</p>   
+    let gqlerror = '';
     if (overview.error.graphQLErrors) {
-      error = overview.error.graphQLErrors.join(', ')
+      gqlerror = overview.error.graphQLErrors.join(', ')
     }
-    return (<p>{error}</p>)
+    if (gqlerror.indexOf('permission') !== -1) {
+      error = <><p>{gqlerror}.</p>  <p><Link to='/login'>Log in</Link> to see todos.</p></>
+    }
+    
+    return (error)
   }  
 
   return (<>

@@ -4,7 +4,7 @@ import React from 'react';
 import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 
-import { Container, Row } from "reactstrap";
+import { Container, Row, Col } from "reactstrap";
 
 const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
@@ -25,6 +25,7 @@ const App = () => {
    <Header />
    <Container>
       <Row>
+        <Col> 
           <Switch>
             <Route
               exact
@@ -35,6 +36,7 @@ const App = () => {
             <Route path="/login" component={Login} />
             <Route path="/register" component={Register} />
           </Switch>
+        </Col>
       </Row>
       <Row>
           <Footer />
