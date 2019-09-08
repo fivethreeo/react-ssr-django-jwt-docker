@@ -1,7 +1,6 @@
 import path from 'path';
 import React from 'react';
 import express from 'express';
-import isEmpty from 'is-empty';
 import ssrPrepass from 'react-ssr-prepass';
 import bodyParser from 'body-parser';
 

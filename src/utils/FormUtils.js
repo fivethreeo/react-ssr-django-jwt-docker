@@ -1,4 +1,5 @@
 import React from 'react';
+import isEmpty from 'is-empty';
 
 import classnames from 'classnames';
 import { useField } from 'formik';
@@ -6,89 +7,104 @@ import { useField } from 'formik';
 export const InputFeedback = ({ error }) =>
   error ? <div className="invalid-feedback">{error}</div> : null;
 
-export const InputFeedbackTooltip = ({ error }) =>
-  error ? <div className="invalid-tooltip">{error}</div> : null;
+export const Label = ({ className = '', field, ...props }) => {
+  const id = 'id_' + field.name;
 
-export const Label = ({ error, className, children, ...props }) => {
-  const classes = classnames(
-    'label',
-    {
-      'error': error,
-    },
-    className
-  );
   return (
-    <label className={classes} {...props}>
-      {children}
+    <label for={id} className={className}>
+      {props.label}
     </label>
   );
 };
 
-export const TextInput = ({ label, labelClassName="", inputClassName="", ...props }) => {
-  const [field, meta] = useField(props);
+export const InputGroup = ({ className = '', children }) => {
+  const classes = classnames(
+    'input-group',
+    className
+  );
+  return (<div className={classes} children={children} />)
+}
+
+export const Input = ({ field, meta, baseClassName = 'form-control', className = '', group = {}, ...props }) => {
   const id = 'id_' + field.name;
 
   const classes = classnames(
-    'form-control',
+    baseClassName,
     {
-      'is-invalid': !!meta.error,
+      'is-invalid': !!meta.error && meta.touched,
     },
     {
       'is-valid': meta.touched && (meta.error === undefined),
     },
-    inputClassName
+    className
   );
-  return (
-    <>
-      <Label htmlFor={id} error={!!meta.error} className={labelClassName}>
-        {label}
-      </Label>
-      <input
-        id={id}
-        className={classes}
-        {...field}
-        {...props}
-      />
-      <InputFeedbackTooltip error={meta.error} />
+
+  const LocalInputGroup = !isEmpty(group) ? (!!group.component ? group.component : InputGroup) : React.Fragment;
+
+  return (<>
+      <LocalInputGroup {...group}>
+        <input
+          id={id}
+          className={classes}
+          {...field}
+          {...props}
+        />
+      </LocalInputGroup>
+      <InputFeedback error={meta.error} />
     </>
   );
 };
 
-export const CheckboxInput = ({ label, className, labelClassName="", inputClassName="", ...props }) => {
+export const CheckboxInput = ({ field, meta, ...props }) => {
+
+  return (
+      <Input
+        baseClassName='form-check-input'
+        field={field}
+        meta={meta}
+        {...props} 
+      />
+  );
+};
+
+
+
+export const TextField = ({ className='', ...props }) => {
   const [field, meta] = useField(props);
-  const id = 'id_' + field.name;
 
   const classes = classnames(
-    'form-check-input',
-    {
-      'is-invalid': !!meta.error,
-    },
-    {
-      'is-valid': meta.touched && (meta.error === undefined),
-    },
-    inputClassName
+    'form-group',
+    className
   );
-  const labelClasses = classnames(
-    'form-check-label',
-    labelClassName
+
+  return (
+    <div class={classes}>
+      <Label field={field} {...props} />
+      <Input
+        field={field}
+        meta={meta}
+        {...props}
+      />
+    </div>
   );
-  const wrapperClasses = classnames(
+};
+
+export const CheckboxField = ({ className='', ...props }) => {
+  const [field, meta] = useField(props);
+
+  const classes = classnames(
     'form-check',
     className
   );
-  return ( 
-    <div className={wrapperClasses}>
-      <input
-        id={id}
-        className={classes}
-        {...field}
+
+  return (
+    <div class={classes}>
+      <CheckboxInput
+        field={field}
+        meta={meta}
         {...props}
       />
-      <Label htmlFor={id} error={!!meta.error} className={labelClasses}>
-         {label}
-      </Label>
-      
-      <InputFeedback error={meta.error} />
+      <Label className='form-check-label' field={field} {...props} />
     </div>
   );
 };

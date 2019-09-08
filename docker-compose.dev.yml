@@ -38,6 +38,8 @@ services:
     environment:
       DEBUG: "True"
       ALLOWED_HOSTS: "djangoapi,localhost"
+      DOMAIN: "localhost"
+      SITE_NAME: "My Site"
       PROXY_SSL: "True"
       SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
       EMAIL_URL: ${EMAIL_URL:-consolemail://}

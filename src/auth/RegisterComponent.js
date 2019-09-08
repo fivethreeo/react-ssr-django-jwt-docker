@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom'
 import { Formik } from 'formik';
 import { Context  } from "urql";
 
-import { TextInput } from '../utils/FormUtils';
+import { TextField } from '../utils/FormUtils';
 import { useSSRState } from '../hooks/useSSRState';
 import { executeMutation, fromGqlErrors } from '../utils/SSRUtils';
 
@@ -35,9 +35,9 @@ const Register = ({ history }) => {
         render={(props) => (
           <form method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
-            <TextInput name="email" type="text" label="Email address" placeholder="your@email.com" />
-            <TextInput name="password" type="text" label="Password" placeholder="Password" />
-            <TextInput name="passwordRepeat" type="email" label="Password (again)" placeholder="Password (again)" />
+            <TextField name="email" type="text" label="Email address" placeholder="your@email.com" />
+            <TextField name="password" type="text" label="Password" placeholder="Password" />
+            <TextField name="passwordRepeat" type="email" label="Password (again)" placeholder="Password (again)" />
             <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
           </form>
         )}

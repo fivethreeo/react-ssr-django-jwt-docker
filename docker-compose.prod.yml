@@ -7,6 +7,9 @@ services:
       context: .
       dockerfile: docker/django/Dockerfile
     image: djangoapi:latest
+    environment:
+      DOMAIN: "localhost"
+      SITE_NAME: "My Site"
     labels:
       - "traefik.enable=true"
       - "traefik.port=3002"
