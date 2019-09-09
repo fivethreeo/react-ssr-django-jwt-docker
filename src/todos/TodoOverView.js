@@ -1,6 +1,7 @@
 import gql from 'graphql-tag';
 import React, { useState } from "react";
 import { Link } from 'react-router-dom'
+import { Row, Col } from "reactstrap";
 
 import { useQuery } from 'urql';
 
@@ -26,9 +27,15 @@ const TodoOverview = () => {
   }  
 
   return (<>
-    <NewTodoForm users={overview.data.users} />
-    <p>{overview.data.todos.length} todos</p>
-    <TodoList todos={overview.data.todos} filterCompleted={filterCompleted} />
+    <Row>
+      <Col>
+        <NewTodoForm users={overview.data.users} />
+      </Col>
+      <Col>
+        <p>{overview.data.todos.length} todos</p>
+        <TodoList todos={overview.data.todos} filterCompleted={filterCompleted} />
+      </Col>
+    </Row>
   </>)
 }
  

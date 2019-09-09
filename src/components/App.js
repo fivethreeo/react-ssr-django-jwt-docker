@@ -18,26 +18,24 @@ const TodoOverView = loadable(() => import(/* webpackChunkName: "auth" */ '../to
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
 );
-
+const OneRowOneCol = (Component) => {
+  return (props) => (<Row><Col><Component {...props} /></Col></Row>)
+}
 const App = () => {
  return (
    <>
    <Header />
    <Container>
-      <Row>
-        <Col> 
           <Switch>
             <Route
               exact
               path="/"
               component={TodoOverView} 
             />
-            <Route path="/activate" component={Activate} />
-            <Route path="/login" component={Login} />
-            <Route path="/register" component={Register} />
+            <Route path="/activate" component={OneRowOneCol(Activate)} />
+            <Route path="/login" component={OneRowOneCol(Login)} />
+            <Route path="/register" component={OneRowOneCol(Register)} />
           </Switch>
-        </Col>
-      </Row>
       <Row>
           <Footer />
       </Row>

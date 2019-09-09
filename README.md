@@ -35,6 +35,7 @@ docker-compose -f docker-compose.dev.yml build
 Run database migrations:
 
 ```bash
+touch db.sqlite3
 docker-compose -f docker-compose.dev.yml run djangoapi python manage.py migrate
 ```
 
