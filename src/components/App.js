@@ -4,7 +4,6 @@ import React from 'react';
 import loadable from '@loadable/component';
 import { Route, Switch } from 'react-router-dom';
 
-import { Container, Row, Col } from "reactstrap";
 
 const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
@@ -19,27 +18,28 @@ const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
 );
 const OneRowOneCol = (Component) => {
-  return (props) => (<Row><Col><Component {...props} /></Col></Row>)
+  return (props) => (<div className="row">
+      <div className="col-sm"><Component {...props} /></div></div>)
 }
 const App = () => {
  return (
    <>
    <Header />
-   <Container>
-          <Switch>
-            <Route
-              exact
-              path="/"
-              component={TodoOverView} 
-            />
-            <Route path="/activate" component={OneRowOneCol(Activate)} />
-            <Route path="/login" component={OneRowOneCol(Login)} />
-            <Route path="/register" component={OneRowOneCol(Register)} />
-          </Switch>
-      <Row>
+     <div className="container">
+      <Switch>
+        <Route
+          exact
+          path="/"
+          component={TodoOverView} 
+        />
+        <Route path="/activate" component={OneRowOneCol(Activate)} />
+        <Route path="/login" component={OneRowOneCol(Login)} />
+        <Route path="/register" component={OneRowOneCol(Register)} />
+      </Switch>
+      <div className="row">
           <Footer />
-      </Row>
-    </Container>
+      </div>
+    </div>
     </>
   );
 };
