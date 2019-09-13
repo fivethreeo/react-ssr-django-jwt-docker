@@ -7,12 +7,11 @@ import { useField } from 'formik';
 export const InputFeedback = ({ error }) =>
   error ? <div className="invalid-feedback">{error}</div> : null;
 
-export const Label = ({ className = '', field, ...props }) => {
-  const id = 'id_' + field.name;
+export const Label = ({ className = 'form-label', field, label }) => {
 
   return (
-    <label for={id} className={className}>
-      {props.label}
+    <label htmlFor={field.id} className={className}>
+      {label}
     </label>
   );
 };
@@ -25,52 +24,36 @@ export const InputGroup = ({ className = '', children }) => {
   return (<div className={classes} children={children} />)
 }
 
-export const Input = ({ field, meta, baseClassName = 'form-control', className = '', group = {}, ...props }) => {
+export const get_id_classes = (className, field, meta) => {
   const id = 'id_' + field.name;
 
   const classes = classnames(
-    baseClassName,
+    className,
     {
       'is-invalid': !!meta.error && meta.touched,
     },
     {
       'is-valid': meta.touched && (meta.error === undefined),
-    },
-    className
+    }
   );
+  return {id: id, className: classes};
+}
 
-  const LocalInputGroup = !isEmpty(group) ? (!!group.component ? group.component : InputGroup) : React.Fragment;
+export const useFieldExtra = ({className = 'form-control', ...props}) => {
+  const [field, meta] = useField(props);
+  return [
+    {...get_id_classes(className, field, meta), ...field},
+    meta]
+}
 
-  return (<>
-      <LocalInputGroup {...group}>
-        <input
-          id={id}
-          className={classes}
-          {...field}
-          {...props}
-        />
-      </LocalInputGroup>
-      <InputFeedback error={meta.error} />
-    </>
-  );
+export const InputWidget = (props) => {
+  return (<input {...props} />);
 };
-
-export const CheckboxInput = ({ field, meta, ...props }) => {
-
-  return (
-      <Input
-        baseClassName='form-check-input'
-        field={field}
-        meta={meta}
-        {...props} 
-      />
-  );
-};
-
 
 
 export const TextField = ({ className='', ...props }) => {
-  const [field, meta] = useField(props);
+  const newProps = { type: 'text', ...props };
+  const [field, meta] = useFieldExtra(newProps);
 
   const classes = classnames(
     'form-group',
@@ -78,19 +61,18 @@ export const TextField = ({ className='', ...props }) => {
   );
 
   return (
-    <div class={classes}>
+    <div className={classes}>
       <Label field={field} {...props} />
-      <Input
-        field={field}
-        meta={meta}
-        {...props}
-      />
+      <InputWidget type={newProps.type} {...field} />
+      <InputFeedback error={meta.error} />
     </div>
   );
 };
 
+
 export const CheckboxField = ({ className='', ...props }) => {
-  const [field, meta] = useField(props);
+  const newProps = { type: 'checkbox', className: 'form-check-input', ...props };
+  const [field, meta] = useFieldExtra(newProps);
 
   const classes = classnames(
     'form-check',
@@ -98,13 +80,10 @@ export const CheckboxField = ({ className='', ...props }) => {
   );
 
   return (
-    <div class={classes}>
-      <CheckboxInput
-        field={field}
-        meta={meta}
-        {...props}
-      />
+    <div className={classes}>
+      <InputWidget type={newProps.type} {...field} />
       <Label className='form-check-label' field={field} {...props} />
+      <InputFeedback error={meta.error} />
     </div>
   );
 };

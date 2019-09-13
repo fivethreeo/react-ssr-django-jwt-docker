@@ -1,32 +1,130 @@
 import gql from 'graphql-tag';
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext, useEffect, useCallback, useImperativeHandle, useLayoutEffect } from 'react';
 import { useMutation } from 'urql';
-import { Formik } from 'formik';
+import { Formik, useField } from 'formik';
+import classnames from 'classnames';
 
-import { TextField, CheckboxField } from '../utils/FormUtils';
+import { TextField, CheckboxField, Label, useFieldExtra, InputGroup, InputFeedback } from '../utils/FormUtils';
 
 import Todo from './Todo';
 
-const NewTodoForm = ({users}) => {
+const RegistryContext = React.createContext();
 
-  const [result, executeMutation] = useMutation(NewTodoMutation); 
+const useRegistry = () => {
+  const registry = useRef({});
 
-  const [mutationParams, setMutationParams] = useState({
-    title: '',
-    body: '',
-    creatorId: null,
-    completed: false,
+  useEffect(() => {
+    return () => {
+      registry.current = {};
+    }
   });
+
+  return [registry, ({children}) => (
+    <RegistryContext.Provider value={registry}>
+      {children}
+    </RegistryContext.Provider>)];
+}
+
+const useRegister = (id, context, deps) => {
+  const registry = useContext(RegistryContext);
+
+  useEffect(() => {
+    registry.current[id] = context;
+    return () => {
+      delete registry.current[id];
+    }
+  }, [deps]);
+}
+
+
+
+export const SearchGroup = ({children}) => {
+  return (<div className="input-group">
+      {children}
+    <div className="input-group-append">
+      <span className="input-group-text">V</span>
+    </div>
+
+  </div>);
+};
+
+const useIsomorphicNoopLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : () => ({});
+
+export const SearchResult = ({ id, description }) => {
+  return (<li className="list-group-item">{id}: {description}</li>)
+}
+
+export const SearchResults = React.forwardRef(({ choices }, ref) => {
+  const [registry, RegistryProvider] = useRegistry();
+  const [searchResults, setSearchResults] = useState([]);
+  const listGroupRef = useRef();
+
+  useIsomorphicNoopLayoutEffect(() => {
+    const brect = listGroupRef.current.getBoundingClientRect();
+    listGroupRef.current.style.width = `${brect.width.toFixed()}px`;
+    listGroupRef.current.style.position = 'absolute'; 
+    listGroupRef.current.style.zIndex = 4; 
+  });
+
+  useImperativeHandle(ref, () => ({
+    setSearchResults: (results) => {
+      setSearchResults(results)
+    }
+  }))
+
+    return (
+      <RegistryProvider><ul className="list-group" ref={listGroupRef}>{searchResults
+        .map((result, i) => <SearchResult key={i} {...result} />)}</ul></RegistryProvider>
+  );
+})
+
+export const SearchWidget = ({ field, choices, ...props }) => {
+  const searchRef = useRef(null);
+
+  const { onChange, onBlur, value, ...oldField } = field;
+
+  const onChangeSearch = useCallback((event) => {
+    searchRef.current.setSearchResults(
+      choices.filter(choice => choice.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1))
+  }, [])
+
+  return (<>
+    <SearchGroup><input {...{onChange: onChangeSearch, ...oldField}} /></SearchGroup>
+    <SearchResults ref={searchRef} />
+    </>);
+};
+
+export const SearchField = ({ className='', ...props }) => {
+  const newProps = { type: 'text', ...props };
+  const [field, meta] = useFieldExtra(newProps);
+
+  const classes = classnames(
+    'form-group',
+    className
+  );
+
+  return (
+    <div className={classes}>
+      <Label field={field} {...props} />
+      <SearchWidget
+        field={field}
+        meta={meta}
+        {...newProps}
+      />
+      <InputFeedback error={meta.error} />
+    </div>
+  );
+};
+
+
+/* 
+              onResultSelect={onResultSelect}
+              onSearchChange={onSearchChange}
+              results={searchResults}
 
   const [searchQuery, setSearchQuery] = useState('');
 
-  const onChange = (e) => {
-    setMutationParams((state) => {
-      return Object.assign({}, state,
-        { [e.target.name]: e.target.value || e.target.checked }
-      )
-    });
-  };
 
   const onSearchChange = (event) => {
     setSearchQuery(event.target.value);
@@ -40,58 +138,43 @@ const NewTodoForm = ({users}) => {
     });
     setSearchQuery(title);
   }
-
-  const onSubmit = e => {
-    executeMutation({
-      variables: mutationParams,
-    })
-  };
-  
-  const {
-    title,
-    body,
-    completed,
-  } = mutationParams;
-  
-  const searchResults = users
     .filter(user => user.username.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
+
+  */
+  const modifyChoices = (users) => users
     .map(user => {
-      const fullName = user.firstName + ' ' + user.lastName;
       return {
-        title: user.username,
-        description: fullName !== ' ' ? fullName : null,
+        description: user.email,
         id: parseInt(user.id, 10),
       }
-    });
-  
-  const initialValues = Object.assign({}, mutationParams, { user: searchQuery });
+    }); 
+
+const NewTodoForm = ({users}) => {
+
+  const [result, executeMutation] = useMutation(NewTodoMutation); 
 
   return (<Formik
-        initialValues={initialValues}
+        initialValues={{title: '', body: '', creatorId: 0, completed: false}}
         onSubmit={(values, actions) => {
         }}
         render={(props) => (
-          <form onSubmit={onSubmit} noValidate>
+          <form onSubmit={props.handleSubmit} noValidate>
             <TextField
               name="title"
               label="Title"
               placeholder="Todo Title"
-              type="text"
             />
             <TextField
               name="body"
               label="Body"
               placeholder="I have to &hellip;"
             />
-            <TextField
-              name="user"
+            <SearchField
+              name="creatorId"
               label="User"
-              onResultSelect={onResultSelect}
-              onSearchChange={onSearchChange}
-              results={searchResults}
+              choices={modifyChoices(users)}
             />
             <CheckboxField
-              type="checkbox"
               name="completed"
               label="Completed"
             />            
