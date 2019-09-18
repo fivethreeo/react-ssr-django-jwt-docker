@@ -20,6 +20,7 @@ const Register = ({ history }) => {
         initialValues={registration.values}
         initialErrors={registration.errors}
         validationSchema={RegisterSchema}
+        validateOnBlur={false}
         onSubmit={(values, actions) => {
           executeMutation(client, RegisterMutation, values)
           .then((res)=>{
@@ -36,8 +37,8 @@ const Register = ({ history }) => {
           <form method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
             <TextField name="email" type="text" label="Email address" placeholder="your@email.com" />
-            <TextField name="password" type="text" label="Password" placeholder="Password" />
-            <TextField name="passwordRepeat" type="email" label="Password (again)" placeholder="Password (again)" />
+            <TextField name="password" type="password" label="Password" placeholder="Password" />
+            <TextField name="passwordRepeat" type="password" label="Password (again)" placeholder="Password (again)" />
             <button className="btn btn-lg btn-primary btn-block" type="submit">Register</button>
           </form>
         )}

@@ -3,7 +3,7 @@ import gql from 'graphql-tag';
 
 export const LoginSchema = Yup.object().shape({
   email: Yup.string()
-    .email()
+    .email('Email must be a valid email')
     .required('Required'),
   password: Yup.string()
     .required('Required')

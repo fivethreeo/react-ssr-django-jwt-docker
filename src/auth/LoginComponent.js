@@ -22,6 +22,7 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
         initialValues={login.values}
         initialErrors={login.errors}
         validationSchema={LoginSchema}
+        validateOnBlur={false}
         onSubmit={(values, actions) => {
           executeMutation(client, LoginMutation, values)
           .then((res)=>{
@@ -48,7 +49,7 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
           <form action="/login" method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please log in</h1>
             <TextField name="email" type="text" label="Email address" placeholder="your@email.com" />
-            <TextField name="password" type="text" label="Password" placeholder="Password" />
+            <TextField name="password" type="password" label="Password" placeholder="Password" />
             <p><button className="btn btn-lg btn-primary btn-block" type="submit">Login</button></p>
             <p>Don't have an account? <Link to='/register'>Create one now</Link></p>
 

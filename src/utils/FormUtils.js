@@ -30,10 +30,10 @@ export const get_id_classes = (className, field, meta) => {
   const classes = classnames(
     className,
     {
-      'is-invalid': !!meta.error && meta.touched,
+      'is-invalid': field.value && !!meta.error,
     },
     {
-      'is-valid': meta.touched && (meta.error === undefined),
+      'is-valid': field.value && meta.touched && (meta.error === undefined),
     }
   );
   return {id: id, className: classes};
@@ -51,8 +51,8 @@ export const InputWidget = (props) => {
 };
 
 
-export const TextField = ({ className='', ...props }) => {
-  const newProps = { type: 'text', ...props };
+export const TextField = ({ type = 'text', className = '', ...props }) => {
+  const newProps = { type: type, ...props };
   const [field, meta] = useFieldExtra(newProps);
 
   const classes = classnames(

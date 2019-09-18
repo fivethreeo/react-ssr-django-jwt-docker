@@ -4,7 +4,7 @@ import gql from 'graphql-tag';
 export const RegisterSchema = Yup.object().shape({
 
   email: Yup.string()
-    .email()
+    .email('Email must be a valid email')
     .required('Required'),
     password: Yup.string().matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\+\?])(?=.{8,})/,
