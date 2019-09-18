@@ -24,7 +24,7 @@ const TodoOverview = () => {
     if (gqlerror.indexOf('permission') !== -1) {
       error = <><p>{gqlerror}.</p></>
     }
-    content = <div className="col-sm">{error}<Login onLoginSuccess={refetchOverView}/></div>
+    content = <Login onLoginSuccess={refetchOverView} error={error} />
   } else {
     content = <>
       <div className="col-sm">
