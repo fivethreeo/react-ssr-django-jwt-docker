@@ -8,16 +8,36 @@ import { TextField, CheckboxField, Label, useFieldExtra, InputGroup, InputFeedba
 
 import Todo from './Todo';
 
+
+export const useIsomorphicNoopLayoutEffect =
+  typeof window !== 'undefined' ? useLayoutEffect : () => ({});
+
+export const  useIsomorphicNoopEffect =
+  typeof window !== 'undefined' ? useEffect : () => ({});
+
+export const useWindowEvent = (event, callback) => {
+  useIsomorphicNoopEffect(() => {
+    window.addEventListener(event, callback);
+    return () => window.removeEventListener(event, callback);
+  }, [event, callback]);
+};
+
+export const useGlobalMouseClick = (callback) => {
+  return useWindowEvent("click", callback);
+};
+
+export const useGlobalMouseUp = (callback) => {
+  return useWindowEvent("mouseup", callback);
+};
+
+export const useGlobalMouseMove = (callback) => {
+  return useWindowEvent("mousemove", callback);
+};
+
 const RegistryContext = React.createContext();
 
 const useRegistry = () => {
   const registry = useRef({});
-
-  useEffect(() => {
-    return () => {
-      registry.current = {};
-    }
-  });
 
   return [registry, ({children}) => (
     <RegistryContext.Provider value={registry}>
@@ -33,7 +53,7 @@ const useRegister = (id, context, deps) => {
     return () => {
       delete registry.current[id];
     }
-  }, [deps]);
+  });
 }
 
 
@@ -48,24 +68,35 @@ export const SearchGroup = ({children}) => {
   </div>);
 };
 
-const useIsomorphicNoopLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : () => ({});
-
 export const SearchResult = ({ id, description }) => {
+  useRegister(id, description, [])
   return (<li className="list-group-item">{id}: {description}</li>)
 }
 
-export const SearchResults = React.forwardRef(({ choices }, ref) => {
+export const SearchResults = React.forwardRef(({ fieldRef }, ref) => {
   const [registry, RegistryProvider] = useRegistry();
   const [searchResults, setSearchResults] = useState([]);
   const listGroupRef = useRef();
+  
+  const onClickGlobal = useCallback((event) => {
+    if (event.target!==fieldRef.current && !listGroupRef.current.contains(event.target)) {
+      listGroupRef.current.style.display = 'none';
+    }
+  }, [])
+
+  useGlobalMouseClick(onClickGlobal);
 
   useIsomorphicNoopLayoutEffect(() => {
     const brect = listGroupRef.current.getBoundingClientRect();
     listGroupRef.current.style.width = `${brect.width.toFixed()}px`;
     listGroupRef.current.style.position = 'absolute'; 
-    listGroupRef.current.style.zIndex = 4; 
+    listGroupRef.current.style.zIndex = 4;
+    listGroupRef.current.style.display = 'block';
   });
+
+  const searchCallback = useCallback((event) => {
+    console.log(listGroupRef.current.contains(event.target))
+  }, [])
 
   useImperativeHandle(ref, () => ({
     setSearchResults: (results) => {
@@ -73,14 +104,15 @@ export const SearchResults = React.forwardRef(({ choices }, ref) => {
     }
   }))
 
-    return (
-      <RegistryProvider><ul className="list-group" ref={listGroupRef}>{searchResults
-        .map((result, i) => <SearchResult key={i} {...result} />)}</ul></RegistryProvider>
+  return (
+    <RegistryProvider><ul className="list-group" ref={listGroupRef}>{searchResults
+      .map((result, i) => <SearchResult key={i} {...result} />)}</ul></RegistryProvider>
   );
 })
 
 export const SearchWidget = ({ field, choices, ...props }) => {
   const searchRef = useRef(null);
+  const fieldRef = useRef(null);
 
   const { onChange, onBlur, value, ...oldField } = field;
 
@@ -89,9 +121,15 @@ export const SearchWidget = ({ field, choices, ...props }) => {
       choices.filter(choice => choice.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1))
   }, [])
 
+  const fieldProps =  {
+    onChange: onChangeSearch,
+    // onFocus: onChangeSearch,
+    ref: fieldRef,
+    ...oldField}
+
   return (<>
-    <SearchGroup><input {...{onChange: onChangeSearch, ...oldField}} /></SearchGroup>
-    <SearchResults ref={searchRef} />
+    <SearchGroup><input {...fieldProps} /></SearchGroup>
+    <SearchResults ref={searchRef} fieldRef={fieldRef} />
     </>);
 };
 
@@ -118,36 +156,13 @@ export const SearchField = ({ className='', ...props }) => {
 };
 
 
-/* 
-              onResultSelect={onResultSelect}
-              onSearchChange={onSearchChange}
-              results={searchResults}
-
-  const [searchQuery, setSearchQuery] = useState('');
-
-
-  const onSearchChange = (event) => {
-    setSearchQuery(event.target.value);
-  }
-
-  const onResultSelect = (event, { result: { title, id } }) => {
-    setMutationParams((state) => {
-      return Object.assign({}, state,
-        { creatorId: id }
-      )
-    });
-    setSearchQuery(title);
-  }
-    .filter(user => user.username.toLowerCase().indexOf(searchQuery.toLowerCase()) !== -1)
-
-  */
-  const modifyChoices = (users) => users
-    .map(user => {
-      return {
-        description: user.email,
-        id: parseInt(user.id, 10),
-      }
-    }); 
+const modifyChoices = (users) => users
+  .map(user => {
+    return {
+      description: user.email,
+      id: parseInt(user.id, 10),
+    }
+  }); 
 
 const NewTodoForm = ({users}) => {
 

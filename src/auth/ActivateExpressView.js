@@ -11,16 +11,14 @@ export default SSRCallback( async (req, res, next, cache, client) => {
 
     const { token, uid } = decodeQueryParams(QueryParams, parseQueryString(parseUrl(req).search));
 
-    executeMutation(client, ActivateMutation, { token: token, uid: uid }).then((res)=>{
+    const mutationresult = await executeMutation(client, ActivateMutat0ion, { token: token, uid: uid });
 
-      if (res.data && res.data.success) {
-        cache.set('activated', true, [ token, uid ] );
-      }
-      else {
-        cache.set('activated', true, [ token, uid ] );
-      }
-      next();
-
-    })
+    if (mutationresult.data && mutationresult.data.success) {
+      cache.set('activated', true, [ token, uid ] );
+    }
+    else {
+      cache.set('activated', true, [ token, uid ] );
+    }
+    return next();
   }
 )

@@ -11,7 +11,7 @@ import { withCookies } from '../utils/CookieContext';
 import { LoginSchema, LoginMutation } from './LoginCommon';
 import config from '../config';
 
-const Login = ({ history, cookies }) => {
+const Login = ({ history, cookies, onLoginSuccess = null }) => {
   const client = useContext(Context);
   const [login, hasSSRState, setLogin] = useSSRState(
     {values: { email: '', password: '' }, errors: {} }, 'login', []);
@@ -34,7 +34,8 @@ const Login = ({ history, cookies }) => {
                 httpOnly: false,
                 sameSite: true
               });
-              history.push('/')
+              if (onLoginSuccess) onLoginSuccess()
+              else history.push('/')
             }
             else if (res.errors) {
               actions.setErrors(fromGqlErrors(res.errors));
@@ -43,7 +44,7 @@ const Login = ({ history, cookies }) => {
           })
         }}
         render={(props) => (
-          <form method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
+          <form action="/login" method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please log in</h1>
             <TextField name="email" type="text" label="Email address" placeholder="your@email.com" />
             <TextField name="password" type="text" label="Password" placeholder="Password" />

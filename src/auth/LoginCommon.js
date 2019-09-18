@@ -7,6 +7,10 @@ export const LoginSchema = Yup.object().shape({
     .required('Required'),
   password: Yup.string()
     .required('Required')
+    .matches(
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\+\?])(?=.{8,})/,
+      "Must Contain 8 Characters, One Uppercase, One Lowercase, One Number and one special case Character"
+    )
 });
 
 export const LoginMutation = gql`

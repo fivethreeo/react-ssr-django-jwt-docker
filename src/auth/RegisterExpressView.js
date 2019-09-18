@@ -4,41 +4,34 @@ import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 export default SSRCallback( async (req, res, next, cache, client) => {
   
-  if (req.method != "POST") next();
+  if (req.method != "POST") return next();
 
   const state = {
     values: RegisterSchema.cast(req.body),
     errors: {}
   };
 
-  RegisterSchema.validate(state['values'], {abortEarly: false})
-  .then((values) => {
-    
-    executeMutation(client, RegisterMutation, values)
-    .then((mres)=>{
-
-      if (mres.data && mres.data.register.success) {
-        res.redirect('/login');
-      }
-      else {
-        state['errors'] = fromGqlErrors(mres.data.register.errors);
-        state['values']['password'] = '';
-        state['values']['passwordRepeat'] = '';
-        cache.set('registration', state, [])
-        next();
-      }
-
-    })
-
-  }).catch((err) => {
-    state['values']['password'] = '';    
+  try {
+    state['values'] = RegisterSchema.validateSync(state['values'], {abortEarly: false});
+  }
+  catch(err) {
+    state['values']['password'] = '';
     state['values']['passwordRepeat'] = '';
     state['errors'] = fromYupErrors(err);
-    cache.set('registration', state, [])
+    cache.set('registration', state, []);
+    return next();
+  }
 
-    next();
+  const mutationresult = await executeMutation(client, RegisterMutation, state['values']);
+  if (mutationresult.data && mutationresult.data.register.success) {
+    res.redirect('/login');
+  }
+  else {
+    state['errors'] = fromGqlErrors(mutationresult.data.register.errors);
+    state['values']['password'] = '';
+    state['values']['passwordRepeat'] = '';
+    cache.set('registration', state, []);
+    return next();
+  }
 
-  });
-       
- }
-)
+})

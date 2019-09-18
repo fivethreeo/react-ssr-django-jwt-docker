@@ -16,7 +16,7 @@ import {
 import { renderToString } from 'react-dom/server';
 import { ChunkExtractor } from '@loadable/server'
 import { Router, Route } from 'react-router-dom';
-import Cookies from 'universal-cookie';
+import cookiesMiddleware from 'universal-cookie-express';
 import { createMemoryHistory } from 'history';
 import queryString from 'query-string';
 import UrqlDataComponent from '../utils/UrqlDataComponent';
@@ -43,16 +43,11 @@ const SSRCacheMiddleware = (req, res, next)=>{
   next();
 };
 
-const UniversalCookiesMiddleware = (req, res, next)=>{
-  res.locals.UniversalCookies = new Cookies(req.headers.cookie);
-  next();
-};
-
 const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
     fetchOptions: () => {
-      const token = res.locals.UniversalCookies.get('authToken');
+      const token = req.universalCookies.get('authToken');
       if (token) {
         return {
           headers: {
@@ -81,7 +76,7 @@ server
   .use(...security)
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
-  .use(...[SSRCacheMiddleware, UniversalCookiesMiddleware, urqlClientMiddleware])
+  .use(...[SSRCacheMiddleware, cookiesMiddleware(), urqlClientMiddleware])
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   
   .use('/register', RegisterExpressView)
@@ -92,7 +87,7 @@ server
 
     const [SSRCache, UniversalCookies, urqlSSRCache, urqlClient] = [
       res.locals.SSRCache,
-      res.locals.UniversalCookies,
+      req.universalCookies,
       res.locals.urqlSSRCache,
       res.locals.urqlClient
     ];
