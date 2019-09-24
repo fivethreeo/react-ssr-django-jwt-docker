@@ -12,6 +12,7 @@ const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
 const Login = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/LoginComponent'));
 const Register = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/RegisterComponent'));
 const Activate = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/ActivateComponent'));
+const Social = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/SocialAuthComponent'));
 const TodoOverView = loadable(() => import(/* webpackChunkName: "auth" */ '../todos/TodoOverView'));
 
 const Footer = loadable(() =>
@@ -35,6 +36,7 @@ const App = () => {
         <Route path="/activate" component={OneRowOneCol(Activate)} />
         <Route path="/login" component={OneRowOneCol(Login)} />
         <Route path="/register" component={OneRowOneCol(Register)} />
+        <Route path="/social/:provider" component={OneRowOneCol(Social)} />
       </Switch>
       <div className="row">
           <Footer />
