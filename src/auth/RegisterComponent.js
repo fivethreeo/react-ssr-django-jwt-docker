@@ -11,7 +11,7 @@ import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 const Register = ({ history }) => {
   const client = useContext(Context);
-  const [registration, hasSSRState, setRegistration] = useSSRState(
+  const [registration] = useSSRState(
     {values: { email: '', password: '', passwordRepeat: '' }, errors: {} }, 'registration', []);
 
   return (

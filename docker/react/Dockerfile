@@ -36,9 +36,6 @@ RUN apk add --no-cache --virtual .build-deps \
 
 FROM base as dev
 
-COPY razzle.config.js razzle.config.js
-COPY .babelrc .babelrc
-
 RUN rm -rf node_modules_run && rm yarn_run.lock
 
 # Start server 

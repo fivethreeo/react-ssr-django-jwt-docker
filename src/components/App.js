@@ -8,12 +8,11 @@ import { Route, Switch } from 'react-router-dom';
 const Header = loadable(() =>
   import(/* webpackChunkName: "header" */ './Header')
 );
-const Body = loadable(() => import(/* webpackChunkName: "body" */ './Body'));
 const Login = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/LoginComponent'));
 const Register = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/RegisterComponent'));
 const Activate = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/ActivateComponent'));
 const Social = loadable(() => import(/* webpackChunkName: "auth" */ '../auth/SocialAuthComponent'));
-const TodoOverView = loadable(() => import(/* webpackChunkName: "auth" */ '../todos/TodoOverView'));
+const TodoOverView = loadable(() => import(/* webpackChunkName: "todo" */ '../todos/TodoOverView'));
 
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')

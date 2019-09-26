@@ -1,6 +1,5 @@
 import {
   useContext,
-  useCallback,
   useState
 } from 'react';
 
@@ -11,23 +10,6 @@ export const useSSRState = (init, key, context) => {
   const SSRCache = useContext(SSRCacheContext);
   const [hasSSRState, setHasSSRState] = useState(false);
   const [state, setState] = useState(init);
-
-  // This wraps setState and updates SSRCache
-  const updateState = useCallback(
-    (action) => {
-      setState((state) => {
-        const newState =
-          typeof action === 'function'
-            ? action(state)
-            : action;
-        if (typeof window === 'undefined') SSRCache.set(key, newState, context);
-        setHasSSRState(true);
-        return newState
-      });
-    },
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-    [setState]
-  );
 
   useImmediateEffect(() => {
     if (!hasSSRState) {

@@ -2,3 +2,6 @@ django
 django-environ
 django-cors-headers
 graphene-jwt-auth-registration
+social-auth-app-django
+django-graphql-jwt
+-e git+https://github.com/fivethreeo/django-graphql-social-auth.git#egg=django-graphql-social-auth

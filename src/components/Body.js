@@ -1,4 +1,3 @@
-import gql from 'graphql-tag';
 import React from 'react';
 import loadable from '@loadable/component';
 

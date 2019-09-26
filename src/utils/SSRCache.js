@@ -14,9 +14,6 @@ const phash = (h, x) => {
   return h;
 };
 
-// This is a djb2 hashing function
-const hash = (x) => phash(5381 | 0, x) >>> 0;
-
 
 export const SSRCacheContext = createContext(null);
 

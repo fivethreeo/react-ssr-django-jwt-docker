@@ -11,7 +11,7 @@ RUN pip install --upgrade pip setuptools wheel
 
 RUN apk add --no-cache --virtual .build-deps \
     ca-certificates gcc postgresql-dev linux-headers musl-dev \
-    libffi-dev jpeg-dev zlib-dev \
+    libffi-dev jpeg-dev zlib-dev git \
     && pip install -r requirements.txt \
     && pip install uwsgi \
     && find /usr/local \

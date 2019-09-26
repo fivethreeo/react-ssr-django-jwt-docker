@@ -1,61 +1,16 @@
 import gql from 'graphql-tag';
-import React, { useState, useRef, useContext, useEffect, useCallback, useImperativeHandle, useLayoutEffect } from 'react';
+import React, { useState, useRef, useCallback, useImperativeHandle } from 'react';
+import { useIsomorphicNoopLayoutEffect } from '../hooks/IsomorphicEffects';
+import { useGlobalMouseClick } from '../hooks/WindowEvents';
+import { useRegistry, useRegister } from '../hooks/Registry';
 import { useMutation } from 'urql';
-import { Formik, useField } from 'formik';
+import { Formik } from 'formik';
 import classnames from 'classnames';
 
-import { TextField, CheckboxField, Label, useFieldExtra, InputGroup, InputFeedback } from '../utils/FormUtils';
+
+import { TextField, CheckboxField, Label, useFieldExtra, InputFeedback } from '../utils/FormUtils';
 
 import Todo from './Todo';
-
-
-export const useIsomorphicNoopLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : () => ({});
-
-export const  useIsomorphicNoopEffect =
-  typeof window !== 'undefined' ? useEffect : () => ({});
-
-export const useWindowEvent = (event, callback) => {
-  useIsomorphicNoopEffect(() => {
-    window.addEventListener(event, callback);
-    return () => window.removeEventListener(event, callback);
-  }, [event, callback]);
-};
-
-export const useGlobalMouseClick = (callback) => {
-  return useWindowEvent("click", callback);
-};
-
-export const useGlobalMouseUp = (callback) => {
-  return useWindowEvent("mouseup", callback);
-};
-
-export const useGlobalMouseMove = (callback) => {
-  return useWindowEvent("mousemove", callback);
-};
-
-const RegistryContext = React.createContext();
-
-const useRegistry = () => {
-  const registry = useRef({});
-
-  return [registry, ({children}) => (
-    <RegistryContext.Provider value={registry}>
-      {children}
-    </RegistryContext.Provider>)];
-}
-
-const useRegister = (id, context, deps) => {
-  const registry = useContext(RegistryContext);
-
-  useEffect(() => {
-    registry.current[id] = context;
-    return () => {
-      delete registry.current[id];
-    }
-  });
-}
-
 
 
 export const SearchGroup = ({children}) => {

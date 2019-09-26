@@ -7,7 +7,7 @@ export const RegisterSchema = Yup.object().shape({
     .email('Email must be a valid email')
     .required('Required'),
     password: Yup.string().matches(
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#\$%\^&\*\+\?])(?=.{8,})/,
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*+?])(?=.{8,})/,
       "Must contain 8 characters, one uppercase, one lowercase, one number and one special case character"
     ),
     passwordRepeat: Yup.string().when('password', {

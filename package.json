@@ -39,6 +39,7 @@
     "@loadable/babel-plugin": "^5.8.0",
     "@loadable/webpack-plugin": "^5.7.1",
     "razzle": "^3.0.0",
+    "razzle-plugin-eslint": "^3.0.0",
     "razzle-plugin-scss": "3.0.0",
     "webpack": "^4.30.0"
   }

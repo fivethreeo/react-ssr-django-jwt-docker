@@ -1,14 +1,10 @@
 import {
   useRef,
   useState,
-  useCallback,
-  useEffect,
-  useLayoutEffect,
+  useCallback
 } from 'react';
 
-// See https://github.com/reduxjs/react-redux/blob/316467a/src/hooks/useSelector.js#L6-L15
-const useIsomorphicLayoutEffect =
-  typeof window !== 'undefined' ? useLayoutEffect : useEffect;
+import { useIsomorphicLayoutEffect } from './IsomorphicEffects';
 
 /**
  * This is a drop-in replacement for useState, limited to object-based state.

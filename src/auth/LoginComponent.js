@@ -13,7 +13,7 @@ import config from '../config';
 
 const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
   const client = useContext(Context);
-  const [login, hasSSRState, setLogin] = useSSRState(
+  const [login] = useSSRState(
     {values: { email: '', password: '' }, errors: {} }, 'login', []);
   return (
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">

@@ -1,17 +1,16 @@
 import React, { useState, useEffect, useContext } from "react";
 import { parse as parseQueryString } from 'serialize-query-params';
 
-import { useQuery, Context  } from "urql";
+import { Context  } from "urql";
 
 import { executeMutation } from '../utils/SSRUtils';
 //import { SocialAuthMutation } from './SocialAuthCommon';
 
 
-const SocialAuth = ({ match: { params: { provider } }, ...props }) => {
+const SocialAuth = ({ match: { params: { provider } }, history: { location } }) => {
   const client = useContext(Context);
  
   useEffect(() => {
-    console.log(props)
 /*parseQueryString(location.search)     if (!hasSSRState && typeof window !== 'undefined') {
 
       executeMutation(client, SocialAuthMutation, { token: token, uid: uid })

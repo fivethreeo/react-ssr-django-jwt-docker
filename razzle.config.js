@@ -1,6 +1,6 @@
 'use strict';
 const path = require('path');
-const LoadablePlugin = require('@loadable/webpack-plugin')
+const LoadablePlugin = require('@loadable/webpack-plugin');
 
 module.exports = {
   modify: (defaultConfig, { target }, webpack) => {
@@ -14,7 +14,10 @@ module.exports = {
           }
         })
       );
+      config.devServer.quiet = false;
+
     }
+
 
     if (target === 'node') {
       config.entry.unshift('cross-fetch/polyfill'); // add cross-fetch/polyfill for apollo
@@ -22,5 +25,5 @@ module.exports = {
 
     return config;
   },
-  plugins: [ 'scss' ]
+  plugins: [ 'scss', 'eslint' ]
 };

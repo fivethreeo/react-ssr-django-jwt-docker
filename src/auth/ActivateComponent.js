@@ -1,17 +1,16 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useEffect, useContext } from "react";
 import { withRouter, Link } from 'react-router-dom';
 import { useQueryParams } from 'use-query-params';
-import { useQuery, Context  } from "urql";
+import { Context  } from "urql";
 
 import { executeMutation } from '../utils/SSRUtils';
-import { useImmediateEffect } from '../hooks/useImmediateEffect';
 import { useSSRState } from '../hooks/useSSRState';
 
 import { ActivateMutation, QueryParams } from './ActivateCommon';
 
 
 const Activate = ({ history }) => {
-  const [{ token, uid }, setQuery] = useQueryParams(QueryParams);
+  const [{ token, uid }] = useQueryParams(QueryParams);
   const client = useContext(Context);
   const [activated, hasSSRState, setActivated] = useSSRState(false, 'activated', [ token, uid ]);
  

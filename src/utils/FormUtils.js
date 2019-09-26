@@ -1,5 +1,4 @@
 import React from 'react';
-import isEmpty from 'is-empty';
 
 import classnames from 'classnames';
 import { useField } from 'formik';
