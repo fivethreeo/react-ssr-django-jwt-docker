@@ -28,7 +28,7 @@ export const SSRDataComponent = ({ windowkey, data, ...props }) => {
       {...props}
     />
   );
-}
+};
 
 export const createSSRCache = (params={}) => {
   
@@ -36,11 +36,12 @@ export const createSSRCache = (params={}) => {
 
   const data = {};
 
-  const ssr = () => {}
+  const ssr = () => {};
   
   ssr.restoreData = (restore) => Object.assign(data, restore);
   ssr.extractData = () => Object.assign({}, data);
-  ssr.Component = (props) => <SSRDataComponent data={data} windowkey={windowkey} {...props} />;
+  ssr.Component = (props) => 
+    <SSRDataComponent data={data} windowkey={windowkey} {...props} />;
 
   ssr.get = (key, context) => {
     const hashkey = context ? phash(key, stringify(context)) >>> 0 : key;
@@ -50,14 +51,17 @@ export const createSSRCache = (params={}) => {
   ssr.set = (key, val, context) => {
     const hashkey = context ? phash(key, stringify(context)) >>> 0 : key;
     data[hashkey] = val;
-  }
+  };
 
-  ssr.Provider = ({children}) => <SSRCacheContext.Provider value={ssr}>{children}</SSRCacheContext.Provider>;
+  ssr.Provider = ({children}) =>
+    <SSRCacheContext.Provider value={ssr}>
+      {children}
+    </SSRCacheContext.Provider>;
 
   if (typeof window !== 'undefined' && window[windowkey]) {
     ssr.restoreData(window[windowkey]);
   }
 
   return ssr;
-}
+};
 

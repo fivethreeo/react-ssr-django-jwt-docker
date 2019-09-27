@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { withRouter, Link } from 'react-router-dom'
+import { withRouter, Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Context  } from "urql";
 
@@ -36,29 +36,38 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
                 httpOnly: false,
                 sameSite: true
               });
-              if (onLoginSuccess) onLoginSuccess()
-              else history.push('/')
+              if (onLoginSuccess) onLoginSuccess();
+              else history.push('/');
             }
             else if (res.errors) {
               actions.setErrors(fromGqlErrors(res.errors));
               actions.setSubmitting(false);
             }
-          })
+          });
         }}
         render={(props) => (
-          <form action="/login" method="POST" className="needs-validation form-auth form-register" onSubmit={props.handleSubmit} noValidate>
+          <form action="/login"
+            method="POST"
+            className="needs-validation form-auth form-register"
+            onSubmit={props.handleSubmit}
+            noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please log in</h1>
-            <TextField name="email" type="text" label="Email address" placeholder="your@email.com" />
-            <TextField name="password" type="password" label="Password" placeholder="Password" />
-            <p><button className="btn btn-lg btn-primary btn-block" type="submit">Login</button></p>
-            <p>Don't have an account? <Link to='/register'>Create one now</Link></p>
+            <TextField name="email" type="text"
+              label="Email address" placeholder="your@email.com" />
+            <TextField name="password" type="password"
+              label="Password" placeholder="Password" />
+            <p>
+              <button className="btn btn-lg btn-primary btn-block"
+                type="submit">Login</button></p>
+            <p>Don't have an account?
+              <Link to='/register'>Create one now</Link></p>
 
           </form>
 
         )}
       />
     </div>
-  )
-}
+  );
+};
 
 export default withRouter(withCookies(Login));

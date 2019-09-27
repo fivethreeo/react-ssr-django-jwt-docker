@@ -4,7 +4,8 @@ const WILL_MOUNT = 0;
 const DID_MOUNT = 1;
 const UPDATE = 2;
 
-/** This is a drop-in replacement for useEffect that will execute the first effect that happens during initial mount synchronously */
+/** This is a drop-in replacement for useEffect that will execute the
+first effect that happens during initial mount synchronously */
 export const useImmediateEffect = (
   effect,
   changes

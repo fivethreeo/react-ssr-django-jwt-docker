@@ -2,8 +2,8 @@ import gql from 'graphql-tag';
 import React from 'react';
 
 const Todo = ({ todo }) => {
-  return (<p>Todo</p>)
-} 
+  return (<p>Todo</p>);
+};
 
 Todo.fragments = {
   todo: gql`
@@ -40,5 +40,6 @@ const UpdateTodoMutation = gql`
   }
   
   ${Todo.fragments.todo}
-`
+`;
+
 export default Todo;

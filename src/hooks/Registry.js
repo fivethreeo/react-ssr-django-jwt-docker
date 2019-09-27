@@ -9,7 +9,7 @@ export const useRegistry = () => {
     <RegistryContext.Provider value={registry}>
       {children}
     </RegistryContext.Provider>)];
-}
+};
 
 export const useRegister = (id, context, deps) => {
   const registry = useContext(RegistryContext);
@@ -18,7 +18,7 @@ export const useRegister = (id, context, deps) => {
     registry.current[id] = context;
     return () => {
       delete registry.current[id];
-    }
+    };
   });
-}
+};
 

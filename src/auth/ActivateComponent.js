@@ -12,7 +12,8 @@ import { ActivateMutation, QueryParams } from './ActivateCommon';
 const Activate = ({ history }) => {
   const [{ token, uid }] = useQueryParams(QueryParams);
   const client = useContext(Context);
-  const [activated, hasSSRState, setActivated] = useSSRState(false, 'activated', [ token, uid ]);
+  const [activated, hasSSRState, setActivated] = 
+    useSSRState(false, 'activated', [ token, uid ]);
  
   useEffect(() => {
 
@@ -28,20 +29,20 @@ const Activate = ({ history }) => {
           setActivated(false);
         }
         
-      })
+      });
 
     }
 
   });
 
-  let display = <p>Activation unsuccessful</p>
+  let display = <p>Activation unsuccessful</p>;
     
     if (activated) {
 
       display = <>
         <p>Activation successful</p>
         <p>You can now <Link to='/login'>sign in</Link></p>
-      </>
+      </>;
     
   }
 
@@ -49,8 +50,9 @@ const Activate = ({ history }) => {
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
       { display }
     </div>
-  )
+  );
 
-}
+};
+
 
 export default withRouter(Activate);

@@ -47,6 +47,7 @@ COPY src src/
 COPY public public/
 COPY razzle.config.js razzle.config.js
 COPY .babelrc .babelrc
+COPY .eslintrc.js .eslintrc.js
 
 RUN yarn build \
     && rm -rf node_modules \

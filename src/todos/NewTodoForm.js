@@ -1,5 +1,10 @@
 import gql from 'graphql-tag';
-import React, { useState, useRef, useCallback, useImperativeHandle } from 'react';
+import React, { 
+  useState,
+  useRef,
+  useCallback,
+  useImperativeHandle
+} from 'react';
 import { useIsomorphicNoopLayoutEffect } from '../hooks/IsomorphicEffects';
 import { useGlobalMouseClick } from '../hooks/WindowEvents';
 import { useRegistry, useRegister } from '../hooks/Registry';
@@ -8,7 +13,13 @@ import { Formik } from 'formik';
 import classnames from 'classnames';
 
 
-import { TextField, CheckboxField, Label, useFieldExtra, InputFeedback } from '../utils/FormUtils';
+import {
+  TextField,
+  CheckboxField,
+  Label,
+  useFieldExtra,
+  InputFeedback
+} from '../utils/FormUtils';
 
 import Todo from './Todo';
 
@@ -24,9 +35,9 @@ export const SearchGroup = ({children}) => {
 };
 
 export const SearchResult = ({ id, description }) => {
-  useRegister(id, description, [])
-  return (<li className="list-group-item">{id}: {description}</li>)
-}
+  useRegister(id, description, []);
+  return (<li className="list-group-item">{id}: {description}</li>);
+};
 
 export const SearchResults = React.forwardRef(({ fieldRef }, ref) => {
   const [registry, RegistryProvider] = useRegistry();
@@ -34,10 +45,11 @@ export const SearchResults = React.forwardRef(({ fieldRef }, ref) => {
   const listGroupRef = useRef();
   
   const onClickGlobal = useCallback((event) => {
-    if (event.target!==fieldRef.current && !listGroupRef.current.contains(event.target)) {
+    if (event.target!==fieldRef.current
+      && !listGroupRef.current.contains(event.target)) {
       listGroupRef.current.style.display = 'none';
     }
-  }, [])
+  }, []);
 
   useGlobalMouseClick(onClickGlobal);
 
@@ -50,20 +62,22 @@ export const SearchResults = React.forwardRef(({ fieldRef }, ref) => {
   });
 
   const searchCallback = useCallback((event) => {
-    console.log(listGroupRef.current.contains(event.target))
-  }, [])
+    console.log(listGroupRef.current.contains(event.target));
+  }, []);
 
   useImperativeHandle(ref, () => ({
     setSearchResults: (results) => {
-      setSearchResults(results)
+      setSearchResults(results);
     }
-  }))
+  }));
 
   return (
-    <RegistryProvider><ul className="list-group" ref={listGroupRef}>{searchResults
-      .map((result, i) => <SearchResult key={i} {...result} />)}</ul></RegistryProvider>
+    <RegistryProvider>
+      <ul className="list-group" ref={listGroupRef}>{searchResults
+      .map((result, i) => <SearchResult key={i} {...result} />)}</ul>
+    </RegistryProvider>
   );
-})
+});
 
 export const SearchWidget = ({ field, choices, ...props }) => {
   const searchRef = useRef(null);
@@ -73,14 +87,16 @@ export const SearchWidget = ({ field, choices, ...props }) => {
 
   const onChangeSearch = useCallback((event) => {
     searchRef.current.setSearchResults(
-      choices.filter(choice => choice.description.toLowerCase().indexOf(event.target.value.toLowerCase()) !== -1))
-  }, [])
+      choices.filter(choice => choice
+        .description.toLowerCase()
+        .indexOf(event.target.value.toLowerCase()) !== -1));
+  }, []);
 
   const fieldProps =  {
     onChange: onChangeSearch,
     // onFocus: onChangeSearch,
     ref: fieldRef,
-    ...oldField}
+    ...oldField};
 
   return (<>
     <SearchGroup><input {...fieldProps} /></SearchGroup>
@@ -116,12 +132,12 @@ const modifyChoices = (users) => users
     return {
       description: user.email,
       id: parseInt(user.id, 10),
-    }
+    };
   }); 
 
 const NewTodoForm = ({users}) => {
 
-  const [result, executeMutation] = useMutation(NewTodoMutation); 
+  const [result, executeMutation] = useMutation(NewTodoMutation);
 
   return (<Formik
         initialValues={{title: '', body: '', creatorId: 0, completed: false}}
@@ -148,12 +164,13 @@ const NewTodoForm = ({users}) => {
               name="completed"
               label="Completed"
             />            
-            <p><button className="btn btn-lg btn-primary btn-block" type="submit">Submit</button></p>
+            <p><button className="btn btn-lg btn-primary btn-block"
+              type="submit">Submit</button></p>
           </form>
 
         )}
-      />)
-}
+      />);
+};
 
 NewTodoForm.fragments = {
   user: gql`
@@ -185,6 +202,6 @@ const NewTodoMutation = gql`
     }
   }
   ${Todo.fragments.todo}
-`
+`;
 
 export default NewTodoForm;

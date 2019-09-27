@@ -55,6 +55,7 @@ services:
       - ./public:/code/public
       - ./razzle.config.js:/code/razzle.config.js
       - ./.babelrc:/code/.babelrc
+      - ./.eslintrc.js:/code/.eslintrc.js
     labels:
       - "traefik.enable=true"
       - "traefik.server.port=3000"

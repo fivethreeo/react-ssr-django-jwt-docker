@@ -5,9 +5,9 @@ export const fromYupErrors = (err) => {
   const errout = {};
   err.inner.forEach(inner => {
     errout[inner.path] = inner.message;
-  })
+  });
   return errout;
-}
+};
 
 export const fromGqlErrors = (err) => {
   const errout = {};
@@ -15,14 +15,19 @@ export const fromGqlErrors = (err) => {
     errout[err[i]] = err[i+1];
   }
   return errout;
-}
+};
 
 export const SSRCallback = (callback) => {
   return async (req, res, next) => {
-    const retval = callback(req, res, next, res.locals.SSRCache, res.locals.urqlClient)
-    if (retval) return retval
-  }
-}
+    const retval = callback(
+      req,
+      res,
+      next,
+      res.locals.SSRCache,
+      res.locals.urqlClient);
+    if (retval) return retval;
+  };
+};
 
 export const executeMutation = (client, doc, vars) => {
   const req = client.createRequestOperation(
@@ -31,4 +36,4 @@ export const executeMutation = (client, doc, vars) => {
   );
 
   return pipe(client.executeMutation(req), toPromise);
-}
+};

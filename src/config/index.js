@@ -1,8 +1,9 @@
 /**
  * Unified Configuration Reader
  *
- * This helper function allows you to use the same API in accessing configuration
- * values no matter where the code is being executed (i.e. browser/node).
+ * This helper function allows you to use the same API in accessing
+ * configuration values no matter where the code is being executed
+ * (i.e. browser/node).
  *
  * e.g.
  *   import config from '../config';
@@ -30,10 +31,11 @@ function resolveConfigForBrowserOrServer() {
     return configCache;
   }
 
-  // NOTE: By using the "process.env.BUILD_FLAG_IS_NODE" flag here this block of code
-  // will be removed when "process.env.BUILD_FLAG_IS_NODE === true".
-  // If no "BUILD_FLAG_IS_NODE" env var is undefined we can assume that we are running outside
-  // of a webpack run, and will therefore return the config file.
+  // NOTE: By using the "process.env.BUILD_FLAG_IS_NODE" flag here this block
+  // of code will be removed when "process.env.BUILD_FLAG_IS_NODE === true".
+  // If no "BUILD_FLAG_IS_NODE" env var is undefined we can assume that we are
+  // running outside of a webpack run, and will therefore return the
+  // config file.
   if (
     process.env.BUILD_TARGET === 'server'
   ) {
@@ -45,7 +47,8 @@ function resolveConfigForBrowserOrServer() {
 
   // To get here we are likely running in the browser.
 
-  if (typeof window !== 'undefined' && typeof window.__CLIENT_CONFIG__ === 'object') {
+  if (typeof window !== 'undefined'
+    && typeof window.__CLIENT_CONFIG__ === 'object') {
     configCache = window.__CLIENT_CONFIG__;
   } else {
     // To get here we must be running in the browser.
@@ -64,7 +67,8 @@ function resolveConfigForBrowserOrServer() {
  * browser/node.
  *
  * i.e.
- *  - For the browser the config values are available at window.__CLIENT_CONFIG__
+ *  - For the browser the config values are available
+ *    at window.__CLIENT_CONFIG__
  *  - For a node process they are within the "<root>/config".
  *
  * To request a configuration value you must provide the repective path. For
@@ -93,17 +97,25 @@ export default function configGet(path) {
 
   if (parts.length === 0) {
     throw new Error(
-      'You must provide the path to the configuration value you would like to consume.',
+      'You must provide the path to the configuration ' +
+      'value you would like to consume.',
     );
   }
   let result = resolveConfigForBrowserOrServer();
   for (let i = 0; i < parts.length; i += 1) {
     if (result === undefined) {
-      const errorMessage = `Failed to resolve configuration value at "${parts.join('.')}".`;
+      const errorMessage = 
+        `Failed to resolve configuration value at "${parts.join('.')}".`;
       // This "if" block gets stripped away by webpack for production builds.
-      if (process.env.NODE_ENV === 'development' && process.env.BUILD_TARGET === 'client') {
+      if (process.env.NODE_ENV === 'development'
+        && process.env.BUILD_TARGET === 'client') {
         throw new Error(
-          `${errorMessage} We have noticed that you are trying to access this configuration value from the client bundle (i.e. code that will be executed in a browser). For configuration values to be exposed to the client bundle you must ensure that the path is added to the client configuration filter in the project configuration values file.`,
+          `${errorMessage} We have noticed that you are trying to access
+           this configuration value from the client bundle
+           (i.e. code that will be executed in a browser).
+           For configuration values to be exposed to the client bundle you 
+           must ensure that the path is added to the client configuration
+           filter in the project configuration values file.`,
         );
       }
       throw new Error(errorMessage);

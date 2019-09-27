@@ -7,11 +7,16 @@ import { executeMutation } from '../utils/SSRUtils';
 //import { SocialAuthMutation } from './SocialAuthCommon';
 
 
-const SocialAuth = ({ match: { params: { provider } }, history: { location } }) => {
+const SocialAuth = ({
+  match: { params: { provider } },
+  history: { location }
+}) => {
+
   const client = useContext(Context);
  
   useEffect(() => {
-/*parseQueryString(location.search)     if (!hasSSRState && typeof window !== 'undefined') {
+/*parseQueryString(location.search)
+  if (!hasSSRState && typeof window !== 'undefined') {
 
       executeMutation(client, SocialAuthMutation, { token: token, uid: uid })
       .then((res)=>{
@@ -34,8 +39,8 @@ const SocialAuth = ({ match: { params: { provider } }, history: { location } }) 
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
       { provider }
     </div>
-  )
+  );
 
-}
+};
 
 export default SocialAuth;

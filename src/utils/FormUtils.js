@@ -20,8 +20,8 @@ export const InputGroup = ({ className = '', children }) => {
     'input-group',
     className
   );
-  return (<div className={classes} children={children} />)
-}
+  return (<div className={classes} children={children} />);
+};
 
 export const get_id_classes = (className, field, meta) => {
   const id = 'id_' + field.name;
@@ -36,14 +36,14 @@ export const get_id_classes = (className, field, meta) => {
     }
   );
   return {id: id, className: classes};
-}
+};
 
 export const useFieldExtra = ({className = 'form-control', ...props}) => {
   const [field, meta] = useField(props);
   return [
     {...get_id_classes(className, field, meta), ...field},
-    meta]
-}
+    meta];
+};
 
 export const InputWidget = (props) => {
   return (<input {...props} />);
@@ -70,7 +70,11 @@ export const TextField = ({ type = 'text', className = '', ...props }) => {
 
 
 export const CheckboxField = ({ className='', ...props }) => {
-  const newProps = { type: 'checkbox', className: 'form-check-input', ...props };
+  const newProps = {
+    type: 'checkbox',
+    className: 'form-check-input',
+    ...props
+  };
   const [field, meta] = useFieldExtra(newProps);
 
   const classes = classnames(

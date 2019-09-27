@@ -13,7 +13,7 @@ export const useSSRState = (init, key, context) => {
 
   useImmediateEffect(() => {
     if (!hasSSRState) {
-        const value = SSRCache.get(key, context)
+        const value = SSRCache.get(key, context);
         if (typeof value !== 'undefined') {
           setState(value);
           setHasSSRState(true);

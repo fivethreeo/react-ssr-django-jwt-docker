@@ -1,6 +1,6 @@
 import React from 'react';
 import { hydrate, render } from 'react-dom';
-import { loadableReady } from '@loadable/component'
+import { loadableReady } from '@loadable/component';
 import { Router } from 'react-router-dom';
 import { createBrowserHistory } from 'history';
 import Cookies from 'universal-cookie';
@@ -46,8 +46,9 @@ const client = new Client({
   exchanges: [
     dedupExchange,
     cacheExchange,
-    // Put the exchange returned by calling ssrExchange after your cacheExchange,
-    // but before any asynchronous exchanges like the fetchExchange:
+    // Put the exchange returned by calling ssrExchange after your
+    // cacheExchange, but before any asynchronous exchanges like
+    // the fetchExchange:
     uqlSSRCache,
     fetchExchange,
   ],
@@ -57,7 +58,7 @@ const client = new Client({
 
 // Load all components needed before rendering
 loadableReady(() => {
-  const root = document.getElementById('root')
+  const root = document.getElementById('root');
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
     <SSRCache.Provider>
@@ -69,8 +70,8 @@ loadableReady(() => {
         </CookieContext.Provider>
       </UrqlProvider>
     </SSRCache.Provider>,
-    root)
-})
+    root);
+});
 
 if (module.hot) {
   module.hot.accept();

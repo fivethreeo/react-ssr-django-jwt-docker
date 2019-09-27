@@ -19,6 +19,6 @@ TodoList.fragments = {
     }
     ${Todo.fragments.todo}
   `,
-}
+};
 
 export default TodoList;
