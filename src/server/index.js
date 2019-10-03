@@ -1,8 +1,27 @@
 import path from 'path';
-import React from 'react';
 import express from 'express';
-import ssrPrepass from 'react-ssr-prepass';
 import bodyParser from 'body-parser';
+import cookiesMiddleware from 'universal-cookie-express';
+import queryString from 'query-string';
+import security from './middleware/security';
+
+import React from 'react';
+import { Router, Route } from 'react-router-dom';
+import { renderToString } from 'react-dom/server';
+import { ChunkExtractor } from '@loadable/server';
+import { createMemoryHistory } from 'history';
+import { QueryParamProvider } from 'use-query-params';
+import ssrPrepass from 'react-ssr-prepass';
+
+import config from '../config';
+import ClientConfig from '../config/components/ClientConfig';
+
+import CookieContext from '../common/CookieContext';
+import ServerContext from '../common/ServerContext';
+
+import ServerContextComponent from './components/ServerContextComponent';
+import UrqlDataComponent from './components/UrqlDataComponent';
+import App from '../components/App';
 
 import {
   Client,
@@ -10,25 +29,8 @@ import {
   cacheExchange,
   fetchExchange,
   ssrExchange,
-  Provider
+  Provider as UrqlProvider
 } from 'urql';
-
-import { renderToString } from 'react-dom/server';
-import { ChunkExtractor } from '@loadable/server'
-import { Router, Route } from 'react-router-dom';
-import cookiesMiddleware from 'universal-cookie-express';
-import { createMemoryHistory } from 'history';
-import queryString from 'query-string';
-import UrqlDataComponent from '../utils/UrqlDataComponent';
-import { QueryParamProvider } from 'use-query-params';
-import CookieContext from '../utils/CookieContext';
-import { createSSRCache } from '../utils/SSRCache';
-
-import ClientConfig from '../config/components/ClientConfig';
-import App from '../components/App';
-
-import security from './middleware/security';
-import config from '../config';
 
 import ActivateExpressView from '../auth/ActivateExpressView';
 import RegisterExpressView from '../auth/RegisterExpressView';
@@ -37,11 +39,6 @@ import LoginExpressView from '../auth/LoginExpressView';
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
-
-const SSRCacheMiddleware = (req, res, next)=>{
-  res.locals.SSRCache = createSSRCache();
-  next();
-};
 
 const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
@@ -76,7 +73,7 @@ server
   .use(...security)
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
-  .use(...[SSRCacheMiddleware, cookiesMiddleware(), urqlClientMiddleware])
+  .use(...[cookiesMiddleware(), urqlClientMiddleware])
   .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
   
   .use('/register', RegisterExpressView)
@@ -85,8 +82,8 @@ server
 
   .use( async (req, res) => {
 
-    const [SSRCache, UniversalCookies, urqlSSRCache, urqlClient] = [
-      res.locals.SSRCache,
+    const [serverContextValue, UniversalCookies, urqlSSRCache, urqlClient] = [
+      res.locals.serverContextValue,
       req.universalCookies,
       res.locals.urqlSSRCache,
       res.locals.urqlClient
@@ -103,8 +100,8 @@ server
     const extractor = new ChunkExtractor({ statsFile, entrypoints: ['client']})
     // Wrap your application using "collectChunks"
     const jsx = extractor.collectChunks(
-      <SSRCache.Provider>
-        <Provider value={urqlClient}>
+      <ServerContext.Provider value={serverContextValue}>
+        <UrqlProvider value={urqlClient}>
           <CookieContext.Provider value={UniversalCookies}>
             <Router history={history} >
               <QueryParamProvider ReactRouterRoute={Route}>
@@ -112,8 +109,8 @@ server
               </QueryParamProvider>
             </Router>
           </CookieContext.Provider>
-        </Provider>
-      </SSRCache.Provider>
+        </UrqlProvider>
+      </ServerContext.Provider>
     )
   
     // Suspense prepass    
@@ -143,7 +140,7 @@ server
           <div id="root">DO_NOT_DELETE_THIS_YOU_WILL_BREAK_YOUR_APP</div>
           <ClientConfig nonce={res.locals.nonce} />
           <UrqlDataComponent data={urqlData} nonce={res.locals.nonce} />
-          <SSRCache.Component nonce={res.locals.nonce} />
+          <ServerContextComponent data={serverContextValue} nonce={res.locals.nonce} />
           {scriptElements}
       </body>
     </html>);

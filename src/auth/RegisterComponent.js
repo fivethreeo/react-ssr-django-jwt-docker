@@ -4,20 +4,21 @@ import { Formik } from 'formik';
 import { Context  } from 'urql';
 
 import { TextField } from '../utils/FormUtils';
-import { useSSRState } from '../hooks/useSSRState';
+import useServerContext from '../hooks/useServerContext';
 import { executeMutation, fromGqlErrors } from '../utils/SSRUtils';
 
 import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 const Register = ({ history }) => {
   const client = useContext(Context);
-  const [registration] = useSSRState(
-    { values:
-      { email: '', password: '', passwordRepeat: '' },
+  const [registration] = useServerContext({
+    values:
+      { email: '',
+        password: '',
+        passwordRepeat: ''
+      },
       errors: {} 
-    },
-    'registration',
-    []);
+  });
 
   return (
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">

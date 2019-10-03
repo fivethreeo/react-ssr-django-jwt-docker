@@ -1,23 +1,22 @@
 import React, { useEffect, useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useQueryParams } from 'use-query-params';
-import { Context  } from 'urql';
+import { Context as UrqlContext } from 'urql';
 
 import { executeMutation } from '../utils/SSRUtils';
-import { useSSRState } from '../hooks/useSSRState';
+import useServerContext from '../hooks/useServerContext';
 
 import { ActivateMutation, QueryParams } from './ActivateCommon';
 
 
 const Activate = ({ history }) => {
   const [{ token, uid }] = useQueryParams(QueryParams);
-  const client = useContext(Context);
-  const [activated, hasSSRState, setActivated] = 
-    useSSRState(false, 'activated', [ token, uid ]);
+  const client = useContext(UrqlContext);
+  const [activated, hasServerContext, setActivated] = useServerContext(false);
  
   useEffect(() => {
 
-    if (!hasSSRState && typeof window !== 'undefined') {
+    if (!hasServerContext && typeof window !== 'undefined') {
 
       executeMutation(client, ActivateMutation, { token: token, uid: uid })
       .then((res)=>{

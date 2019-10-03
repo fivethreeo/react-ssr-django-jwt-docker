@@ -3,7 +3,7 @@ import { LoginSchema, LoginMutation } from './LoginCommon';
 import config from '../config';
 
 
-export default SSRCallback( async (req, res, next, cache, client) => {
+export default SSRCallback( async (req, res, next, client) => {
   
   if (req.method != "POST") return next();
 
@@ -18,7 +18,7 @@ export default SSRCallback( async (req, res, next, cache, client) => {
   catch(err) {
     state['values']['password'] = '';    
     state['errors'] = fromYupErrors(err);
-    cache.set('login', state, [])
+    res.locals.serverContextValue = state;
     return next();
   }
 
@@ -39,7 +39,7 @@ export default SSRCallback( async (req, res, next, cache, client) => {
   else {
     state['errors'] = fromGqlErrors(mutationresult.data.errors);
     state['values']['password'] = '';
-    cache.set('login', state, [])
+    res.locals.serverContextValue = state;
     return next();
   }
 

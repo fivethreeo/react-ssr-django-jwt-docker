@@ -4,17 +4,22 @@ import { Formik } from 'formik';
 import { Context  } from 'urql';
 
 import { TextField } from '../utils/FormUtils';
-import { useSSRState } from '../hooks/useSSRState';
+import useServerContext from '../hooks/useServerContext';
 import { executeMutation, fromGqlErrors } from '../utils/SSRUtils';
 
-import { withCookies } from '../utils/CookieContext';
+import { withCookies } from '../common/CookieContext';
 import { LoginSchema, LoginMutation } from './LoginCommon';
 import config from '../config';
 
 const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
   const client = useContext(Context);
-  const [login] = useSSRState(
-    {values: { email: '', password: '' }, errors: {} }, 'login', []);
+  const [login] = useServerContext({
+    values: {
+      email: '',
+      password: ''
+    },
+    errors: {}
+  });
   return (
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
       { error }

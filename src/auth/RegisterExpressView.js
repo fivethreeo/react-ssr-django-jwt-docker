@@ -2,7 +2,7 @@ import { SSRCallback, executeMutation, fromYupErrors, fromGqlErrors } from '../u
 import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 
-export default SSRCallback( async (req, res, next, cache, client) => {
+export default SSRCallback( async (req, res, next, client) => {
   
   if (req.method != "POST") return next();
 
@@ -18,7 +18,7 @@ export default SSRCallback( async (req, res, next, cache, client) => {
     state['values']['password'] = '';
     state['values']['passwordRepeat'] = '';
     state['errors'] = fromYupErrors(err);
-    cache.set('registration', state, []);
+    res.locals.serverContextValue = state;
     return next();
   }
 
@@ -30,7 +30,7 @@ export default SSRCallback( async (req, res, next, cache, client) => {
     state['errors'] = fromGqlErrors(mutationresult.data.register.errors);
     state['values']['password'] = '';
     state['values']['passwordRepeat'] = '';
-    cache.set('registration', state, []);
+    res.locals.serverContextValue = state;
     return next();
   }
 

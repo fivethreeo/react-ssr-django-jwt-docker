@@ -23,7 +23,6 @@ export const SSRCallback = (callback) => {
       req,
       res,
       next,
-      res.locals.SSRCache,
       res.locals.urqlClient);
     if (retval) return retval;
   };

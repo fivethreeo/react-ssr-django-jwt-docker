@@ -14,9 +14,8 @@ import {
   Provider as UrqlProvider
 } from 'urql';
 
-
-import CookieContext from './utils/CookieContext';
-import { createSSRCache } from './utils/SSRCache';
+import CookieContext from './common/CookieContext';
+import ServerContext from './common/ServerContext';
 
 import App from './components/App';
 import config from './config';
@@ -24,8 +23,6 @@ import config from './config';
 const cookies = new Cookies();
 
 const history = createBrowserHistory();
-
-const SSRCache = createSSRCache();
 
 const uqlSSRCache = ssrExchange({
   initialState: window.URQL_DATA
@@ -61,7 +58,7 @@ loadableReady(() => {
   const root = document.getElementById('root');
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
-    <SSRCache.Provider>
+    <ServerContext.Provider value={window.__SERVER_CONTEXT__}>
       <UrqlProvider value={client}>
         <CookieContext.Provider value={cookies}>
           <Router history={history} >
@@ -69,7 +66,7 @@ loadableReady(() => {
           </Router>
         </CookieContext.Provider>
       </UrqlProvider>
-    </SSRCache.Provider>,
+    </ServerContext.Provider>,
     root);
 });
 
