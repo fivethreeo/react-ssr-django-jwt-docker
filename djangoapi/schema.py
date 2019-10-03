@@ -1,6 +1,10 @@
 
 import graphene
 import graphql_jwt
+import graphql_social_auth
+
+
+class Mutations(graphene.ObjectType):
 
 from gjwt_auth.mutations import (
     Activate,
@@ -21,6 +25,9 @@ class Mutation(graphene.ObjectType):
     deleteAccount = DeleteAccount.Field()
     resetPassword = ResetPassword.Field()
     resetPasswordConfirm = ResetPasswordConfirm.Field()
+
+    social_auth = graphql_social_auth.SocialAuth.Field()
+    social_auth_complete = graphql_social_auth.SocialAuthComplete.Field()
 
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

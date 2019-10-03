@@ -8,8 +8,8 @@ export const RegisterSchema = Yup.object().shape({
     .required('Required'),
     password: Yup.string().matches(
       /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*+?])(?=.{8,})/,
-      "Must contain 8 characters, one uppercase, " +
-      "one lowercase, one number and one special case character"
+      'Must contain 8 characters, one uppercase, ' +
+      'one lowercase, one number and one special case character'
     ),
     passwordRepeat: Yup.string().when('password', {
       is: undefined,

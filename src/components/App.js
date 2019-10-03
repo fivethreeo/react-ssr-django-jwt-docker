@@ -42,7 +42,7 @@ const App = () => {
         <Route path="/activate" component={OneRowOneCol(Activate)} />
         <Route path="/login" component={OneRowOneCol(Login)} />
         <Route path="/register" component={OneRowOneCol(Register)} />
-        <Route path="/social/:provider" component={OneRowOneCol(Social)} />
+        <Route path="/social" component={OneRowOneCol(Social)} />
       </Switch>
       <div className="row">
           <Footer />

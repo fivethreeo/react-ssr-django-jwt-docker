@@ -1,7 +1,7 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { useQueryParams } from 'use-query-params';
-import { Context  } from "urql";
+import { Context  } from 'urql';
 
 import { executeMutation } from '../utils/SSRUtils';
 import { useSSRState } from '../hooks/useSSRState';

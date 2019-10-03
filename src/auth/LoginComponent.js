@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
+import React, { useContext } from 'react';
 import { withRouter, Link } from 'react-router-dom';
 import { Formik } from 'formik';
-import { Context  } from "urql";
+import { Context  } from 'urql';
 
 import { TextField } from '../utils/FormUtils';
 import { useSSRState } from '../hooks/useSSRState';

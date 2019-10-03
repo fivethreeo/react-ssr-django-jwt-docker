@@ -8,13 +8,13 @@ export const useWindowEvent = (event, callback) => {
 };
 
 export const useGlobalMouseClick = (callback) => {
-  return useWindowEvent("click", callback);
+  return useWindowEvent('click', callback);
 };
 
 export const useGlobalMouseUp = (callback) => {
-  return useWindowEvent("mouseup", callback);
+  return useWindowEvent('mouseup', callback);
 };
 
 export const useGlobalMouseMove = (callback) => {
-  return useWindowEvent("mousemove", callback);
+  return useWindowEvent('mousemove', callback);
 };

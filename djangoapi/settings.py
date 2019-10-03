@@ -57,6 +57,7 @@ INSTALLED_APPS = [
     'djoser',
     'graphene_django',
     'gjwt_auth',
+    'social_django',
     'djangoapi.todos',
     'corsheaders'
 ]
