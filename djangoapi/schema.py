@@ -4,8 +4,6 @@ import graphql_jwt
 import graphql_social_auth
 
 
-class Mutations(graphene.ObjectType):
-
 from gjwt_auth.mutations import (
     Activate,
     DeleteAccount,
