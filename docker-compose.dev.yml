@@ -34,7 +34,7 @@ services:
       - "traefik.enable=true"
       - "traefik.port=3002"
       - "traefik.frontend.headers.customRequestHeaders=X-Forwarded-Proto:https"
-      - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin"
+      - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin,/django-static"
     environment:
       DEBUG: "True"
       ALLOWED_HOSTS: "djangoapi,localhost"
