@@ -5,10 +5,10 @@ import { useEffect, useLayoutEffect } from 'react';
 export const useIsomorphicLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : useEffect;
 
-export const useIsomorphicNoopLayoutEffect =
+export const useServerNoopLayoutEffect =
   typeof window !== 'undefined' ? useLayoutEffect : () => ({});
 
-export const  useIsomorphicNoopEffect =
+export const useServerNoopEffect =
   typeof window !== 'undefined' ? useEffect : () => ({});
 
 export const useClientNoopEffect =

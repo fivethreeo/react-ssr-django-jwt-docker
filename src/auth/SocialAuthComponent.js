@@ -1,93 +1,116 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { Route, Switch } from 'react-router-dom';
-import { parse as parseQueryString } from 'serialize-query-params';
+import { parse as parseQueryString } from 'query-string';
+import serialize from 'serialize-javascript';
 
 import { Context  } from 'urql';
+import { withCookies } from '../common/CookieContext';
+
+import { useServerNoopEffect } from '../hooks/IsomorphicEffects';
 
 import { executeMutation } from '../utils/SSRUtils';
-//import { SocialAuthMutation } from './SocialAuthCommon';
+import { SocialAuthMutation, SocialAuthCompleteMutation } from './SocialAuthCommon';
+import config from '../config';
 
 const SocialAuthBegin = ({
   match: { params: { provider } },
-  history: { location }
+  history
 }) => {
+
+  const [error, setError] = useState('');
 
   const client = useContext(Context);
  
-  useEffect(() => {
-/*parseQueryString(location.search)
-  if (!hasSSRState && typeof window !== 'undefined') {
-
-      executeMutation(client, SocialAuthMutation, { token: token, uid: uid })
-      .then((res)=>{
-
-        if (res.data && res.data.success) {
-          setActivated(true);
+  useServerNoopEffect(() => {
+    executeMutation(client,  SocialAuthMutation, {
+      provider: provider,
+      redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
+    })
+    .then((res)=>{
+      if (res.error && res.error.graphQLErrors) {
+        setError(res.error.graphQLErrors[0].message);
+      }
+      else if (res.data && res.data.socialAuth) {
+        if (res.data.socialAuth.result.__typename === 'Redirect') {
+          window.location.href = res.data.socialAuth.result.url;
         }
-        else {
-          setActivated(false);
-        }
-        
-      })
+      }
+    })
 
-    } */
+  }, []);
 
-  });
-
-  return null;
+  if (error) {
+    return <p>{error}</p>;
+  } else {
+    return <p>test</p>;
+  }
 
 };
 
 const SocialAuthComplete = ({
   match: { params: { provider } },
-  history: { location }
+  history,
+  cookies
 }) => {
+
+  const [error, setError] = useState('');
 
   const client = useContext(Context);
  
-  useEffect(() => {
-/*parseQueryString(location.search)
-  if (!hasSSRState && typeof window !== 'undefined') {
+  useServerNoopEffect(() => {
+    const requestData = serialize(
+      parseQueryString(history.location.search, {parseNumbers:true})
+    );
 
-      executeMutation(client, SocialAuthMutation, { token: token, uid: uid })
-      .then((res)=>{
+    executeMutation(client, SocialAuthCompleteMutation, {
+      provider: provider,
+      requestData: requestData,
+      redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
+    }).then((res)=>{
 
-        if (res.data && res.data.success) {
-          setActivated(true);
+      if (res.error && res.error.graphQLErrors) {
+        setError(res.error.graphQLErrors[0].message);
+      }
+      else if (res.data && res.data.socialAuthComplete) {
+        if (res.data.socialAuthComplete.result.__typename === 'Redirect') {
+          window.location.href = res.data.socialAuthComplete.result.url;
         }
-        else {
-          setActivated(false);
+        if (res.data.socialAuthComplete.result.__typename === 'JWT') {
+          cookies.set('authToken', res.data.socialAuthComplete.result.token, {
+            path: '/',
+            expires: new Date(new Date().getTime()+1000*60*60*24),
+            maxAge: 60*60*24,
+            domain: config('COOKIE_HOST'),
+            secure: config('COOKIE_SECURE'),
+            httpOnly: false,
+            sameSite: true
+          })
         }
-        
-      })
+      }
+    })
 
-    } */
+  }, []);
 
-  });
-
-  return null;
-
+  if (error) {
+    return <p>{error}</p>;
+  } else {
+    return <p>test</p>;
+  }
 };
+
+const SocialAuthCompleteCookies = withCookies(SocialAuthComplete);
 
 const SocialAuth = () => {
 
-  useEffect(() => {
-
-
-  });
-
-
   return (
-    <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
     <Switch>
-        <Route
-          exact
-          path="/:provider"
-          component={SocialAuthBegin} 
-        />
-        <Route path="/:provider/complete" component={SocialAuthComplete} />
-      </Switch>
-    </div>
+      <Route
+        exact
+        path="/social/:provider"
+        component={SocialAuthBegin} 
+      />
+      <Route path="/social/:provider/complete" component={SocialAuthCompleteCookies} />
+    </Switch>
   );
 
 };

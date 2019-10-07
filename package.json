@@ -23,6 +23,7 @@
     "history": "^4.9.0",
     "hpp": "^0.2.2",
     "is-empty": "^1.2.0",
+    "query-string": "^6.8.3",
     "react": "^16.8.6",
     "react-dom": "^16.8.6",
     "react-is": "^16.9.0",

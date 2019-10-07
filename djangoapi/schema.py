@@ -25,7 +25,7 @@ class Mutation(graphene.ObjectType):
     resetPasswordConfirm = ResetPasswordConfirm.Field()
 
     social_auth = graphql_social_auth.SocialAuth.Field()
-    social_auth_complete = graphql_social_auth.SocialAuthComplete.Field()
+    social_auth_complete = graphql_social_auth.SocialAuthJWTComplete.Field()
 
     token_auth = graphql_jwt.ObtainJSONWebToken.Field()
     verify_token = graphql_jwt.Verify.Field()

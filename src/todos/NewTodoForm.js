@@ -5,7 +5,7 @@ import React, {
   useCallback,
   useImperativeHandle
 } from 'react';
-import { useIsomorphicNoopLayoutEffect } from '../hooks/IsomorphicEffects';
+import { useServerNoopLayoutEffect } from '../hooks/IsomorphicEffects';
 import { useGlobalMouseClick } from '../hooks/WindowEvents';
 import { useRegistry, useRegister } from '../hooks/Registry';
 import { useMutation } from 'urql';
@@ -53,7 +53,7 @@ export const SearchResults = React.forwardRef(({ fieldRef }, ref) => {
 
   useGlobalMouseClick(onClickGlobal);
 
-  useIsomorphicNoopLayoutEffect(() => {
+  useServerNoopLayoutEffect(() => {
     const brect = listGroupRef.current.getBoundingClientRect();
     listGroupRef.current.style.width = `${brect.width.toFixed()}px`;
     listGroupRef.current.style.position = 'absolute'; 

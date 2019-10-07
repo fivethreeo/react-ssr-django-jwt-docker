@@ -43,6 +43,8 @@ services:
       PROXY_SSL: "True"
       SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
       EMAIL_URL: ${EMAIL_URL:-consolemail://}
+      SOCIAL_AUTH_GITHUB_KEY: ${SOCIAL_AUTH_GITHUB_KEY}
+      SOCIAL_AUTH_GITHUB_SECRET: ${SOCIAL_AUTH_GITHUB_SECRET}
 
   reactapp:
     build:

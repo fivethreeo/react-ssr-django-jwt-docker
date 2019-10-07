@@ -22,7 +22,9 @@ const values = {
     htmlPage: true,
 
     COOKIE_HOST: true,
-    COOKIE_SECURE: true
+    COOKIE_SECURE: true,
+
+    APP_URL: true
   },
 
   clientConfigOverrides: {
@@ -30,6 +32,8 @@ const values = {
     GRAPHQL_URL: EnvVars.string('GRAPHQL_FRONTEND_URL'),
 
   },
+
+  APP_URL: EnvVars.string('APP_URL', 'https://localhost'),
 
   COOKIE_HOST: EnvVars.string('COOKIE_HOST', 'localhost'),
   COOKIE_SECURE: EnvVars.bool('COOKIE_SECURE', true),

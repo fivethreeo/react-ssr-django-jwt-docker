@@ -1,7 +1,7 @@
-import { useIsomorphicNoopEffect } from './IsomorphicEffects';
+import { useServerNoopEffect } from './IsomorphicEffects';
 
 export const useWindowEvent = (event, callback) => {
-  useIsomorphicNoopEffect(() => {
+  useServerNoopEffect(() => {
     window.addEventListener(event, callback);
     return () => window.removeEventListener(event, callback);
   }, [event, callback]);
