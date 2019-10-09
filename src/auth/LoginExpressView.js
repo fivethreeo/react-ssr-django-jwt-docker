@@ -23,7 +23,15 @@ export default SSRCallback( async (req, res, next, client) => {
   }
 
   const mutationresult = await executeMutation(client, LoginMutation, state['values'])
-  if (mutationresult.data && mutationresult.data.tokenAuth.token) {
+  console.log(mutationresult)
+  if (mutationresult.error && mutationresult.error.graphQLErrors) {
+    state['formerror'] = mutationresult.error.graphQLErrors[0].message;
+    state['values']['password'] = '';
+    res.locals.serverContextValue = state;
+    console.log(state)
+    return next();
+  }
+  else if (mutationresult.data && mutationresult.data.tokenAuth && mutationresult.data.tokenAuth.token) {
     req.universalCookies.set('authToken',
       mutationresult.data.tokenAuth.token, {
       path: '/',
@@ -37,10 +45,7 @@ export default SSRCallback( async (req, res, next, client) => {
     res.redirect('/');
   }
   else {
-    state['errors'] = fromGqlErrors(mutationresult.data.errors);
-    state['values']['password'] = '';
-    res.locals.serverContextValue = state;
-    return next();
+    next();
   }
 
 })

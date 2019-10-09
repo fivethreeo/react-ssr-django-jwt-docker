@@ -46,6 +46,7 @@ const Register = ({ history }) => {
             onSubmit={props.handleSubmit}
             noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
+            { registration.formerror && <p>{registration.formerror}</p> }
             <TextField name="email" type="text"
               label="Email address" placeholder="your@email.com" />
             <TextField name="password" type="password"

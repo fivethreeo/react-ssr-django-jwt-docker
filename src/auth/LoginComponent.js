@@ -18,7 +18,8 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
       email: '',
       password: ''
     },
-    errors: {}
+    errors: {},
+    formerror: ''
   });
   return (
     <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
@@ -57,6 +58,7 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
             onSubmit={props.handleSubmit}
             noValidate>
           <h1 className="h3 mb-3 font-weight-normal">Please log in</h1>
+            { login.formerror && <p>{login.formerror}</p> }
             <TextField name="email" type="text"
               label="Email address" placeholder="your@email.com" />
             <TextField name="password" type="password"

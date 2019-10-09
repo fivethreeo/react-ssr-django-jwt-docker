@@ -23,14 +23,17 @@ export default SSRCallback( async (req, res, next, client) => {
   }
 
   const mutationresult = await executeMutation(client, RegisterMutation, state['values']);
+  if (mutationresult.error && mutationresult.error.graphQLErrors) {
+    state['formerror'] = mutationresult.error.graphQLErrors[0].message;
+    state['values']['password'] = '';
+    state['values']['passwordRepeat'] = '';
+    res.locals.serverContextValue = state;
+    return next();
+  }
   if (mutationresult.data && mutationresult.data.register.success) {
     res.redirect('/login');
   }
   else {
-    state['errors'] = fromGqlErrors(mutationresult.data.register.errors);
-    state['values']['password'] = '';
-    state['values']['passwordRepeat'] = '';
-    res.locals.serverContextValue = state;
     return next();
   }
 

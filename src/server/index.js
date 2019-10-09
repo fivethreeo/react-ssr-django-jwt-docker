@@ -44,14 +44,7 @@ const server = express();
 const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
-    fetch: async (url, opts) => {
-      return nodeFetch(url, opts).then((fetch_res) => {
-        const headers = fetch_res.headers.raw()
-        if (headers['set-cookie'] !== undefined) {
-          cookies = headers['set-cookie']
-        }
-      }) 
-    },
+    fetch: nodeFetch,
     fetchOptions: () => {
       const token = req.universalCookies.get('authToken');
       if (token) {
