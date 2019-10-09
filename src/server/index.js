@@ -1,6 +1,7 @@
 import path from 'path';
 import express from 'express';
 import bodyParser from 'body-parser';
+import nodeFetch from 'node-fetch';
 import cookiesMiddleware from 'universal-cookie-express';
 import queryString from 'query-string';
 import security from './middleware/security';
@@ -43,6 +44,14 @@ const server = express();
 const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
+    fetch: async (url, opts) => {
+      return nodeFetch(url, opts).then((fetch_res) => {
+        const headers = fetch_res.headers.raw()
+        if (headers['set-cookie'] !== undefined) {
+          cookies = headers['set-cookie']
+        }
+      }) 
+    },
     fetchOptions: () => {
       const token = req.universalCookies.get('authToken');
       if (token) {

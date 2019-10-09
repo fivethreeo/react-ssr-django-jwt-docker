@@ -20,7 +20,7 @@ module.exports = {
 
 
     if (target === 'node') {
-      config.entry.unshift('cross-fetch/polyfill'); // add cross-fetch/polyfill for apollo
+      // config.entry.unshift('cross-fetch/polyfill'); // add cross-fetch/polyfill for apollo
     }
 
     return config;
