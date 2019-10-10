@@ -60,7 +60,7 @@ export SOCIAL_AUTH_GITHUB_SECRET="23b3yfifvveeeyhvb0c6ce80bb"
 sudo -E docker-compose -f docker-compose.dev.yml up
 ```
 
-To add other social backends:
+### To add other social backends:
 
 Add more backends to `AUTHENTICATION_BACKENDS` in `djangoapi/settings.py`. 
 
