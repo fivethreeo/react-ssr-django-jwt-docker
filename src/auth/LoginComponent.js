@@ -67,8 +67,8 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
             <p>
               <button className="btn btn-lg btn-primary btn-block"
                 type="submit">Login</button></p>
-            <p>Don't have an account?
-              <Link to='/register'>Create one now</Link></p>
+            <p>Don't have an account? 
+              <Link to='/register'>Create one now</Link> or <Link to='/social/github'>Log in using github</Link></p>
 
           </form>
 

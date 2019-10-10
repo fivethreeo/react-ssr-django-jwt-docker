@@ -38,6 +38,7 @@ import {
 import ActivateExpressView from '../auth/ActivateExpressView';
 import RegisterExpressView from '../auth/RegisterExpressView';
 import LoginExpressView from '../auth/LoginExpressView';
+import { SocialAuthExpressView, SocialAuthCompleteExpressView } from '../auth/SocialAuthExpressViews';
 
 const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
@@ -48,6 +49,7 @@ const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlClient = new Client({
     fetch: async (url, opts) => {
       return nodeFetch(url, opts).then((fetch_res) => {
+        // Pass session cookie from django for social auth state session var
         const parsed_cookies = getParsedCookies(fetch_res.headers.raw()['set-cookie']);
         const session_cookie = getCookie(parsed_cookies, "sessionid");
         if (session_cookie) {
@@ -58,14 +60,15 @@ const urqlClientMiddleware = (req, res, next)=>{
     },
     fetchOptions: () => {
       const token = req.universalCookies.get('authToken');
+      console.log(token)
+      let opts = {
+        headers: { cookie: req.headers.cookie }
+      };
       if (token) {
-        return {
-          headers: {
-            Authorization: `JWT ${token}`
-          }
-        };
+        opts.headers['Authorization'] = `JWT ${token}`
       }
-      return {};
+      console.log(opts)
+      return opts;
     },
     exchanges: [
       dedupExchange,
@@ -92,6 +95,8 @@ server
   .use('/register', RegisterExpressView)
   .use('/activate', ActivateExpressView)
   .use('/login', LoginExpressView)
+  .use('/social/:provider/complete', SocialAuthCompleteExpressView)
+  .use('/social/:provider', SocialAuthExpressView)
 
   .use( async (req, res) => {
 

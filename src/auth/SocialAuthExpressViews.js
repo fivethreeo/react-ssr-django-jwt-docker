@@ -22,7 +22,7 @@ export const SocialAuthExpressView = SSRCallback( async (req, res, next, client)
   }
   else if (result.data && result.data.socialAuth) {
     if (result.data.socialAuth.result.__typename === 'Redirect') {
-      res.redirect(result.data.socialAuth.result.url);
+      return res.redirect(result.data.socialAuth.result.url);
     }
   }
   else {
@@ -35,10 +35,12 @@ export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next,
   
   const state = {};
 
+  const requestData = serialize(req.query);
+
   const result = await executeMutation(client, SocialAuthCompleteMutation, {
     provider: req.params.provider,
     requestData: requestData,
-    redirectUri: config('APP_URL') + '/social/' + req.params..provider + '/complete'
+    redirectUri: config('APP_URL') + '/social/' + req.params.provider + '/complete'
   });
 
   if (result.error && result.error.graphQLErrors) {
@@ -48,10 +50,10 @@ export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next,
   }
   else if (result.data && result.data.socialAuthComplete) {
     if (result.data.socialAuthComplete.result.__typename === 'Redirect') {
-      res.redirect(result.data.socialAuthComplete.result.url);
+      return res.redirect(result.data.socialAuthComplete.result.url);
     }
-    if (res.data.socialAuthComplete.result.__typename === 'JWT') {
-      req.universalCookies.set('authToken', res.data.socialAuthComplete.result.token, {
+    if (result.data.socialAuthComplete.result.__typename === 'JWT') {
+      req.universalCookies.set('authToken', result.data.socialAuthComplete.result.token, {
         path: '/',
         expires: new Date(new Date().getTime()+1000*60*60*24),
         maxAge: 60*60*24,
@@ -60,7 +62,7 @@ export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next,
         httpOnly: false,
         sameSite: true
       })
-      res.redirect('/');
+      return res.redirect(301, '/');
     }
   }
   else {

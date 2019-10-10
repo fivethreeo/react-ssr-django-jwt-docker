@@ -5,6 +5,7 @@ import serialize from 'serialize-javascript';
 
 import { Context  } from 'urql';
 import { withCookies } from '../common/CookieContext';
+import useServerContext from '../hooks/useServerContext';
 
 import { useServerNoopEffect } from '../hooks/IsomorphicEffects';
 
@@ -21,31 +22,32 @@ const SocialAuthBegin = ({
   match: { params: { provider } },
   history
 }) => {
-
-  const [error, setError] = useState('');
+  const [state, hasServerContext, setState] = useServerContext({});
 
   const client = useContext(Context);
  
   useServerNoopEffect(() => {
-    executeMutation(client,  SocialAuthMutation, {
-      provider: provider,
-      redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
-    })
-    .then((res)=>{
-      if (res.error && res.error.graphQLErrors) {
-        setError(res.error.graphQLErrors[0].message);
-      }
-      else if (res.data && res.data.socialAuth) {
-        if (res.data.socialAuth.result.__typename === 'Redirect') {
-          window.location.href = res.data.socialAuth.result.url;
+    if (!hasServerContext) {
+      executeMutation(client,  SocialAuthMutation, {
+        provider: provider,
+        redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
+      })
+      .then((res)=>{
+        if (res.error && res.error.graphQLErrors) {
+          setState({ error: res.error.graphQLErrors[0].message });
         }
-      }
-    });
+        else if (res.data && res.data.socialAuth) {
+          if (res.data.socialAuth.result.__typename === 'Redirect') {
+            window.location.href = res.data.socialAuth.result.url;
+          }
+        }
+      });
+    }
 
   }, []);
 
-  if (error) {
-    return <p>{error}</p>;
+  if (state.error) {
+    return <p>{state.error}</p>;
   } else {
     return <p>test</p>;
   }
@@ -58,49 +60,51 @@ const SocialAuthComplete = ({
   cookies
 }) => {
 
-  const [error, setError] = useState('');
+  const [state, hasServerContext, setState] = useServerContext({});
 
   const client = useContext(Context);
  
   useServerNoopEffect(() => {
-    const requestData = serialize(
-      parseQueryString(history.location.search, {parseNumbers:true})
-    );
+    if (!hasServerContext) {
+      const requestData = serialize(
+        parseQueryString(history.location.search, {parseNumbers:true})
+      );
 
-    executeMutation(client, SocialAuthCompleteMutation, {
-      provider: provider,
-      requestData: requestData,
-      redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
-    }).then((res)=>{
+      executeMutation(client, SocialAuthCompleteMutation, {
+        provider: provider,
+        requestData: requestData,
+        redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
+      }).then((res)=>{
 
-      if (res.error && res.error.graphQLErrors) {
-        setError(res.error.graphQLErrors[0].message);
-      }
-      else if (res.data && res.data.socialAuthComplete) {
-        if (res.data.socialAuthComplete.result.__typename === 'Redirect') {
-          window.location.href = res.data.socialAuthComplete.result.url;
+        if (res.error && res.error.graphQLErrors) {
+          setState({ error: res.error.graphQLErrors[0].message });
         }
-        if (res.data.socialAuthComplete.result.__typename === 'JWT') {
-          cookies.set('authToken', res.data.socialAuthComplete.result.token, {
-            path: '/',
-            expires: new Date(new Date().getTime()+1000*60*60*24),
-            maxAge: 60*60*24,
-            domain: config('COOKIE_HOST'),
-            secure: config('COOKIE_SECURE'),
-            httpOnly: false,
-            sameSite: true
-          });
+        else if (res.data && res.data.socialAuthComplete) {
+          if (res.data.socialAuthComplete.result.__typename === 'Redirect') {
+            window.location.href = res.data.socialAuthComplete.result.url;
+          }
+          if (res.data.socialAuthComplete.result.__typename === 'JWT') {
+            cookies.set('authToken', res.data.socialAuthComplete.result.token, {
+              path: '/',
+              expires: new Date(new Date().getTime()+1000*60*60*24),
+              maxAge: 60*60*24,
+              domain: config('COOKIE_HOST'),
+              secure: config('COOKIE_SECURE'),
+              httpOnly: false,
+              sameSite: true
+            });
+          }
         }
-      }
-    });
-
+      });
+    }
   }, []);
 
-  if (error) {
-    return <p>{error}</p>;
+  if (state.error) {
+    return <p>{state.error}</p>;
   } else {
     return <p>test</p>;
   }
+
 };
 
 const SocialAuthCompleteCookies = withCookies(SocialAuthComplete);
