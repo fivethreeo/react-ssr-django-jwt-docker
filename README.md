@@ -45,14 +45,14 @@ Run all services (traefik, djangoapi, reactapp):
 sudo docker-compose -f docker-compose.dev.yml up
 ```
 
-To test registration email:
+### To test registration email
 
 ```bash
 export EMAIL_URL=smtp://username:password@localhost:25
 sudo docker-compose -f docker-compose.dev.yml up
 ```
 
-To test social auth:
+### TTo test social auth
 
 ```bash
 export SOCIAL_AUTH_GITHUB_KEY="5137xfvkhv44468bca82e88"
@@ -62,11 +62,13 @@ sudo -E docker-compose -f docker-compose.dev.yml up
 
 To add other social backends:
 
-Add more backends to AUTHENTICATION_BACKENDS in `djangoapi/settings.py`. 
+Add more backends to `AUTHENTICATION_BACKENDS` in `djangoapi/settings.py`. 
 
-Add extra SOCIAL_AUTH_[BACKEND]_[SECRET|KEY] settings in `djangoapi/settings.py`. 
+Add extra `SOCIAL_AUTH_[BACKEND]_[SECRET|KEY]` settings in `djangoapi/settings.py`. 
 
 See [https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#authentication-backends](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#authentication-backends)
+
+### Try it out
 
 Go to [https://localhost](https://localhost).
 
