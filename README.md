@@ -49,10 +49,10 @@ sudo docker-compose -f docker-compose.dev.yml up
 
 ```bash
 export EMAIL_URL=smtp://username:password@localhost:25
-sudo docker-compose -f docker-compose.dev.yml up
+sudo -E docker-compose -f docker-compose.dev.yml up
 ```
 
-### TTo test social auth
+### To test social auth
 
 ```bash
 export SOCIAL_AUTH_GITHUB_KEY="5137xfvkhv44468bca82e88"
