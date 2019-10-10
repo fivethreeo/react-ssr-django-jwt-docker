@@ -7,12 +7,12 @@
 * Server hot module reloading
 * Server-side rendering
 * Suspense server side using [react-ssr-prepass][react-ssr-prepass]
-* Server-side handlers for graceful degradation of registration/activation/login views.  
+* Server-side handlers for graceful degradation of registration/ activation/ login/ social views.  
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
 * Using [formik][formik] for forms with bootstrap4
-* Registration/activation and authentication using JWT and graphene
+* Registration / activation/ social login and authentication using social-auth-app-django, JWT and graphene
 * Using [træfik][træfik] for routing requests and ssl.
 
 ## How to use
@@ -29,27 +29,44 @@ cd react-ssr-django-jwt-docker-master
 Build images:
 
 ```bash
-docker-compose -f docker-compose.dev.yml build
+sudo docker-compose -f docker-compose.dev.yml build
 ```
 
 Run database migrations:
 
 ```bash
 touch db.sqlite3
-docker-compose -f docker-compose.dev.yml run djangoapi python manage.py migrate
+sudo docker-compose -f docker-compose.dev.yml run djangoapi python manage.py migrate
 ```
 
 Run all services (traefik, djangoapi, reactapp):
 
 ```bash
-docker-compose -f docker-compose.dev.yml up
+sudo docker-compose -f docker-compose.dev.yml up
 ```
 
 To test registration email:
 
 ```bash
 export EMAIL_URL=smtp://username:password@localhost:25
+sudo docker-compose -f docker-compose.dev.yml up
 ```
+
+To test social auth:
+
+```bash
+export SOCIAL_AUTH_GITHUB_KEY="5137xfvkhv44468bca82e88"
+export SOCIAL_AUTH_GITHUB_SECRET="23b3yfifvveeeyhvb0c6ce80bb"
+sudo -E docker-compose -f docker-compose.dev.yml up
+```
+
+To add other social backends:
+
+Add more backends to AUTHENTICATION_BACKENDS in `djangoapi/settings.py`. 
+
+Add extra SOCIAL_AUTH_[BACKEND]_[SECRET|KEY] settings in `djangoapi/settings.py`. 
+
+See [https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#authentication-backends](https://python-social-auth.readthedocs.io/en/latest/configuration/django.html#authentication-backends)
 
 Go to [https://localhost](https://localhost).
 
