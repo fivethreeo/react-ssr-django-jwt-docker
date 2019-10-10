@@ -3,9 +3,10 @@ import { withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Context  } from 'urql';
 
-import { TextField } from '../utils/FormUtils';
+import { TextField } from '../components/BootstrapForm';
 import useServerContext from '../hooks/useServerContext';
-import { executeMutation, fromGqlErrors } from '../utils/SSRUtils';
+import { executeMutation } from '../common/utils/urql';
+import { fromGqlErrors } from '../common/utils/errors';
 
 import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 

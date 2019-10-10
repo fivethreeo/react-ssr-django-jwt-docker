@@ -1,4 +1,6 @@
-import { SSRCallback, executeMutation, fromYupErrors, fromGqlErrors } from '../utils/SSRUtils';
+import { fromYupErrors, fromGqlErrors } from '../common/utils/errors';
+import { SSRCallback } from '../server/utils/ssr';
+import { executeMutation } from '../common/utils/urql';
 import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 
@@ -22,15 +24,15 @@ export default SSRCallback( async (req, res, next, client) => {
     return next();
   }
 
-  const mutationresult = await executeMutation(client, RegisterMutation, state['values']);
-  if (mutationresult.error && mutationresult.error.graphQLErrors) {
-    state['formerror'] = mutationresult.error.graphQLErrors[0].message;
+  const result = await executeMutation(client, RegisterMutation, state['values']);
+  if (result.error && result.error.graphQLErrors) {
+    state['formerror'] = result.error.graphQLErrors[0].message;
     state['values']['password'] = '';
     state['values']['passwordRepeat'] = '';
     res.locals.serverContextValue = state;
     return next();
   }
-  if (mutationresult.data && mutationresult.data.register.success) {
+  if (result.data && result.data.register.success) {
     res.redirect('/login');
   }
   else {

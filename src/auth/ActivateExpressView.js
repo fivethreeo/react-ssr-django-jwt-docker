@@ -4,7 +4,8 @@ import {
 } from 'serialize-query-params';
 import parseUrl from 'parseurl';
 
-import { SSRCallback, executeMutation } from '../utils/SSRUtils';
+import { SSRCallback } from '../server/utils/ssr';
+import { executeMutation } from '../common/utils/urql';
 import { QueryParams, ActivateMutation } from './ActivateCommon';
 
 export default SSRCallback( async (req, res, next, client) => { 

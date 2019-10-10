@@ -8,8 +8,13 @@ import { withCookies } from '../common/CookieContext';
 
 import { useServerNoopEffect } from '../hooks/IsomorphicEffects';
 
-import { executeMutation } from '../utils/SSRUtils';
-import { SocialAuthMutation, SocialAuthCompleteMutation } from './SocialAuthCommon';
+import { executeMutation } from '../common/utils/urql';
+
+import {
+  SocialAuthMutation,
+  SocialAuthCompleteMutation
+} from './SocialAuthCommon';
+
 import config from '../config';
 
 const SocialAuthBegin = ({
@@ -35,7 +40,7 @@ const SocialAuthBegin = ({
           window.location.href = res.data.socialAuth.result.url;
         }
       }
-    })
+    });
 
   }, []);
 
@@ -84,10 +89,10 @@ const SocialAuthComplete = ({
             secure: config('COOKIE_SECURE'),
             httpOnly: false,
             sameSite: true
-          })
+          });
         }
       }
-    })
+    });
 
   }, []);
 
@@ -109,7 +114,8 @@ const SocialAuth = () => {
         path="/social/:provider"
         component={SocialAuthBegin} 
       />
-      <Route path="/social/:provider/complete" component={SocialAuthCompleteCookies} />
+      <Route path="/social/:provider/complete"
+        component={SocialAuthCompleteCookies} />
     </Switch>
   );
 

@@ -1,4 +1,6 @@
-import { SSRCallback, executeMutation, fromYupErrors, fromGqlErrors } from '../utils/SSRUtils';
+import { fromYupErrors, fromGqlErrors } from '../common/utils/errors';
+import { SSRCallback } from '../server/utils/ssr';
+import { executeMutation } from '../common/utils/urql';
 import { LoginSchema, LoginMutation } from './LoginCommon';
 import config from '../config';
 
@@ -22,18 +24,16 @@ export default SSRCallback( async (req, res, next, client) => {
     return next();
   }
 
-  const mutationresult = await executeMutation(client, LoginMutation, state['values'])
-  console.log(mutationresult)
-  if (mutationresult.error && mutationresult.error.graphQLErrors) {
-    state['formerror'] = mutationresult.error.graphQLErrors[0].message;
+  const result = await executeMutation(client, LoginMutation, state['values'])
+  if (result.error && result.error.graphQLErrors) {
+    state['formerror'] = result.error.graphQLErrors[0].message;
     state['values']['password'] = '';
     res.locals.serverContextValue = state;
-    console.log(state)
     return next();
   }
-  else if (mutationresult.data && mutationresult.data.tokenAuth && mutationresult.data.tokenAuth.token) {
+  else if (result.data && result.data.tokenAuth && result.data.tokenAuth.token) {
     req.universalCookies.set('authToken',
-      mutationresult.data.tokenAuth.token, {
+      result.data.tokenAuth.token, {
       path: '/',
       expires: new Date(new Date().getTime()+1000*60*60*24),
       maxAge: 60*60*24,
@@ -45,7 +45,7 @@ export default SSRCallback( async (req, res, next, client) => {
     res.redirect('/');
   }
   else {
-    next();
+    return next();
   }
 
 })

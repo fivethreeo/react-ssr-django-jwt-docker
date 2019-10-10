@@ -17,8 +17,12 @@ export const SocialAuthMutation = gql`
 `;
 
 export const SocialAuthCompleteMutation = gql`
-  mutation SocialAuthComplete($provider: String!, $requestData: JSONString!, $redirectUri: String!) {
-    socialAuthComplete(provider: $provider, requestData: $requestData, redirectUri: $redirectUri) {
+  mutation SocialAuthComplete(
+    $provider: String!, $requestData: JSONString!, $redirectUri: String!) {
+    socialAuthComplete(
+      provider: $provider,
+      requestData: $requestData,
+      redirectUri: $redirectUri) {
       result {
         __typename
         ... on JWT {

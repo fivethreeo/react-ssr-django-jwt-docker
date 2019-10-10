@@ -24,6 +24,8 @@ import ServerContextComponent from './components/ServerContextComponent';
 import UrqlDataComponent from './components/UrqlDataComponent';
 import App from '../components/App';
 
+import { getParsedCookies, getCookie } from './utils/cookies';
+
 import {
   Client,
   dedupExchange,
@@ -44,7 +46,16 @@ const server = express();
 const urqlClientMiddleware = (req, res, next)=>{
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
-    fetch: nodeFetch,
+    fetch: async (url, opts) => {
+      return nodeFetch(url, opts).then((fetch_res) => {
+        const parsed_cookies = getParsedCookies(fetch_res.headers.raw()['set-cookie']);
+        const session_cookie = getCookie(parsed_cookies, "sessionid");
+        if (session_cookie) {
+          res.append('set-cookie', session_cookie.toString());
+        }
+        return fetch_res;
+      }) 
+    },
     fetchOptions: () => {
       const token = req.universalCookies.get('authToken');
       if (token) {

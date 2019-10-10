@@ -3,8 +3,8 @@ import { withRouter, Link } from 'react-router-dom';
 import { useQueryParams } from 'use-query-params';
 import { Context as UrqlContext } from 'urql';
 
-import { executeMutation } from '../utils/SSRUtils';
 import useServerContext from '../hooks/useServerContext';
+import { executeMutation } from '../common/utils/urql';
 
 import { ActivateMutation, QueryParams } from './ActivateCommon';
 
