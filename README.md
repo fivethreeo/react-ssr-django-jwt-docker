@@ -112,13 +112,9 @@ Go to [http://localhost](http://localhost).
 
 ## Ideas behind the example
 
-* [react-universally][react-universally]
 * [razzle][razzle]
-* [Setting up JWT Authentication][JWT A]
 
-  [react-universally]: <https://github.com/ctrlplusb/react-universally>
   [razzle]: <https://github.com/jaredpalmer/razzle>
-  [JWT A]: <https://thinkster.io/tutorials/django-json-api/authentication>
   [@loadable/component]: <https://github.com/smooth-code/loadable-components#readme>
   [react-ssr-prepass]: <https://github.com/FormidableLabs/react-ssr-prepass>
   [træfik]: <https://traefik.io/>
