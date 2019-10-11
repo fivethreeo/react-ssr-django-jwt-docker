@@ -44,7 +44,7 @@ const assets = require(process.env.RAZZLE_ASSETS_MANIFEST);
 
 const server = express();
 
-const urqlClientMiddleware = (req, res, next)=>{
+const urqlClientMiddleware = (req, res, next) => {
   res.locals.urqlSSRCache = ssrExchange();
   res.locals.urqlClient = new Client({
     fetch: async (url, opts) => {
@@ -60,14 +60,13 @@ const urqlClientMiddleware = (req, res, next)=>{
     },
     fetchOptions: () => {
       const token = req.universalCookies.get('authToken');
-      console.log(token)
       let opts = {
+        // Pass session cookie down to django for social auth
         headers: { cookie: req.headers.cookie }
       };
       if (token) {
         opts.headers['Authorization'] = `JWT ${token}`
       }
-      console.log(opts)
       return opts;
     },
     exchanges: [

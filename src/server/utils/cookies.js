@@ -11,6 +11,6 @@ export const getParsedCookies = (cookie_headers) => {
 
 export const getCookie = (parsed_cookies, cookie_name) => {
   return parsed_cookies.filter(
-    (cookie) => (cookie.key === cookie_name));
+    (cookie) => (cookie.key === cookie_name)).pop();
 }
 

@@ -12,7 +12,7 @@ const TodoOverview = () => {
   const [filterCompleted, setFilterCompleted] = useState(false);
 
   const [overview, refetchOverView] =
-    useQuery({ query: TodoOverviewQuery, requestPolicy: 'network-only' });
+    useQuery({ query: TodoOverviewQuery });
 
   let content;
 

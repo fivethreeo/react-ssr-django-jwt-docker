@@ -91,7 +91,7 @@ const SocialAuthComplete = ({
               domain: config('COOKIE_HOST'),
               secure: config('COOKIE_SECURE'),
               httpOnly: false,
-              sameSite: true
+              sameSite: 'lax'
             });
           }
         }

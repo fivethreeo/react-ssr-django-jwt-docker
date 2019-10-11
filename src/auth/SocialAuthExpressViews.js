@@ -22,7 +22,7 @@ export const SocialAuthExpressView = SSRCallback( async (req, res, next, client)
   }
   else if (result.data && result.data.socialAuth) {
     if (result.data.socialAuth.result.__typename === 'Redirect') {
-      return res.redirect(result.data.socialAuth.result.url);
+      res.redirect(302, result.data.socialAuth.result.url);
     }
   }
   else {
@@ -50,7 +50,7 @@ export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next,
   }
   else if (result.data && result.data.socialAuthComplete) {
     if (result.data.socialAuthComplete.result.__typename === 'Redirect') {
-      return res.redirect(result.data.socialAuthComplete.result.url);
+      res.redirect(302, result.data.socialAuthComplete.result.url);
     }
     if (result.data.socialAuthComplete.result.__typename === 'JWT') {
       req.universalCookies.set('authToken', result.data.socialAuthComplete.result.token, {
@@ -60,9 +60,9 @@ export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next,
         domain: config('COOKIE_HOST'),
         secure: config('COOKIE_SECURE'),
         httpOnly: false,
-        sameSite: true
+        sameSite: 'lax'
       })
-      return res.redirect(301, '/');
+      res.redirect(302, '/');
     }
   }
   else {

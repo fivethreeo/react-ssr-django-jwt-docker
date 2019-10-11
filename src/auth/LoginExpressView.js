@@ -42,7 +42,7 @@ export default SSRCallback( async (req, res, next, client) => {
       httpOnly: false,
       sameSite: true
     });
-    return res.redirect('/');
+    res.redirect('/');
   }
   else {
     return next();
