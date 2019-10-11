@@ -5,7 +5,6 @@ services:
     restart: always
     image: traefik
     command:
-      - "--api"
       - "--entrypoints=Name:http Address::80 Redirect.EntryPoint:https"
       - "--entrypoints=Name:https Address::443 TLS:certs/localhost_https_localhost.crt,certs/localhost_https_localhost.key"
       - "--defaultentrypoints=http,https"

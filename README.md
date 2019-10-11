@@ -85,30 +85,6 @@ bash makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
   --common-name "localhost" --dns "localhost" --ip "127.0.0.1" --https
 ```
 
-### To run locally:
-
-Install requirements:
-
-```bash
-virtualenv venv
-venv/bin/pip install -r requirements.txt
-yarn install
-```
-
-Run database migrations:
-
-```bash
-venv/bin/python manage.py migrate
-```
-
-Start the django api and the react app:
-
-```bash
-venv/bin/python runserver.py & pid=$! && sleep 5 && pid=`pgrep -P $pid` && yarn start
-kill -9 $pid
-```
-
-Go to [http://localhost](http://localhost).
 
 ## Ideas behind the example
 

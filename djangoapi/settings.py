@@ -34,7 +34,9 @@ SECRET_KEY = env('SECRET_KEY')
 
 if env('PROXY_SSL'):
     SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    
 # SECURITY WARNING: don't run with debug turned on in production!
 
 EMAIL_CONFIG = env.email_url(
