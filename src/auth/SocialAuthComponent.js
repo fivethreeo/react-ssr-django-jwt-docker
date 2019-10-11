@@ -49,7 +49,7 @@ const SocialAuthBegin = ({
   if (state.error) {
     return <p>{state.error}</p>;
   } else {
-    return <p>test</p>;
+    return null;
   }
 
 };
@@ -102,7 +102,7 @@ const SocialAuthComplete = ({
   if (state.error) {
     return <p>{state.error}</p>;
   } else {
-    return <p>test</p>;
+    return null;
   }
 
 };
