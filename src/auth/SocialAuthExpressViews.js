@@ -8,6 +8,8 @@ import config from '../config';
 
 export const SocialAuthExpressView = SSRCallback( async (req, res, next, client) => {
   
+  if (res.locals.serverContextValue) return next();
+
   const state = {};
 
   const result = await executeMutation(client, SocialAuthMutation, {
