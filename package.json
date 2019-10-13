@@ -9,9 +9,10 @@
     "start:prod": "NODE_ENV=production node build/server.js"
   },
   "dependencies": {
+    "@blueprintjs/core": "^3.19.1",
+    "@blueprintjs/select": "^3.11.0",
     "@loadable/component": "^5.7.0",
     "@loadable/server": "^5.8.0",
-    "bootstrap": "^4.3.1",
     "classnames": "^2.2.6",
     "cross-fetch": "^3.0.4",
     "deepmerge": "^4.0.0",
@@ -29,6 +30,7 @@
     "react-is": "^16.9.0",
     "react-router-dom": "^5.0.0",
     "react-ssr-prepass": "^1.0.5",
+    "reflex-grid": "^2.0.4",
     "universal-cookie": "^4.0.2",
     "universal-cookie-express": "^4.0.1",
     "urql": "^1.4.1",
@@ -39,6 +41,7 @@
     "@babel/core": "^7.4.4",
     "@loadable/babel-plugin": "^5.8.0",
     "@loadable/webpack-plugin": "^5.7.1",
+    "normalize.css": "^8.0.1",
     "razzle": "^3.0.0",
     "razzle-plugin-eslint": "^3.0.0",
     "razzle-plugin-scss": "3.0.0",

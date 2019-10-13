@@ -25,13 +25,13 @@ const TodoOverview = () => {
     if (gqlerror.indexOf('permission') !== -1) {
       error = <><p>{gqlerror}.</p></>;
     }
-    content = <Login onLoginSuccess={refetchOverView} error={error} />;
+    content = <div className="col-sm-6"><Login onLoginSuccess={refetchOverView} error={error} /></div>;
   } else {
     content = <>
-      <div className="col-sm">
+      <div className="col-sm-3">
         <NewTodoForm users={overview.data.users} />
       </div>
-      <div className="col-sm">
+      <div className="col-sm-3">
         <p>{overview.data.todos.length} todos</p>
         <TodoList todos={overview.data.todos}
           filterCompleted={filterCompleted} />
@@ -40,7 +40,7 @@ const TodoOverview = () => {
   }
 
   return (<>
-    <div className="row">
+    <div className="grid justify-center">
       {content}
     </div>
   </>);

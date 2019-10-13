@@ -1,92 +1,46 @@
 import React from 'react';
 
-import classnames from 'classnames';
 import { useField } from 'formik';
+import { FormGroup, InputGroup, Checkbox } from '@blueprintjs/core';
 
-export const InputFeedback = ({ error }) =>
-  error ? <div className="invalid-feedback">{error}</div> : null;
-
-export const Label = ({ className = 'form-label', field, label }) => {
-
-  return (
-    <label htmlFor={field.id} className={className}>
-      {label}
-    </label>
-  );
-};
-
-export const InputGroup = ({ className = '', children }) => {
-  const classes = classnames(
-    'input-group',
-    className
-  );
-  return (<div className={classes} children={children} />);
-};
-
-export const get_id_classes = (className, field, meta) => {
+export const getBlueprintFormGroupProps = (props, field, meta) => {
   const id = 'id_' + field.name;
-
-  const classes = classnames(
-    className,
-    {
-      'is-invalid': field.value && !!meta.error,
-    },
-    {
-      'is-valid': field.value && meta.touched && (meta.error === undefined),
-    }
-  );
-  return {id: id, className: classes};
+  const intent = (field.value && !!meta.error) ? 'danger' : (field.value && meta.touched && (meta.error === undefined) ? 'success' : null);
+  return {labelFor: id, label: props.label, intent: intent};
 };
 
-export const useFieldExtra = ({className = 'form-control', ...props}) => {
+export const getBlueprintInputProps = (props, field, meta) => {
+  const id = 'id_' + field.name;
+  const intent = (field.value && !!meta.error) ? 'danger' : (field.value && meta.touched && (meta.error === undefined) ? 'success' : null);
+  return {id: id, intent: intent};
+};
+
+export const useFieldExtra = (props) => {
   const [field, meta] = useField(props);
   return [
-    {...get_id_classes(className, field, meta), ...field},
+    getBlueprintFormGroupProps(props, field, meta),
+    {...getBlueprintInputProps(props, field, meta), ...field},
     meta];
 };
 
-export const InputWidget = (props) => {
-  return (<input {...props} />);
-};
-
-
-export const TextField = ({ type = 'text', className = '', ...props }) => {
-  const newProps = { type: type, ...props };
-  const [field, meta] = useFieldExtra(newProps);
-
-  const classes = classnames(
-    'form-group',
-    className
-  );
-
+export const TextField = (props) => {
+  const newProps = { type: 'text', ...props };
+  const [formgroup, field, meta] = useFieldExtra(newProps);
+console.log(formgroup, meta)
   return (
-    <div className={classes}>
-      <Label field={field} {...props} />
-      <InputWidget type={newProps.type} {...field} />
-      <InputFeedback error={meta.error} />
-    </div>
+    <FormGroup {...formgroup}>
+      <InputGroup {...field} />
+    </FormGroup>
   );
 };
 
 
-export const CheckboxField = ({ className='', ...props }) => {
-  const newProps = {
-    type: 'checkbox',
-    className: 'form-check-input',
-    ...props
-  };
-  const [field, meta] = useFieldExtra(newProps);
-
-  const classes = classnames(
-    'form-check',
-    className
-  );
+export const CheckboxField = (props) => {
+  const newProps = { type: 'checkbox', ...props };
+  const [formgroup, field, meta] = useFieldExtra(newProps);
+  const { labelFor, formgroupProps } = formgroup;
 
   return (
-    <div className={classes}>
-      <InputWidget type={newProps.type} {...field} />
-      <Label className='form-check-label' field={field} {...props} />
-      <InputFeedback error={meta.error} />
-    </div>
+    <Checkbox {...formgroupProps} {...field} />
   );
 };

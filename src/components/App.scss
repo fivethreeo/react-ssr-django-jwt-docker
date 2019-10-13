@@ -1,8 +1,6 @@
-@import 'bootstrap/scss/bootstrap.scss';
-@import url('https://fonts.googleapis.com/css?family=Open+Sans');
+// using node-style package resolution in a CSS file: 
+@import "~normalize.css";
+@import "~reflex-grid/scss/reflex.scss";
 
-body {
-  margin: 0;
-  padding: 0;
-  font-family: 'Open Sans', sans-serif;
-}
+@import "~@blueprintjs/core/lib/css/blueprint.css";
+@import "~@blueprintjs/icons/lib/css/blueprint-icons.css";

@@ -23,7 +23,7 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
     formerror: ''
   });
   return (
-    <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+    <>
       { error }
       <Formik
         initialValues={login.values}
@@ -74,7 +74,7 @@ const Login = ({ history, cookies, onLoginSuccess = null, error = '' }) => {
 
         )}
       />
-    </div>
+    </>
   );
 };
 

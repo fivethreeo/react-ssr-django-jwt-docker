@@ -24,8 +24,8 @@ const Footer = loadable(() =>
 );
 
 const OneRowOneCol = (Component) => {
-  return (props) => (<div className="row">
-      <div className="col-sm"><Component {...props} /></div></div>);
+  return (props) => (<div className="grid">
+      <div className="col-sm-6 align-self-center"><Component {...props} /></div></div>);
 };
 
 const App = () => {
@@ -44,7 +44,7 @@ const App = () => {
         <Route path="/register" component={OneRowOneCol(Register)} />
         <Route path="/social" component={OneRowOneCol(Social)} />
       </Switch>
-      <div className="row">
+      <div className="grid">
           <Footer />
       </div>
     </div>

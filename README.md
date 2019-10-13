@@ -11,7 +11,7 @@
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
-* Using [formik][formik] for forms with bootstrap4
+* Using [formik][formik] for forms with blueprintjs[blueprintjs]
 * Registration / activation/ social login and authentication using social-auth-app-django, JWT and graphene
 * Using [træfik][træfik] for routing requests and ssl.
 
@@ -95,3 +95,4 @@ bash makecert.sh --dn-c "US" --dn-st "TX" --dn-l "Houston" \
   [react-ssr-prepass]: <https://github.com/FormidableLabs/react-ssr-prepass>
   [træfik]: <https://traefik.io/>
   [formik]: <https://github.com/jaredpalmer/formik>
+  [blueprintjs]: <https://blueprintjs.com/>

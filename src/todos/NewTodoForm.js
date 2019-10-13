@@ -10,131 +10,47 @@ import { useGlobalMouseClick } from '../hooks/WindowEvents';
 import { useRegistry, useRegister } from '../hooks/Registry';
 import { useMutation } from 'urql';
 import { Formik } from 'formik';
-import classnames from 'classnames';
+
+import { FormGroup, MenuItem } from '@blueprintjs/core';
+import { MultiSelect } from '@blueprintjs/select';
 
 
 import {
   TextField,
   CheckboxField,
-  Label,
-  useFieldExtra,
-  InputFeedback
+  useFieldExtra
 } from '../components/BootstrapForm';
 
 import Todo from './Todo';
 
-
-export const SearchGroup = ({children}) => {
-  return (<div className="input-group">
-      {children}
-    <div className="input-group-append">
-      <span className="input-group-text">V</span>
-    </div>
-
-  </div>);
-};
-
-export const SearchResult = ({ id, description }) => {
-  useRegister(id, description, []);
-  return (<li className="list-group-item">{id}: {description}</li>);
-};
-
-export const SearchResults = React.forwardRef(({ fieldRef }, ref) => {
-  const [registry, RegistryProvider] = useRegistry();
-  const [searchResults, setSearchResults] = useState([]);
-  const listGroupRef = useRef();
-  
-  const onClickGlobal = useCallback((event) => {
-    if (event.target!==fieldRef.current
-      && !listGroupRef.current.contains(event.target)) {
-      listGroupRef.current.style.display = 'none';
-    }
-  }, []);
-
-  useGlobalMouseClick(onClickGlobal);
-
-  useServerNoopLayoutEffect(() => {
-    const brect = listGroupRef.current.getBoundingClientRect();
-    listGroupRef.current.style.width = `${brect.width.toFixed()}px`;
-    listGroupRef.current.style.position = 'absolute'; 
-    listGroupRef.current.style.zIndex = 4;
-    listGroupRef.current.style.display = 'block';
-  });
-
-  const searchCallback = useCallback((event) => {
-    console.log(listGroupRef.current.contains(event.target));
-  }, []);
-
-  useImperativeHandle(ref, () => ({
-    setSearchResults: (results) => {
-      setSearchResults(results);
-    }
-  }));
+export const SearchField = (props) => {
+  const newProps = { type: 'select', ...props };
+  const [formgroup, field, meta] = useFieldExtra(newProps);
 
   return (
-    <RegistryProvider>
-      <ul className="list-group" ref={listGroupRef}>{searchResults
-      .map((result, i) => <SearchResult key={i} {...result} />)}</ul>
-    </RegistryProvider>
+    <FormGroup {...formgroup}>
+      <MultiSelect items={props.items} itemRenderer={props.itemRenderer} {...field} />
+    </FormGroup>
   );
-});
-
-export const SearchWidget = ({ field, choices, ...props }) => {
-  const searchRef = useRef(null);
-  const fieldRef = useRef(null);
-
-  const { onChange, onBlur, value, ...oldField } = field;
-
-  const onChangeSearch = useCallback((event) => {
-    searchRef.current.setSearchResults(
-      choices.filter(choice => choice
-        .description.toLowerCase()
-        .indexOf(event.target.value.toLowerCase()) !== -1));
-  }, []);
-
-  const fieldProps =  {
-    onChange: onChangeSearch,
-    // onFocus: onChangeSearch,
-    ref: fieldRef,
-    ...oldField};
-
-  return (<>
-    <SearchGroup><input {...fieldProps} /></SearchGroup>
-    <SearchResults ref={searchRef} fieldRef={fieldRef} />
-    </>);
 };
-
-export const SearchField = ({ className='', ...props }) => {
-  const newProps = { type: 'text', ...props };
-  const [field, meta] = useFieldExtra(newProps);
-
-  const classes = classnames(
-    'form-group',
-    className
-  );
-
+/* 
+const renderUser = (user, { modifiers, handleClick }) => {
+  if (!modifiers.matchesPredicate) {
+    return null;
+  }
   return (
-    <div className={classes}>
-      <Label field={field} {...props} />
-      <SearchWidget
-        field={field}
-        meta={meta}
-        {...newProps}
-      />
-      <InputFeedback error={meta.error} />
-    </div>
+    <MenuItem
+      active={modifiers.active}
+      icon={this.isFilmSelected(film) ? "tick" : "blank"}
+      key={film.rank}
+      label={film.year.toString()}
+      onClick={handleClick}
+      text={`${film.rank}. ${film.title}`}
+      shouldDismissPopover={false}
+    />
   );
 };
-
-
-const modifyChoices = (users) => users
-  .map(user => {
-    return {
-      description: user.email,
-      id: parseInt(user.id, 10),
-    };
-  }); 
-
+ */
 const NewTodoForm = ({users}) => {
 
   const [result, executeMutation] = useMutation(NewTodoMutation);
@@ -155,11 +71,7 @@ const NewTodoForm = ({users}) => {
               label="Body"
               placeholder="I have to &hellip;"
             />
-            <SearchField
-              name="creatorId"
-              label="User"
-              choices={modifyChoices(users)}
-            />
+
             <CheckboxField
               name="completed"
               label="Completed"
