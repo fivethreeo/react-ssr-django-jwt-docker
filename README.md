@@ -2,18 +2,18 @@
 
 ## Features
 
-* Building using [razzle][razzle]
+* Building using [razzle]
 * Runtime configuration in server and client
 * Server hot module reloading
 * Server-side rendering
-* Suspense server side using [react-ssr-prepass][react-ssr-prepass]
+* Suspense server side using [react-ssr-prepass]
 * Server-side handlers for graceful degradation of registration/ activation/ login/ social views.  
-* Code splitting using [@loadable/component][@loadable/component]
+* Code splitting using [@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
 * Using [formik] for forms with [blueprintjs]
 * Registration / activation/ social login and authentication using social-auth-app-django, JWT and graphene
-* Using [træfik][træfik] for routing requests and ssl.
+* Using [træfik] for routing requests and ssl.
 
 ## How to use
 
