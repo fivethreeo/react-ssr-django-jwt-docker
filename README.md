@@ -11,7 +11,7 @@
 * Code splitting using [@loadable/component][@loadable/component]
 * Babel 7 with fragments
 * React 16.8.6 with hooks
-* Using [formik][formik] for forms with blueprintjs[blueprintjs]
+* Using [formik] for forms with [blueprintjs]
 * Registration / activation/ social login and authentication using social-auth-app-django, JWT and graphene
 * Using [træfik][træfik] for routing requests and ssl.
 
