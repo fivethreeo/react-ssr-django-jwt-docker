@@ -19,13 +19,17 @@ const Social = loadable(() => import(
 const TodoOverView = loadable(() => import(
   /* webpackChunkName: "todo" */ '../todos/TodoOverView'));
 
+const Body = loadable(() =>
+  import(/* webpackChunkName: "body" */ './Body')
+);
+
 const Footer = loadable(() =>
   import(/* webpackChunkName: "footer" */ './Footer')
 );
 
 const OneRowOneCol = (Component) => {
-  return (props) => (<div className="grid">
-      <div className="col-sm-6 align-self-center"><Component {...props} /></div></div>);
+  return (props) => (<div className="grid justify-center">
+      <div className="col-sm-4"><Component {...props} /></div></div>);
 };
 
 const App = () => {
@@ -34,11 +38,8 @@ const App = () => {
    <Header />
      <div className="container">
       <Switch>
-        <Route
-          exact
-          path="/"
-          component={TodoOverView} 
-        />
+        <Route exact path="/" component={OneRowOneCol(Body)} />
+        <Route path="/todos" component={TodoOverView} />
         <Route path="/activate" component={OneRowOneCol(Activate)} />
         <Route path="/login" component={OneRowOneCol(Login)} />
         <Route path="/register" component={OneRowOneCol(Register)} />

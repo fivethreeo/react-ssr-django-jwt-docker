@@ -4,3 +4,24 @@
 
 @import "~@blueprintjs/core/lib/css/blueprint.css";
 @import "~@blueprintjs/icons/lib/css/blueprint-icons.css";
+
+
+.react-logo {
+  display: block;
+  margin: 0 auto;
+  animation: logo-spin infinite 20s linear;
+  height: 160px;
+}
+
+.shrinkfit {
+	flex-basis: 30%;
+}
+
+@keyframes logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

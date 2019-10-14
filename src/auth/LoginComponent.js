@@ -3,7 +3,7 @@ import { withRouter, Link } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Context  } from 'urql';
 
-import { TextField } from '../components/BootstrapForm';
+import { TextField } from '../components/BlueprintForm';
 import useServerContext from '../hooks/useServerContext';
 import { executeMutation } from '../common/utils/urql';
 import { fromGqlErrors } from '../common/utils/errors';

@@ -19,7 +19,7 @@ import {
   TextField,
   CheckboxField,
   useFieldExtra
-} from '../components/BootstrapForm';
+} from '../components/BlueprintForm';
 
 import Todo from './Todo';
 
