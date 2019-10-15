@@ -26,7 +26,7 @@ export const useFieldExtra = (props) => {
 export const TextField = (props) => {
   const newProps = { type: 'text', ...props };
   const [formgroup, field, meta] = useFieldExtra(newProps);
-console.log(formgroup, meta)
+
   return (
     <FormGroup {...formgroup}>
       <InputGroup {...field} />
