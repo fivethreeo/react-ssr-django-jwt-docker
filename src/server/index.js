@@ -22,6 +22,8 @@ import ServerContext from '../common/ServerContext';
 
 import ServerContextComponent from './components/ServerContextComponent';
 import UrqlDataComponent from './components/UrqlDataComponent';
+import WebpackNonceComponent from './components/WebpackNonceComponent';
+
 import App from '../components/App';
 
 import { getParsedCookies, getCookie } from './utils/cookies';
@@ -158,6 +160,7 @@ server
           <ClientConfig nonce={res.locals.nonce} />
           <UrqlDataComponent data={urqlData} nonce={res.locals.nonce} />
           <ServerContextComponent data={serverContextValue} nonce={res.locals.nonce} />
+          <WebpackNonceComponent nonce={res.locals.nonce} />
           {scriptElements}
       </body>
     </html>);

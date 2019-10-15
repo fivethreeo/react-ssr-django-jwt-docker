@@ -33,7 +33,7 @@
     "reflex-grid": "^2.0.4",
     "universal-cookie": "^4.0.2",
     "universal-cookie-express": "^4.0.1",
-    "urql": "^1.4.1",
+    "urql": "^1.6.1",
     "use-query-params": "^0.3.3",
     "yup": "^0.27.0"
   },

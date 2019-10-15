@@ -7,7 +7,7 @@ const ServerContextComponent = ({ data, ...props }) => {
       type="text/javascript"
       // eslint-disable-next-line react/no-danger
       dangerouslySetInnerHTML={{
-        __html: `window.__SERVER_CONTEXT__=${serialize(data)}`,
+        __html: `window.__SERVER_CONTEXT__=${serialize(data)};`,
       }}
       {...props}
     />

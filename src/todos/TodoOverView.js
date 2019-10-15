@@ -6,44 +6,40 @@ import { useQuery } from 'urql';
 
 import TodoList from './TodoList';
 import NewTodoForm from './NewTodoForm';
-import Login from '../auth/LoginComponent';
+
+import loadable from '@loadable/component';
+
+const Login = loadable(() => import(
+  /* webpackChunkName: "auth" */ '../auth/LoginComponent'));
+
+const JustifyCenter = ({ children }) => {
+  return (<div className="grid justify-center">
+    {children}
+  </div>);
+};
 
 const TodoOverview = () => {
   const [filterCompleted, setFilterCompleted] = useState(false);
 
   const [overview, refetchOverView] =
-    useQuery({ query: TodoOverviewQuery });
+    useQuery({ query: TodoOverviewQuery, variables: {}, requestPolicy: 'network-only'});
 
-  let content;
-
-  if (overview.error) {
-    let error = <p>Error</p>;
-    let gqlerror = '';
-    if (overview.error.graphQLErrors) {
-      gqlerror = overview.error.graphQLErrors.join(', ');
-    }
-    if (gqlerror.indexOf('permission') !== -1) {
-      error = <><p>{gqlerror}.</p></>;
-    }
-    content = <div className="col-sm-4"><Login onLoginSuccess={refetchOverView} error={error} /></div>;
-  } else {
-    content = <>
-      <div className="col-sm-3">
-        <NewTodoForm users={overview.data.users} />
-      </div>
-      <div className="col-sm-3">
-        <p>{overview.data.todos.length} todos</p>
-        <TodoList todos={overview.data.todos}
-          filterCompleted={filterCompleted} />
-      </div>
-    </>;
+  if (overview.fetching) {
+    return (<JustifyCenter><div className="col-sm-4">Loading...</div></JustifyCenter>);
+  } else if (overview.error && overview.error.graphQLErrors) {
+    return (<JustifyCenter><div className="col-sm-4">
+      <Login onLoginSuccess={refetchOverView} error={overview.error.graphQLErrors.join(', ')} /></div></JustifyCenter>);
   }
-
-  return (<>
-    <div className="grid justify-center">
-      {content}
+  return (<JustifyCenter>
+    <div className="col-sm-3">
+      <NewTodoForm users={overview.data.users} />
     </div>
-  </>);
+    <div className="col-sm-3">
+      <p>{overview.data.todos.length} todos</p>
+      <TodoList todos={overview.data.todos}
+        filterCompleted={filterCompleted} />
+    </div>
+  </JustifyCenter>);
 };
  
 const TodoOverviewQuery = gql`

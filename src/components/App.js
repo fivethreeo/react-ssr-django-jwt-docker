@@ -16,6 +16,7 @@ const Activate = loadable(() => import(
   /* webpackChunkName: "auth" */ '../auth/ActivateComponent'));
 const Social = loadable(() => import(
   /* webpackChunkName: "auth" */ '../auth/SocialAuthComponent'));
+
 const TodoOverView = loadable(() => import(
   /* webpackChunkName: "todo" */ '../todos/TodoOverView'));
 
@@ -29,7 +30,7 @@ const Footer = loadable(() =>
 
 const OneRowOneCol = (Component) => {
   return (props) => (<div className="grid justify-center">
-      <div className="col-sm-4"><Component {...props} /></div></div>);
+      <div className="col-sm-3"><Component {...props} /></div></div>);
 };
 
 const App = () => {

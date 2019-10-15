@@ -87,7 +87,7 @@ const values = {
     fontSrc: ['fonts.googleapis.com/css', 'fonts.gstatic.com'],
     imgSrc: [],
     mediaSrc: [],
-    manifestSrc: [],
+    manifestSrc: [], 
     objectSrc: [],
     scriptSrc: process.env.NODE_ENV === 'development' ? ['localhost:3001'] : [],
     styleSrc: [
