@@ -89,7 +89,7 @@ const values = {
     mediaSrc: [],
     manifestSrc: [], 
     objectSrc: [],
-    scriptSrc: process.env.NODE_ENV === 'development' ? ['localhost:3001'] : [],
+    scriptSrc: process.env.NODE_ENV === 'development' ? ['localhost:3001', "'unsafe-eval'"] : ["'unsafe-eval'"],
     styleSrc: [
       'fonts.googleapis.com/css',
     ]

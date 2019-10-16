@@ -1,6 +1,5 @@
 import gql from 'graphql-tag';
-import React, { useState, useCallback } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState } from 'react';
 
 import { useQuery } from 'urql';
 
@@ -22,13 +21,16 @@ const TodoOverview = () => {
   const [filterCompleted, setFilterCompleted] = useState(false);
 
   const [overview, refetchOverView] =
-    useQuery({ query: TodoOverviewQuery, variables: {}, requestPolicy: 'network-only'});
+    useQuery({ query: TodoOverviewQuery});
 
   if (overview.fetching) {
-    return (<JustifyCenter><div className="col-sm-4">Loading...</div></JustifyCenter>);
+    return (<JustifyCenter>
+      <div className="col-sm-4">Loading...</div></JustifyCenter>);
   } else if (overview.error && overview.error.graphQLErrors) {
     return (<JustifyCenter><div className="col-sm-4">
-      <Login onLoginSuccess={refetchOverView} error={overview.error.graphQLErrors.join(', ')} /></div></JustifyCenter>);
+      <Login onLoginSuccess={refetchOverView}
+        error={overview.error.graphQLErrors.join(', ')} /></div>
+      </JustifyCenter>);
   }
   return (<JustifyCenter>
     <div className="col-sm-3">

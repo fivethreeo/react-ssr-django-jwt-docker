@@ -1,13 +1,10 @@
 import gql from 'graphql-tag';
 import React, { 
   useState,
-  useRef,
-  useCallback,
-  useImperativeHandle
+  useCallback
 } from 'react';
-import { useServerNoopLayoutEffect } from '../hooks/IsomorphicEffects';
-import { useGlobalMouseClick } from '../hooks/WindowEvents';
-import { useRegistry, useRegister } from '../hooks/Registry';
+import { useImmediateEffect } from '../hooks/useImmediateEffect';
+
 import { useMutation } from 'urql';
 import { Formik } from 'formik';
 
@@ -34,7 +31,7 @@ function highlightText(text, query) {
     if (words.length === 0) {
         return [text];
     }
-    const regexp = new RegExp(words.join("|"), "gi");
+    const regexp = new RegExp(words.join('|'), 'gi');
     const tokens = [];
     while (true) {
         const match = regexp.exec(text);
@@ -57,33 +54,39 @@ function highlightText(text, query) {
 }
 
 function escapeRegExpChars(text) {
-    return text.replace(/([.*+?^=!:${}()|\[\]\/\\])/g, "\\$1");
+    return text.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
 const UserSearchField = (props) => {
+
+  const NONE = '(none)';
+
   const newProps = { type: 'select', ...props };
-  const [formgroup, field, meta] = useFieldExtra(newProps);
-/* 
-  useServerNoopLayoutEffect(() => {
-
-  });
- */
-
-  const NONE = "(none)";
+  const [formgroup, field] = useFieldExtra(newProps);
+  const [currentItem, setCurrentItem] = useState(NONE);
 
   const items = [...props.items, NONE];
 
+  useImmediateEffect(()=>{
+    const itemFromField = items.filter(
+      item => item.id && item.id === field.value).pop();
+    if (itemFromField) {
+      setCurrentItem(itemFromField);
+    }
+  }, []);
+
   const filterUser = useCallback((query, user) => {
-    if (query === "" && items.length < 3) {
+    if (query === '' && items.length < 3) {
         return true;
     }
-    if (query === "" && user === NONE) {
+    if (query === '' && user === NONE) {
         return true;
     }
-    if (query === "") {
+    if (query === '') {
         return user.id === field.value;
     }
-    return user.email && user.email.toLowerCase().indexOf(query.toLowerCase()) >= 0;
+    return user.email && user.email.toLowerCase()
+      .indexOf(query.toLowerCase()) >= 0;
   }, [field]);
 
   const renderUser = useCallback((user, { modifiers, handleClick, query }) => {
@@ -103,13 +106,16 @@ const UserSearchField = (props) => {
  
   const onItemSelect = useCallback((item) => {
       field.onChange(item === NONE ? '' : item.id);
+      setCurrentItem(item);
   }, [field]); 
 
   return (
     <FormGroup {...formgroup}>
-      <Select items={items} itemRenderer={renderUser} itemPredicate={filterUser}
-        onItemSelect={onItemSelect} noResults={<MenuItem disabled={true} text="No results." />} >
-                <Button text={NONE} rightIcon="double-caret-vertical" />
+      <Select items={items} itemRenderer={renderUser}
+        itemPredicate={filterUser} onItemSelect={onItemSelect}
+        noResults={<MenuItem disabled={true} text="No results." />} >
+      <Button text={currentItem.email ? currentItem.email : currentItem}
+        rightIcon="double-caret-vertical" />
       </Select>
     </FormGroup>
   );

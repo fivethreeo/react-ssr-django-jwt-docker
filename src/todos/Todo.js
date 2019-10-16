@@ -20,7 +20,7 @@ Todo.fragments = {
     }
   `,
 };
-
+/* 
 const UpdateTodoMutation = gql`
   mutation UpdateTodo(
     $id: ID!,
@@ -40,6 +40,6 @@ const UpdateTodoMutation = gql`
   }
   
   ${Todo.fragments.todo}
-`;
+`; */
 
 export default Todo;

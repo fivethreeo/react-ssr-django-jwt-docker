@@ -7,6 +7,7 @@ module.exports = {
         "quotes": [ WARN, "single", {
         	"allowTemplateLiterals": true,
         	"avoidEscape": true
-        }]
+        }],
+        "no-unused-vars": [ WARN, { "ignoreRestSiblings": true }]
     }
 };
