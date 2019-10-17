@@ -54,6 +54,10 @@ sudo -E docker-compose -f docker-compose.dev.yml up
 
 ### To test social auth
 
+Go to [https://github.com/settings/developers](https://github.com/settings/developers) and click `New Oauth App`.
+
+Set `Authorization callback URL` to `https://localhost/social/github/complete`.
+
 ```bash
 export SOCIAL_AUTH_GITHUB_KEY="5137xfvkhv44468bca82e88"
 export SOCIAL_AUTH_GITHUB_SECRET="23b3yfifvveeeyhvb0c6ce80bb"
