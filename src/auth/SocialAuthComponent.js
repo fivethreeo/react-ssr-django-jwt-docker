@@ -5,7 +5,7 @@ import serialize from 'serialize-javascript';
 
 import { Context  } from 'urql';
 import { withCookies } from '../common/CookieContext';
-import useServerContext from '../hooks/useServerContext';
+import useServerState from '../hooks/useServerState';
 
 import { useServerNoopEffect } from '../hooks/IsomorphicEffects';
 
@@ -19,20 +19,18 @@ import {
 import config from '../config';
 
 const SocialAuthBegin = ({
-  match: { params: { provider } },
-  history
+  match: { params: { provider } }
 }) => {
-  const [state, hasServerContext, setState] = useServerContext({});
+  const [state, hasServerState, setState] = useServerState({});
 
   const client = useContext(Context);
  
   useServerNoopEffect(() => {
-    if (!hasServerContext) {
+    if (!hasServerState) {
       executeMutation(client,  SocialAuthMutation, {
         provider: provider,
         redirectUri: config('APP_URL') + '/social/' + provider + '/complete'
-      })
-      .then((res)=>{
+      }).then(res => {
         if (res.error && res.error.graphQLErrors) {
           setState({ error: res.error.graphQLErrors[0].message });
         }
@@ -60,12 +58,12 @@ const SocialAuthComplete = ({
   cookies
 }) => {
 
-  const [state, hasServerContext, setState] = useServerContext({});
+  const [state, hasServerState, setState] = useServerState({});
 
   const client = useContext(Context);
  
   useServerNoopEffect(() => {
-    if (!hasServerContext) {
+    if (!hasServerState) {
       const requestData = serialize(
         parseQueryString(history.location.search, {parseNumbers:true})
       );

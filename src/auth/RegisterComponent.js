@@ -3,8 +3,9 @@ import { withRouter } from 'react-router-dom';
 import { Formik } from 'formik';
 import { Context  } from 'urql';
 
+import { Callout } from '@blueprintjs/core';
 import { TextField } from '../components/BlueprintForm';
-import useServerContext from '../hooks/useServerContext';
+import useServerState from '../hooks/useServerState';
 import { executeMutation } from '../common/utils/urql';
 import { fromGqlErrors } from '../common/utils/errors';
 
@@ -12,42 +13,50 @@ import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
 const Register = ({ history }) => {
   const client = useContext(Context);
-  const [registration] = useServerContext({
-    values:
-      { email: '',
-        password: '',
-        passwordRepeat: ''
-      },
-      errors: {} 
-  });
+
+  const [ values, hasServerValues ] = useServerState(
+    { email: '',  password: '',  passwordRepeat: '' }, 'values');
+
+  const [ errors, hasServerErrors ] = useServerState({}, 'errors');
+
+  const [ formError, hasFormError ] = useServerState(false, 'formerror');
+
+  const touched = hasServerErrors ?
+    Object.keys(errors)
+    .reduce(function(result, item) {
+    result[item] = true;
+    return result;
+  }, {}) : {};
 
   return (
-    <div className="col-sm-9 col-md-7 col-lg-5 mx-auto">
+    <>
       <Formik
-        initialValues={registration.values}
-        initialErrors={registration.errors}
+        initialValues={values}
+        initialErrors={errors}
+        initialTouched={touched}
+        initialState={formError}
         validationSchema={RegisterSchema}
         validateOnBlur={false}
         onSubmit={(values, actions) => {
           executeMutation(client, RegisterMutation, values)
-          .then((res)=>{
-            if (res.data && res.data.register.success) {
-              history.push('/login');
-            }
-            else if (res.data) {
-              actions.setErrors(
-                fromGqlErrors(res.data.register.errors));
-            }
-            actions.setSubmitting(false);
-          });
+            .then((res)=>{
+              if (res.data && res.data.register.success) {
+                history.push('/login');
+              }
+              else if (res.data) {
+                actions.setErrors(
+                  fromGqlErrors(res.data.register.errors));
+              }
+              actions.setSubmitting(false);
+            });
         }}
-        render={(props) => (
+        render={({ handleSubmit, status }) => (
           <form method="POST"
             className="needs-validation form-auth form-register"
-            onSubmit={props.handleSubmit}
+            onSubmit={handleSubmit}
             noValidate>
-          <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
-            { registration.formerror && <p>{registration.formerror}</p> }
+            <h1 className="h3 mb-3 font-weight-normal">Please register</h1>
+            { status && <Callout intent="danger">{status}</Callout> }
             <TextField name="email" type="text"
               label="Email address" placeholder="your@email.com" />
             <TextField name="password" type="password"
@@ -59,7 +68,7 @@ const Register = ({ history }) => {
           </form>
         )}
       />
-    </div>
+    </>
   );
 };
 

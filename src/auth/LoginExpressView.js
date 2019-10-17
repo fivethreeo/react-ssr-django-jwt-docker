@@ -1,35 +1,40 @@
 import { fromYupErrors, fromGqlErrors } from '../common/utils/errors';
-import { SSRCallback } from '../server/utils/ssr';
 import { executeMutation } from '../common/utils/urql';
 import { LoginSchema, LoginMutation } from './LoginCommon';
 import config from '../config';
 
 
-export default SSRCallback( async (req, res, next, client) => {
+import getUrqlProps from '../server/utils/urql';
+import renderApp from '../server/renderApp';
+
+export default async (req, res) => {
   
-  if (req.method != "POST") return next();
+  const urqlProps = getUrqlProps(req, res);
+  const { urqlClient } = urqlProps;
 
-  const state = {
-    values: LoginSchema.cast(req.body),
-    errors: {}
-  };
+  if (req.method !== "POST") return renderApp({ req, res, ...urqlProps });
 
+  let castedValues = LoginSchema.cast(req.body);
   try {
-    state['values'] = LoginSchema.validateSync(state['values'], {abortEarly: false})
+    castedValues = LoginSchema.validateSync(castedValues, {abortEarly: false})
   }
   catch(err) {
-    state['values']['password'] = '';    
-    state['errors'] = fromYupErrors(err);
-    res.locals.serverContextValue = state;
-    return next();
+    const { password = '', ...stripPassword } = castedValues;
+    const serverState = {
+      values: { password: '', ...stripPassword },
+      errors: fromYupErrors(err)
+    };
+    return renderApp({ req, res, serverState, ...urqlProps });
   }
 
-  const result = await executeMutation(client, LoginMutation, state['values'])
+  const result = await executeMutation(urqlClient, LoginMutation, castedValues)
   if (result.error && result.error.graphQLErrors) {
-    state['formerror'] = result.error.graphQLErrors[0].message;
-    state['values']['password'] = '';
-    res.locals.serverContextValue = state;
-    return next();
+    const { password = '', ...stripPassword } = castedValues;
+    const serverState = {
+      values: { password: '', ...stripPassword },
+      formError: result.error.graphQLErrors[0].message
+    };
+    return renderApp({ req, res, serverState, ...urqlProps });
   }
   else if (result.data && result.data.tokenAuth && result.data.tokenAuth.token) {
     req.universalCookies.set('authToken',
@@ -42,10 +47,10 @@ export default SSRCallback( async (req, res, next, client) => {
       httpOnly: false,
       sameSite: true
     });
-    res.redirect('/');
+    return res.redirect('/');
   }
   else {
-    return next();
+    return renderApp({ req, res, ...urqlProps });
   }
 
-})
+};

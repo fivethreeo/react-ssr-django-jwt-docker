@@ -3,7 +3,7 @@ const path = require('path');
 const LoadablePlugin = require('@loadable/webpack-plugin');
 
 module.exports = {
-  modify: (defaultConfig, { target }, webpack) => {
+  modify: (defaultConfig, { target, dev }, webpack) => {
     const config = defaultConfig;
 
     if (target === 'web') {
@@ -14,8 +14,7 @@ module.exports = {
           }
         })
       );
-      config.devServer.quiet = false;
-
+      if (dev) { config.devServer.quiet = false; }
     }
 
 

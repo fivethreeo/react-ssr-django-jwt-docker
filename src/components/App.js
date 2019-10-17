@@ -30,26 +30,26 @@ const Footer = loadable(() =>
 
 const OneRowOneCol = (Component) => {
   return (props) => (<div className="grid justify-center">
-      <div className="col-sm-3"><Component {...props} /></div></div>);
+    <div className="col-sm-3"><Component {...props} /></div></div>);
 };
 
 const App = () => {
- return (
-   <>
-   <Header />
-     <div className="container">
-      <Switch>
-        <Route exact path="/" component={OneRowOneCol(Body)} />
-        <Route path="/todos" component={TodoOverView} />
-        <Route path="/activate" component={OneRowOneCol(Activate)} />
-        <Route path="/login" component={OneRowOneCol(Login)} />
-        <Route path="/register" component={OneRowOneCol(Register)} />
-        <Route path="/social" component={OneRowOneCol(Social)} />
-      </Switch>
-      <div className="grid">
+  return (
+    <>
+      <Header />
+      <div className="container">
+        <Switch>
+          <Route exact path="/" component={OneRowOneCol(Body)} />
+          <Route path="/todos" component={TodoOverView} />
+          <Route path="/activate" component={OneRowOneCol(Activate)} />
+          <Route path="/login" component={OneRowOneCol(Login)} />
+          <Route path="/register" component={OneRowOneCol(Register)} />
+          <Route path="/social" component={OneRowOneCol(Social)} />
+        </Switch>
+        <div className="grid">
           <Footer />
+        </div>
       </div>
-    </div>
     </>
   );
 };

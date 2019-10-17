@@ -24,19 +24,23 @@ services:
       context: .
       dockerfile: docker/django/Dockerfile
     image: djangoapi:staging
-    environment:
-      DEBUG: "False"
-      ALLOWED_HOSTS: "djangoapi,localhost"
-      PROXY_SSL: "True"
-      SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
-      EMAIL_URL: ${EMAIL_URL:-consolemail://}
-      DOMAIN: "localhost"
-      SITE_NAME: "My Site"
+    volumes:
+      - ./:/tmpdb
     labels:
       - "traefik.enable=true"
       - "traefik.port=3002"
-      - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin"
+      - "traefik.frontend.rule=Host:localhost;PathPrefix:/graphql,/admin,/django-static"
       - "traefik.docker.network=traefik_staging"
+    environment:
+      DEBUG: "True"
+      ALLOWED_HOSTS: "djangoapi,localhost"
+      DOMAIN: "localhost"
+      SITE_NAME: "My Site"
+      PROXY_SSL: "True"
+      SECRET_KEY: "u079tk=6$$!hcrr4%yb1!a7+3ycg0=4-nudet6+8w)f-)24j-j4"
+      EMAIL_URL: ${EMAIL_URL:-consolemail://}
+      SOCIAL_AUTH_GITHUB_KEY: ${SOCIAL_AUTH_GITHUB_KEY}
+      SOCIAL_AUTH_GITHUB_SECRET: ${SOCIAL_AUTH_GITHUB_SECRET}
     networks:
       - traefik_staging
   reactapp:
@@ -55,6 +59,11 @@ services:
       - "traefik.docker.network=traefik_staging"
     networks:
       - traefik_staging
+    environment:
+      PUBLIC_PATH: https://localhost/
+      CLIENT_PUBLIC_PATH: https://localhost/
+      GRAPHQL_BACKEND_URL: http://djangoapi:3002/graphql
+      GRAPHQL_FRONTEND_URL: https://localhost/graphql
 
 
 networks:

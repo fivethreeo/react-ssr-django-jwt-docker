@@ -1,6 +1,7 @@
 FROM python:3.7-alpine as base
 ENV PYTHONUNBUFFERED 1
 # Creating working directory
+RUN mkdir /tmpdb
 RUN mkdir /code
 WORKDIR /code
 

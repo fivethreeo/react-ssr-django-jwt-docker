@@ -8,6 +8,7 @@ module.exports = {
         	"allowTemplateLiterals": true,
         	"avoidEscape": true
         }],
-        "no-unused-vars": [ WARN, { "ignoreRestSiblings": true }]
+        "no-unused-vars": [ WARN, { "ignoreRestSiblings": true }],
+        "indent": [ WARN, 2]
     }
 };

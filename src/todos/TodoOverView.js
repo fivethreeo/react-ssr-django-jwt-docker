@@ -30,7 +30,7 @@ const TodoOverview = () => {
     return (<JustifyCenter><div className="col-sm-4">
       <Login onLoginSuccess={refetchOverView}
         error={overview.error.graphQLErrors.join(', ')} /></div>
-      </JustifyCenter>);
+    </JustifyCenter>);
   }
   return (<JustifyCenter>
     <div className="col-sm-3">

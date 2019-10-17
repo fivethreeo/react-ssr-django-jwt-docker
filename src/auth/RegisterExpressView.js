@@ -1,42 +1,53 @@
 import { fromYupErrors, fromGqlErrors } from '../common/utils/errors';
-import { SSRCallback } from '../server/utils/ssr';
 import { executeMutation } from '../common/utils/urql';
 import { RegisterSchema, RegisterMutation } from './RegisterCommon';
 
+import getUrqlProps from '../server/utils/urql';
+import renderApp from '../server/renderApp';
 
-export default SSRCallback( async (req, res, next, client) => {
-  
-  if (req.method != "POST") return next();
+export default async (req, res) => {
 
-  const state = {
-    values: RegisterSchema.cast(req.body),
-    errors: {}
-  };
+  const urqlProps = getUrqlProps(req, res);
+  const { urqlClient } = urqlProps;
+
+  if (req.method !== "POST") renderApp({ req, res, ...urqlProps });
+
+  const castedValues = RegisterSchema.cast(req.body);
 
   try {
-    state['values'] = RegisterSchema.validateSync(state['values'], {abortEarly: false});
+    RegisterSchema.validateSync(castedValues, {abortEarly: false});
   }
   catch(err) {
-    state['values']['password'] = '';
-    state['values']['passwordRepeat'] = '';
-    state['errors'] = fromYupErrors(err);
-    res.locals.serverContextValue = state;
-    return next();
+    const { password = '', passwordRepeat = '', ...stripPassword } = castedValues;
+    const serverState = {
+      values: {
+        password: '',
+        passwordRepeat: '',
+        ...stripPassword
+      },
+      errors: fromYupErrors(err)
+    };
+    renderApp({ req, res, serverState, ...urqlProps });
   }
 
-  const result = await executeMutation(client, RegisterMutation, state['values']);
+  const result = await executeMutation(urqlClient, RegisterMutation, castedValues);
   if (result.error && result.error.graphQLErrors) {
-    state['formerror'] = result.error.graphQLErrors[0].message;
-    state['values']['password'] = '';
-    state['values']['passwordRepeat'] = '';
-    res.locals.serverContextValue = state;
-    return next();
+    const { password = '', passwordRepeat = '', ...stripPassword } = castedValues;
+    const serverState = {
+      values: {
+        password: '',
+        passwordRepeat: '',
+        ...stripPassword
+      },
+      formError: result.error.graphQLErrors[0].message
+    };
+    renderApp({ req, res, serverState, ...urqlProps });
   }
   if (result.data && result.data.register.success) {
     res.redirect('/login');
   }
   else {
-    return next();
+    renderApp({ req, res, ...urqlProps});
   }
 
-})
+};

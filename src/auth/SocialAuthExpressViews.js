@@ -1,26 +1,30 @@
-import { SSRCallback } from '../server/utils/ssr';
 import { executeMutation } from '../common/utils/urql';
 import { SocialAuthMutation, SocialAuthCompleteMutation } from './SocialAuthCommon';
 import serialize from 'serialize-javascript';
 
 import config from '../config';
 
+import getUrqlProps from '../server/utils/urql';
+import renderApp from '../server/renderApp';
 
-export const SocialAuthExpressView = SSRCallback( async (req, res, next, client) => {
-  
-  if (res.locals.serverContextValue) return next();
+export const SocialAuthExpressView = async (req, res) => {
+  const urqlProps = getUrqlProps(req, res);
+  const { urqlClient } = urqlProps;
 
-  const state = {};
-
-  const result = await executeMutation(client, SocialAuthMutation, {
+  const result = await executeMutation(urqlClient, SocialAuthMutation, {
     provider: req.params.provider,
     redirectUri: config('APP_URL') + '/social/' + req.params.provider + '/complete'
   });
 
   if (result.error && result.error.graphQLErrors) {
-    state['error'] = result.error.graphQLErrors[0].message;
-    res.locals.serverContextValue = state;
-    return next();
+      console.error(result.error)
+    renderApp({
+      req, res,
+      severState: {
+        error: result.error.graphQLErrors[0].message
+      },
+      ...urqlProps
+    });
   }
   else if (result.data && result.data.socialAuth) {
     if (result.data.socialAuth.result.__typename === 'Redirect') {
@@ -28,27 +32,32 @@ export const SocialAuthExpressView = SSRCallback( async (req, res, next, client)
     }
   }
   else {
-    return next();
+    renderApp({ req, res, ...urqlProps });
   }
 
-})
+};
 
-export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next, client) => {
-  
-  const state = {};
+export const SocialAuthCompleteExpressView = async (req, res) => {
+  const urqlProps = getUrqlProps(req, res);
+  const { urqlClient } = urqlProps;
 
   const requestData = serialize(req.query);
 
-  const result = await executeMutation(client, SocialAuthCompleteMutation, {
+  const result = await executeMutation(urqlClient, SocialAuthCompleteMutation, {
     provider: req.params.provider,
     requestData: requestData,
     redirectUri: config('APP_URL') + '/social/' + req.params.provider + '/complete'
   });
 
   if (result.error && result.error.graphQLErrors) {
-    state['error'] = result.error.graphQLErrors[0].message;
-    res.locals.serverContextValue = state;
-    return next();
+      console.error(result.error.graphQLErrors)
+    renderApp({
+      req, res,
+      severState: {
+        error: result.error.graphQLErrors[0].message
+      },
+      ...urqlProps
+    });
   }
   else if (result.data && result.data.socialAuthComplete) {
     if (result.data.socialAuthComplete.result.__typename === 'Redirect') {
@@ -68,7 +77,7 @@ export const SocialAuthCompleteExpressView = SSRCallback( async (req, res, next,
     }
   }
   else {
-    return next();
+    renderApp({ req, res, ...urqlProps });
   }
 
-})
+};

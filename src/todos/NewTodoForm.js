@@ -1,7 +1,8 @@
 import gql from 'graphql-tag';
 import React, { 
   useState,
-  useCallback
+  useCallback,
+  useEffect
 } from 'react';
 import { useImmediateEffect } from '../hooks/useImmediateEffect';
 
@@ -23,38 +24,38 @@ import Todo from './Todo';
 
 
 function highlightText(text, query) {
-    let lastIndex = 0;
-    const words = query
-        .split(/\s+/)
-        .filter(word => word.length > 0)
-        .map(escapeRegExpChars);
-    if (words.length === 0) {
-        return [text];
+  let lastIndex = 0;
+  const words = query
+    .split(/\s+/)
+    .filter(word => word.length > 0)
+    .map(escapeRegExpChars);
+  if (words.length === 0) {
+    return [text];
+  }
+  const regexp = new RegExp(words.join('|'), 'gi');
+  const tokens = [];
+  while (true) {
+    const match = regexp.exec(text);
+    if (!match) {
+      break;
     }
-    const regexp = new RegExp(words.join('|'), 'gi');
-    const tokens = [];
-    while (true) {
-        const match = regexp.exec(text);
-        if (!match) {
-            break;
-        }
-        const length = match[0].length;
-        const before = text.slice(lastIndex, regexp.lastIndex - length);
-        if (before.length > 0) {
-            tokens.push(before);
-        }
-        lastIndex = regexp.lastIndex;
-        tokens.push(<strong key={lastIndex}>{match[0]}</strong>);
+    const length = match[0].length;
+    const before = text.slice(lastIndex, regexp.lastIndex - length);
+    if (before.length > 0) {
+      tokens.push(before);
     }
-    const rest = text.slice(lastIndex);
-    if (rest.length > 0) {
-        tokens.push(rest);
-    }
-    return tokens;
+    lastIndex = regexp.lastIndex;
+    tokens.push(<strong key={lastIndex}>{match[0]}</strong>);
+  }
+  const rest = text.slice(lastIndex);
+  if (rest.length > 0) {
+    tokens.push(rest);
+  }
+  return tokens;
 }
 
 function escapeRegExpChars(text) {
-    return text.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
+  return text.replace(/([.*+?^=!:${}()|[\]/\\])/g, '\\$1');
 }
 
 const UserSearchField = (props) => {
@@ -77,17 +78,17 @@ const UserSearchField = (props) => {
 
   const filterUser = useCallback((query, user) => {
     if (query === '' && items.length < 3) {
-        return true;
+      return true;
     }
     if (query === '' && user === NONE) {
-        return true;
+      return true;
     }
     if (query === '') {
-        return user.id === field.value;
+      return user.id === field.value;
     }
     return user.email && user.email.toLowerCase()
       .indexOf(query.toLowerCase()) >= 0;
-  }, [field]);
+  }, []);
 
   const renderUser = useCallback((user, { modifiers, handleClick, query }) => {
     if (!modifiers.matchesPredicate) {
@@ -102,20 +103,23 @@ const UserSearchField = (props) => {
         text={user === NONE ? NONE : highlightText(user.email, query)}
       />
     );
-  }, [field]);
+  }, []);
  
   const onItemSelect = useCallback((item) => {
-      field.onChange(item === NONE ? '' : item.id);
-      setCurrentItem(item);
-  }, [field]); 
+    setCurrentItem(item);
+  }, []); 
+
+  useEffect(()=>{
+    field.onChange(currentItem === NONE ? '' : currentItem.id);
+  }, [currentItem]);
 
   return (
     <FormGroup {...formgroup}>
       <Select items={items} itemRenderer={renderUser}
         itemPredicate={filterUser} onItemSelect={onItemSelect}
         noResults={<MenuItem disabled={true} text="No results." />} >
-      <Button text={currentItem.email ? currentItem.email : currentItem}
-        rightIcon="double-caret-vertical" />
+        <Button text={currentItem.email ? currentItem.email : currentItem}
+          rightIcon="double-caret-vertical" />
       </Select>
     </FormGroup>
   );
@@ -126,38 +130,36 @@ const NewTodoForm = ({users}) => {
   const [result, executeMutation] = useMutation(NewTodoMutation);
 
   return (<Formik
-        initialValues={{title: '', body: '', creatorId: 0, completed: false}}
-        onSubmit={(values, actions) => {
-        }}
-        render={(props) => (
-          <form onSubmit={props.handleSubmit} noValidate>
-            <TextField
-              name="title"
-              label="Title"
-              placeholder="Todo Title"
-            />
-            <TextField
-              name="body"
-              label="Body"
-              placeholder="I have to &hellip;"
-            />
+    initialValues={{title: '', body: '', creatorId: '', completed: false}}
+    onSubmit={(values, actions) => {
+    }}
+    render={(props) => (
+      <form onSubmit={props.handleSubmit} noValidate>
+        <TextField
+          name="title"
+          label="Title"
+          placeholder="Todo Title"
+        />
+        <TextField
+          name="body"
+          label="Body"
+          placeholder="I have to &hellip;"
+        />
+        <UserSearchField
+          name="creatorId"
+          label="Assigned to"
+          items={users}
+        />
+        <CheckboxField
+          name="completed"
+          label="Completed"
+        />            
+        <p><button className="btn btn-lg btn-primary btn-block"
+          type="submit">Submit</button></p>
+      </form>
 
-            <UserSearchField
-              name="creatorId"
-              label="Assigned to"
-              items={users}
-              placeholder="I have to &hellip;"
-            />
-            <CheckboxField
-              name="completed"
-              label="Completed"
-            />            
-            <p><button className="btn btn-lg btn-primary btn-block"
-              type="submit">Submit</button></p>
-          </form>
-
-        )}
-      />);
+    )}
+  />);
 };
 
 NewTodoForm.fragments = {

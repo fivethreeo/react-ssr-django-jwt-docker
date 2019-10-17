@@ -15,7 +15,7 @@ import {
 } from 'urql';
 
 import CookieContext from './common/CookieContext';
-import ServerContext from './common/ServerContext';
+import ServerStateContext from './common/ServerStateContext';
 
 import App from './components/App';
 import config from './config';
@@ -58,7 +58,7 @@ loadableReady(() => {
   const root = document.getElementById('root');
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
-    <ServerContext.Provider value={window.__SERVER_CONTEXT__}>
+    <ServerStateContext.Provider value={window.__SERVER_STATE_CONTEXT__}>
       <UrqlProvider value={client}>
         <CookieContext.Provider value={cookies}>
           <Router history={history} >
@@ -66,7 +66,7 @@ loadableReady(() => {
           </Router>
         </CookieContext.Provider>
       </UrqlProvider>
-    </ServerContext.Provider>,
+    </ServerStateContext.Provider>,
     root);
 });
 

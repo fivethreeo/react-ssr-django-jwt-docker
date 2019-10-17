@@ -4,22 +4,26 @@ import {
 } from 'serialize-query-params';
 import parseUrl from 'parseurl';
 
-import { SSRCallback } from '../server/utils/ssr';
 import { executeMutation } from '../common/utils/urql';
 import { QueryParams, ActivateMutation } from './ActivateCommon';
 
-export default SSRCallback( async (req, res, next, client) => { 
+import getUrqlProps from '../server/utils/urql';
+import renderApp from '../server/renderApp';
 
-    const { token, uid } = decodeQueryParams(QueryParams, parseQueryString(parseUrl(req).search));
+export default async (req, res) => { 
 
-    const mutationresult = await executeMutation(client, ActivateMutation, { token: token, uid: uid });
+  const urqlProps = getUrqlProps(req, res);
+  const { urqlClient } = urqlProps;
 
-    if (mutationresult.data && mutationresult.data.activate.success) {
-      res.locals.serverContextValue =  true;
-    }
-    else {
-      res.locals.serverContextValue =  false;
-    }
-    return next();
+  const { token, uid } = decodeQueryParams(QueryParams, parseQueryString(parseUrl(req).search));
+
+  const mutationresult = await executeMutation(urqlClient, ActivateMutation, { token: token, uid: uid });
+
+  if (mutationresult.data && mutationresult.data.activate.success) {
+    renderApp({ req, res, severContext: true, ...urqlProps });
   }
-)
+  else {
+    renderApp({ req, res, severContext: false, ...urqlProps });
+  }
+
+};

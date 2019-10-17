@@ -5,17 +5,19 @@ import { FormGroup, InputGroup, Checkbox } from '@blueprintjs/core';
 
 export const getBlueprintFormGroupProps = (props, field, meta) => {
   const id = 'id_' + field.name;
-  const intent = (field.value && !!meta.error) ? 'danger' :
+  const intent = (meta.touched && !!meta.error) ? 'danger' :
     (field.value && meta.touched && (meta.error === undefined) ?
-    'success' : null);
-  return {labelFor: id, label: props.label, intent: intent};
+      'success' : null);
+
+  const error = (meta.touched && !!meta.error) ? meta.error : null;
+  return {labelFor: id, label: props.label, intent: intent, helperText: error};
 };
 
 export const getBlueprintInputProps = (props, field, meta) => {
   const id = 'id_' + field.name;
   const intent = (field.value && !!meta.error) ? 'danger' :
     (field.value && meta.touched && (meta.error === undefined) ?
-    'success' : null);
+      'success' : null);
   return {id: id, intent: intent};
 };
 

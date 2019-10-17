@@ -30,7 +30,7 @@ services:
       - ./djangoapi:/code/djangoapi
       - ./runserver.py:/code/runserver.py
       - ./manage.py:/code/manage.py
-      - ./db.sqlite3:/code/db.sqlite3
+      - ./:/tmpdb
     labels:
       - "traefik.enable=true"
       - "traefik.port=3002"
