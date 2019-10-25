@@ -24,7 +24,7 @@ server
   .use(bodyParser.urlencoded({ extended: false }))
   .use(bodyParser.json())
   .use(cookiesMiddleware())
-  .use(express.static(process.env.RAZZLE_PUBLIC_DIR))
+  .use('/static', express.static(process.env.RAZZLE_PUBLIC_DIR))
   
   .use('/register', RegisterExpressView)
   .use('/activate', ActivateExpressView)

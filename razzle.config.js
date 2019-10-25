@@ -15,9 +15,16 @@ module.exports = {
             filename: path.resolve('./build/'),
           }
         })
-      );
 
+      );
+      
       if (dev) {
+
+        if (typeof process.env.RAZZLE_DISABLE_CODESPLIT !== 'undefned') {
+          config.plugins.unshift(new webpack.optimize.LimitChunkCountPlugin({
+            maxChunks: 1
+          }));
+        }
 
         config.devServer.quiet = false;
         config.devServer.public = 'localhost:443';
@@ -51,12 +58,6 @@ module.exports = {
         }, []);
       }
     }
-    if (dev && typeof process.env.SINGLE_CHUNK !== 'undefined') {
-      config.plugins.unshift(new webpack.optimize.LimitChunkCountPlugin({
-        maxChunks: 1
-      }));
-    }
-
     return config;
   },
   plugins: [ 'scss', 'eslint' ]

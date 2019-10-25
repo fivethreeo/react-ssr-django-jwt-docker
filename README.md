@@ -4,7 +4,7 @@
 
 * Building using [razzle]
 * Runtime configuration in server and client
-* Server hot module reloading
+* Webpack hot module reloading in client and server
 * Server-side rendering
 * Suspense server side using [react-ssr-prepass]
 * Server-side handlers for graceful degradation of registration/ activation/ login/ social views.  
