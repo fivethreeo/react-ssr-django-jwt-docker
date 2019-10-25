@@ -3905,9 +3905,10 @@ form-data@~2.3.2:
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
 
-"formik@https://github.com/fivethreeo/formik.git":
-  version "2.0.1-rc.13"
-  resolved "https://github.com/fivethreeo/formik.git#e9d095ffd1a538fb3c5b9b1fac1c4cde0249251e"
+formik@2.0.1-rc.14:
+  version "2.0.1-rc.14"
+  resolved "https://registry.yarnpkg.com/formik/-/formik-2.0.1-rc.14.tgz#e655a20ccb07092f9e68c1359d1bbe0830d54ce1"
+  integrity sha512-48nlspbUsnHVaLwrOP34MElgMv+y6G5SbrjCFTiovn6ZNxWnLbif9cH66XyMpChrdAdY10V66wdInvwRQJ3zaA==
   dependencies:
     deepmerge "^2.1.1"
     hoist-non-react-statics "^3.3.0"
