@@ -128,9 +128,6 @@ class CreateTodo(graphene.Mutation):
         creator_username = args.pop('creator_username', None)
         creator_id = args.pop('creator_id', None)
 
-        print(creator_username)
-        print(creator_id)
-
         if creator_username:
             args['creator'] = User.objects.get(username=creator_username)
         else:

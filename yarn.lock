@@ -2976,7 +2976,7 @@ detect-port-alt@1.1.6:
     address "^1.0.1"
     debug "^2.6.0"
 
-diff@^3.2.0:
+diff@^3.2.0, diff@^3.4.0:
   version "3.5.0"
   resolved "https://registry.yarnpkg.com/diff/-/diff-3.5.0.tgz#800c0dd1e0a8bfbc95835c202ad220fe317e5a12"
   integrity sha512-A46qtFgd+g7pDZinpnwiRJtxbC1hpgf0uzP3iG89scHk0AUC7A1TGxf5OiiOUv/JMZR8GOt8hL900hV0bOy5xA==
@@ -7019,6 +7019,14 @@ pascalcase@^0.1.1:
   version "0.1.1"
   resolved "https://registry.yarnpkg.com/pascalcase/-/pascalcase-0.1.1.tgz#b363e55e8006ca6fe21784d2db22bd15d7917f14"
   integrity sha1-s2PlXoAGym/iF4TS2yK9FdeRfxQ=
+
+patch-loader@^1.0.4:
+  version "1.0.4"
+  resolved "https://registry.yarnpkg.com/patch-loader/-/patch-loader-1.0.4.tgz#b6da314513030fadab6e8a066d6c59a011de3be2"
+  integrity sha512-atDouQLkP3MSqhORWG8U7aMtfBWkKEoHkhEykmQRvn0LqN5UN1A1+Y/EJsMzwJepWnSwNdjQhidRUfKbqEGKGA==
+  dependencies:
+    diff "^3.4.0"
+    loader-utils "^1.1.0"
 
 path-browserify@0.0.1:
   version "0.0.1"

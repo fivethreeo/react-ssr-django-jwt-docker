@@ -53,8 +53,7 @@ const client = new Client({
   suspense: false
 });
 
-// Load all components needed before rendering
-loadableReady(() => {
+const appRender = Component => {
   const root = document.getElementById('root');
   const renderMethod = !!module.hot ? render : hydrate;
   renderMethod(
@@ -62,14 +61,22 @@ loadableReady(() => {
       <UrqlProvider value={client}>
         <CookieContext.Provider value={cookies}>
           <Router history={history} >
-            <App />
+            <Component />
           </Router>
         </CookieContext.Provider>
       </UrqlProvider>
     </ServerStateContext.Provider>,
     root);
+}
+
+// Load all components needed before rendering
+loadableReady(() => {
+  appRender(App);
 });
 
 if (module.hot) {
-  module.hot.accept();
+  module.hot.accept('./components/App', () => {
+    const NextApp = require('./components/App').default;
+    appRender(NextApp);
+  });
 }

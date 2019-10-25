@@ -139,6 +139,7 @@ AUTHENTICATION_BACKENDS = [
 
 GRAPHENE = {
     'SCHEMA': 'djangoapi.schema.schema',
+    'SCHEMA_OUTPUT': '/tmpdb/src/schema.json',
     'MIDDLEWARE': [
         'graphql_jwt.middleware.JSONWebTokenMiddleware',
     ],

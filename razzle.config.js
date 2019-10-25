@@ -1,6 +1,8 @@
 'use strict';
 const path = require('path');
 const LoadablePlugin = require('@loadable/webpack-plugin');
+const paths = require('razzle/config/paths');
+
 
 module.exports = {
   modify: (defaultConfig, { target, dev }, webpack) => {
@@ -14,12 +16,45 @@ module.exports = {
           }
         })
       );
-      if (dev) { config.devServer.quiet = false; }
+
+      if (dev) {
+
+        config.devServer.quiet = false;
+        config.devServer.public = 'localhost:443';
+        // config.devServer.contentBase = paths.appBuild;
+
+        config.module.rules = config.module.rules.reduce((rules, rule) => {
+          if (rule.test &&
+            rule.test.toString()===/\.(js|jsx|mjs)$/.toString() &&
+            !rule.enforce) {
+
+            const { use, ...rest } = rule;
+
+            rules.push({ ...rule, ...{
+              exclude: /razzle-dev-utils\/webpackHotDevClient\.js/
+            }});
+
+            rules.push({ ...rest, ...{
+              use: [ ...use, {
+                loader: require.resolve('patch-loader'),
+                options: { patch: '../../customDevClientPort.diff' },
+              }],
+              include: /razzle-dev-utils\/webpackHotDevClient\.js/,
+            }});
+
+
+          }
+          else {
+            rules.push(rule);
+          } 
+          return rules;
+        }, []);
+      }
     }
-
-
-    if (target === 'node') {
-      // config.entry.unshift('cross-fetch/polyfill'); // add cross-fetch/polyfill for apollo
+    if (dev && typeof process.env.SINGLE_CHUNK !== 'undefined') {
+      config.plugins.unshift(new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 1
+      }));
     }
 
     return config;
